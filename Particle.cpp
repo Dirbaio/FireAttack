@@ -101,10 +101,10 @@ void Particle::renderArray(vector<vec3>& vtxArray, vector<vec2>& texArray, vecto
 	vtxArray.push_back(p-dx-dy);
 	vtxArray.push_back(p-dx+dy);
 	
-	texArray.push_back(vec2(0, 0));
-	texArray.push_back(vec2(1, 0));
+    texArray.push_back(vec2(-1, -1));
+    texArray.push_back(vec2(1, -1));
 	texArray.push_back(vec2(1, 1));
-	texArray.push_back(vec2(0, 1));
+    texArray.push_back(vec2(-1, 1));
 	
 	colArray.push_back(colr);
 	colArray.push_back(colr);

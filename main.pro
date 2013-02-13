@@ -35,3 +35,7 @@ DEPENDPATH += $$PWD/../Downloads/Box2D_v2.2.1/s
 win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/Box2D.lib
 else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/Box2D.lib
 else:unix:!symbian: PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/libBox2D.a
+
+OTHER_FILES += \
+    vertex.glsl \
+    fragment.glsl
