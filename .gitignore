@@ -1,0 +1,5 @@
+Makefile
+*.pro.user
+*.o
+main
+
