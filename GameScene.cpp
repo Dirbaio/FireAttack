@@ -5,69 +5,56 @@
 #include "FireActor.h"
 #include "WallActor.h"
 
-GameScene::GameScene()
+bool intersection(vec3 a, vec3 b, vec3& out)
 {
-    for(int i = 0; i < 10; i++)
-        actors.push_back(new BoxActor(this, false));
+    if(a.z < 0 && b.z < 0) return false;
+    if(a.z > 0 && b.z > 0) return false;
+    if(a.z == 0 && b.z == 0) return false;
+
+    float dx = b.x - a.x;
+    float dy = b.y - a.y;
+    float dz = b.z - a.z;
+
+    out.z = 0;
+    out.x = a.x - dx/dz*a.z;
+    out.y = a.y - dy/dz*a.z;
+
+    return true;
+}
+
+GameScene::GameScene() : mdl("test.obj")
+{
+//    for(int i = 0; i < 10; i++)
+//        actors.push_back(new BoxActor(this, false));
     actors.push_back(new PlayerActor(this));
-    actors.push_back(new WallActor(this, -10, -1));
-    actors.push_back(new WallActor(this, 10, 1));
-    groundTex = loadTexture("wall.png");
+//    actors.push_back(new WallActor(this, -10, -1));
+//    actors.push_back(new WallActor(this, 10, 1));
 
-    vector<b2Vec2> points;
-    points.push_back(b2Vec2(-14, 0));
-    points.push_back(b2Vec2(-10, 0));
-    points.push_back(b2Vec2(10, 0));
-    points.push_back(b2Vec2(14, 0));
+    float sz = 20;
 
-    float thick = 20;
-    float texsize = 15;
-    float texmargin = (thick-texsize)/2;
-    float texloop = texsize; //Texture is 2x wide.
-    float texpos = 0;
+    vertexs.push_back(-sz); vertexs.push_back(0); vertexs.push_back(-sz);
+    vertexs.push_back(sz);  vertexs.push_back(0); vertexs.push_back(-sz);
+    vertexs.push_back(sz);  vertexs.push_back(0); vertexs.push_back(sz);
+    vertexs.push_back(-sz); vertexs.push_back(0); vertexs.push_back(sz);
 
-    for(int i = 0; i < points.size()-1; i++)
+    texcoords.push_back(-sz); texcoords.push_back(-sz);
+    texcoords.push_back(sz);  texcoords.push_back(-sz);
+    texcoords.push_back(sz);  texcoords.push_back(sz);
+    texcoords.push_back(-sz); texcoords.push_back(sz);
+
+    float r = 1;
+    float g = 1;
+    float b = 1;
+
+    for(int i = 0; i < 4; i++)
     {
-        b2Vec2 a = points[i];
-        b2Vec2 b = points[i+1];
-        vertexs.push_back(a.x);
-        vertexs.push_back(a.y);
-        vertexs.push_back(-thick);
-        vertexs.push_back(a.x);
-        vertexs.push_back(a.y);
-        vertexs.push_back(thick);
-        vertexs.push_back(b.x);
-        vertexs.push_back(b.y);
-        vertexs.push_back(thick);
-        vertexs.push_back(b.x);
-        vertexs.push_back(b.y);
-        vertexs.push_back(-thick);
-
-        if(i == 0)
-            for(int i = 0; i < 6; i++)
-                colors.push_back(0);
-        else
-            for(int i = 0; i < 6; i++)
-                colors.push_back(1);
-        if(i == points.size()-2)
-            for(int i = 0; i < 6; i++)
-                colors.push_back(0);
-        else
-            for(int i = 0; i < 6; i++)
-                colors.push_back(1);
-
-        texcoords.push_back(texpos);
-        texcoords.push_back(1+texmargin);
-        texcoords.push_back(texpos);
-        texcoords.push_back(-texmargin);
-        texpos += norm(vec3(a.x-b.x, a.y-b.y, 0)) / texloop;
-        texcoords.push_back(texpos);
-        texcoords.push_back(-texmargin);
-        texcoords.push_back(texpos);
-        texcoords.push_back(1+texmargin);
+        colors.push_back(r);
+        colors.push_back(g);
+        colors.push_back(b);
     }
 
 
+    /*
     vector<b2Vec2> points2;
     points2.push_back(b2Vec2(-10, 100));
     points2.push_back(b2Vec2(-10, 0));
@@ -82,8 +69,33 @@ GameScene::GameScene()
     b2ChainShape chain;
     chain.CreateChain(&points2[0], points2.size());
     groundBody->CreateFixture(&chain, 0.0f);
+*/
+    for(int i = 0; i < mdl.vertexArray.size(); i += 3)
+    {
+        vec3 a = mdl.vertexArray[i+0];
+        vec3 b = mdl.vertexArray[i+1];
+        vec3 c = mdl.vertexArray[i+2];
 
-    groundTex = loadTexture("wall.png");
+        vector<vec3> pts;
+        vec3 p;
+
+        if(intersection(a, b, p)) pts.push_back(p);
+        if(intersection(c, b, p)) pts.push_back(p);
+        if(intersection(c, a, p)) pts.push_back(p);
+
+        if(pts.size() == 2)
+        {
+            b2BodyDef bodyDef;
+            b2Body* body;
+
+            bodyDef.position.Set(0, 0);
+            body = world.CreateBody(&bodyDef);
+            b2EdgeShape edge;
+            edge.Set(b2Vec2(pts[0].x, pts[0].y), b2Vec2(pts[1].x, pts[1].y));
+            body->CreateFixture(&edge, 0.0f);
+
+        }
+    }
 
     deadTimer = 6;
     spawnTimer = 1;
@@ -141,7 +153,7 @@ void GameScene::update()
     }
     if(deadTimer <= 0 && !nextScene)
         nextScene = new GameScene();
-
+/*
     spawnTimer -= dt;
     if(spawnTimer < 0)
     {
@@ -152,14 +164,13 @@ void GameScene::update()
         if(awesome && prand(0.05))
             for(int i = 0; i < 3; i++)
                 actors.push_back(new BoxActor(this, true));
-    }
+    }*/
 }
 
 void GameScene::render()
 {
     Scene::render();
-    groundTex->bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // [!] Juanking SFML
+/*    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // [!] Juanking SFML
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
@@ -176,6 +187,8 @@ void GameScene::render()
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+*/
+    mdl.draw();
 }
 
 void GameScene::BeginContact(b2Contact *contact)

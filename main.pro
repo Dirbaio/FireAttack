@@ -16,13 +16,15 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     GameScene.cpp \
     GroundActor.cpp \
     PlayerActor.cpp \
-    WallActor.cpp
+    WallActor.cpp \
+    Model.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     BoxActor.h \
     GameScene.h \
     GroundActor.h \
     PlayerActor.h \
-    WallActor.h
+    WallActor.h \
+    Model.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/ -lBox2D
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/ -lBox2D
@@ -38,4 +40,5 @@ else:unix:!symbian: PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/libB
 
 OTHER_FILES += \
     vertex.glsl \
-    fragment.glsl
+    fragment.glsl \
+    fragment2.glsl

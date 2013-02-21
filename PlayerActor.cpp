@@ -8,7 +8,7 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     this->gsc = sc;
 
     p.x = 0;
-    p.y = 0;
+    p.y = 10;
     size = 0.5;
 
     b2BodyDef bodyDef;
@@ -74,7 +74,7 @@ void PlayerActor::update()
     sizeEmitter->randVel.rad = min(3.0f, norm(v)*0.3f);
 
     float f = 5;
-    if(Keyboard::isKeyPressed(Keyboard::Space) && p.y < 0.3)
+    if(Keyboard::isKeyPressed(Keyboard::Space))// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 7.0f));
     if(Keyboard::isKeyPressed(Keyboard::A))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
@@ -83,14 +83,9 @@ void PlayerActor::update()
     if(Keyboard::isKeyPressed(Keyboard::S))
         body->ApplyForceToCenter(b2Vec2(0, -f));
 
-    if(p.x < -10)
-        body->SetLinearVelocity(b2Vec2(10.0f, body->GetLinearVelocity().y));
-    if(p.x > 10)
-        body->SetLinearVelocity(b2Vec2(-10.0f, body->GetLinearVelocity().y));
-
-    sc->cameraLookAt = vec3(p.x/2, 3, 0);
+    sc->cameraLookAt = vec3(p.x, p.y, 0);
     float weight = exp(-dt*6);
-    sc->cameraPos = sc->cameraPos * weight + (vec3(p.x/2, p.y , 0) + vec3(0, 2, 7)) * (1-weight);
+    sc->cameraPos = sc->cameraPos * weight + (vec3(p.x, p.y , 0) + vec3(0, 2, 7)) * (1-weight);
 /*
     if(Mouse::isButtonPressed(Mouse::Left))
         mouseDownTime += dt;
@@ -126,7 +121,7 @@ void PlayerActor::update()
 
         FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, false);
         sc->actors.push_back(bullet);
-        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
+        //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
     }
 
     wasMouseDown = Mouse::isButtonPressed(Mouse::Left);

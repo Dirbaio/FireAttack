@@ -57,12 +57,12 @@ int main(int argc, char** argv)
 //	glEnable(GL_ALPHA_TEST);
 //	glAlphaFunc(GL_EQUAL, 0.0f);
 	
-//    glDepthMask(GL_TRUE);
+//  glDepthMask(GL_TRUE);
 //	glDepthFunc(GL_LEQUAL);
 //	glPolygonOffset(-10000, -10000);
 
-    /*
-    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+    GLfloat mat_specular[] = { 0.5, 1.0 , 0.8, 1.0 };
 	GLfloat mat_shininess[] = { 50.0 };
 	GLfloat light_position[] = { 200.0, 100.0, 300.0, 0.0 };
 //	glShadeModel (GL_SMOOTH);
@@ -73,13 +73,13 @@ int main(int argc, char** argv)
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-    */
-    glDisable(GL_LIGHTING);
-    glEnable(GL_CULL_FACE);
 
-    Shader sh;
-    sh.loadFromFile("vertex.glsl", "fragment.glsl");
-    sh.bind();
+    glDisable(GL_LIGHTING);
+//    glEnable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
+
+    Shader sh; sh.loadFromFile("vertex.glsl", "fragment.glsl");
+    Shader sh2; sh2.loadFromFile("vertex.glsl", "fragment2.glsl");
 
 	srand(time(NULL));
 	
@@ -147,6 +147,7 @@ int main(int argc, char** argv)
         profiler.restart();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        sh2.bind();
         sc->render();
         countTime(renderTime, profiler.getElapsedTime().asMilliseconds());
 
@@ -156,7 +157,8 @@ int main(int argc, char** argv)
         glBlendFunc (GL_SRC_ALPHA, GL_ONE);
 
         glDepthMask (GL_FALSE);
-		sc->renderParticles();
+        sh.bind();
+        sc->renderParticles();
 		glDepthMask (GL_TRUE);
 		glDisable (GL_BLEND);
         countTime(renderPartTime, profiler.getElapsedTime().asMilliseconds());

@@ -2,15 +2,14 @@
 #define GAMESCENE_H
 
 #include "Scene.h"
+#include "Model.h"
 
 class PlayerActor;
 
 class GameScene : public Scene
 {
     public:
-
-    Texture* crateTex;
-    Texture* groundTex;
+    Model mdl;
 
     GameScene();
 

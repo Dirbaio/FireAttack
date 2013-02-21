@@ -80,7 +80,7 @@ void Scene::render()
                 0, 1, 0);
 
     glDisable(GL_LIGHTING);
-	glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
 		(*it)->render();
@@ -105,7 +105,7 @@ void Scene::renderParticles()
     normalize(camVec);
     setCameraVec(camVec, false);
     renderParticlePass();
-
+/*
     glDepthFunc(GL_GREATER);
 
     camVec.y = -camVec.y;
@@ -116,7 +116,7 @@ void Scene::renderParticles()
     renderParticlePass();
     glPopMatrix();
 
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LESS);*/
 }
 
 void Scene::renderParticlePass()
