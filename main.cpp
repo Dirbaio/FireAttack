@@ -71,19 +71,12 @@ void initFrameBuffer(void)
 
     glGenTextures(1, &fbo_depth);
     glBindTexture(GL_TEXTURE_2D, fbo_depth);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
-    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_LUMINANCE);
-
-            //NULL means reserve texture memory, but texels are undefined
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, window_width, window_height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, window_width, window_height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window_width, window_height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -122,7 +115,7 @@ int main(int argc, char** argv)
     sf::Clock profiler;
 
     // Set color and depth clear value
-    glClearDepth(3.0f);
+    glClearDepth(1.0f);
     glClearColor(0.f, 0.f, 0.f, 0.f);
 
     glEnable(GL_DEPTH_TEST);
@@ -254,6 +247,7 @@ int main(int argc, char** argv)
 
         profiler.restart();
         glEnable(GL_LIGHTING);
+        glDisable(GL_BLEND);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo); // Bind our frame buffer for rendering
         glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT); // Push our glEnable and glViewport states
         glViewport(0, 0, window_width, window_height); // Set the size of the frame buffer view port
@@ -263,9 +257,11 @@ int main(int argc, char** argv)
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(90.f, float(windowWidth)/float(windowHeight), 1.0f, 50.f);
+        gluPerspective(90.f, float(windowWidth)/float(windowHeight), 0.01f, 50.f);
 
         sh2.bind();
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
         sc->render();
         sh2.unbind();
 
@@ -288,39 +284,64 @@ int main(int argc, char** argv)
         glDisable(GL_CULL_FACE);
         glDisable(GL_LIGHTING);
 
-//        glDepthMask (GL_FALSE);
-//        sh.bind();
-//        sc->renderParticles();
-//        glDepthMask (GL_TRUE);
-//        glDisable (GL_BLEND);
-
         sh.bind();
 
-        glClearColor (1.0f, 0.0f, 0.0f, 1.0f); // Set the clear colour
+        float ratio = float(theApp->getSize().x) / float(theApp->getSize().y);
+        vec3 camVec = sc->cameraLookAt - sc->cameraPos;
+        normalize(camVec);
+        vec3 up2 (0, 1, 0);
+        vec3 right = cross(camVec, up2);
+        normalize(right);
+        right *= ratio;
+        vec3 up = cross(right, camVec);
+        normalize(up);
+        sh.setParameter("w", theApp->getSize().x);
+        sh.setParameter("h", theApp->getSize().y);
+        sh.setParameter("cameraUp", up);
+        sh.setParameter("cameraRight", right);
+        sh.setParameter("cameraFront", camVec);
+        sh.setParameter("cameraPos",  sc->cameraPos);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+        glDisable(GL_DEPTH_TEST);
+        glClearColor (0.0f, 0.0f, 0.0f, 1.0f); // Set the clear colour
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth and colour buffers
 
-        glBindTexture(GL_TEXTURE_2D, fbo_depth); // Bind our frame buffer texture
+        int program;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
+        GLint tex1Loc = glGetUniformLocation(program, "tex1");
+        GLint tex2Loc = glGetUniformLocation(program, "tex2");
+        GLint tex3Loc = glGetUniformLocation(program, "tex3");
+
+        glUniform1i(tex1Loc, 0);
+        glUniform1i(tex2Loc, 1);
+        glUniform1i(tex3Loc, 2);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, fbo_texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, fbo_texture2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, fbo_depth);
+
+        sc->renderParticles();
+/*
+
         glColor3f(1, 1, 1);
+
         glBegin(GL_QUADS);
+        glVertex3f(-1.0f, -1.0f, 0.0f);
+        glVertex3f(-1.0f, 1.0f, 0.0f);
+        glVertex3f(1.0f, 1.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, 0.0f);
+        glEnd();*/
 
-        glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner
 
-        glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner
-
-        glTexCoord2f(1.0f, 1.0f);
-        glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner
-
-        glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner
-
-        glEnd();
 
         glBindTexture(GL_TEXTURE_2D, 0); // Unbind any textures
         sh.unbind();
 
-        countTime(renderPartTime, profiler.getElapsedTime().asMilliseconds());
 
         if(sc->nextScene)
         {
@@ -329,6 +350,7 @@ int main(int argc, char** argv)
             sc = next;
         }
         app.display();
+        countTime(renderPartTime, profiler.getElapsedTime().asMilliseconds());
     }
 
     return EXIT_SUCCESS;

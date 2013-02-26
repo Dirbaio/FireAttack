@@ -28,8 +28,7 @@ public:
 	~Scene();
 	virtual void update();
 	virtual void render();
-	void renderParticles();
-    void renderParticlePass();
+    void renderParticles();
 
 	void addParticle(const Particle& p);
 };

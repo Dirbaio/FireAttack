@@ -38,6 +38,7 @@ void sets(float* a, vec3 b)
 	a[2] = b.z;
 }
 
+//WARNING UNUSED
 void Particle::render()
 {
 	float size = (startSize * (life) + endSize*(startingLife - life)) / startingLife;
@@ -71,7 +72,7 @@ void Particle::render()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void Particle::renderArray(vector<vec3>& vtxArray, vector<vec2>& texArray, vector<color>& colArray)
+void Particle::renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray)
 {
 	float size = (startSize * (life) + endSize*(startingLife - life)) / startingLife;
 	float alpha = (startAlpha * (life) + endAlpha*(startingLife - life)) / startingLife;
@@ -81,31 +82,28 @@ void Particle::renderArray(vector<vec3>& vtxArray, vector<vec2>& texArray, vecto
 	colr.g = col.y;
 	colr.b = col.z;
     colr.a = alpha;
-	
-    if(reflection)
-    {
-        colr.r *= 0.7;
-        colr.g *= 0.8;
-        colr.b *= 1;
-        colr.a *= 0.3;
-    }
+/*
 	vec3 dx = cross(cameraVec, vec3(0, 1, 0));
 	vec3 dy = cross(dx, cameraVec);
 	normalize(dx);
 	normalize(dy);
 	dx *= size;
 	dy *= size;
+    */
 
-	vtxArray.push_back(p+dx+dy);
-	vtxArray.push_back(p+dx-dy);
-	vtxArray.push_back(p-dx-dy);
-	vtxArray.push_back(p-dx+dy);
-	
-    texArray.push_back(vec2(-1, -1));
-    texArray.push_back(vec2(1, -1));
-	texArray.push_back(vec2(1, 1));
-    texArray.push_back(vec2(-1, 1));
-	
+    vtxArray.push_back(vec3(-1, -1, 0));
+    vtxArray.push_back(vec3(-1, 1, 0));
+    vtxArray.push_back(vec3(1, 1, 0));
+    vtxArray.push_back(vec3(1, -1, 0));
+
+    for(int i = 0; i < 4; i++)
+    {
+        texArray.push_back(p.x);
+        texArray.push_back(p.y);
+        texArray.push_back(p.z);
+        texArray.push_back(size);
+    }
+
 	colArray.push_back(colr);
 	colArray.push_back(colr);
 	colArray.push_back(colr);

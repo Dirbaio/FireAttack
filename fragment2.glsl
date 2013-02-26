@@ -2,11 +2,12 @@ varying vec3 normal, lightDir, eyeVec;
 
 void main()
 {
+
+    /*
     vec4 final_color =
         (gl_FrontLightModelProduct.sceneColor * gl_FrontMaterial.ambient) +
         (gl_LightSource[0].ambient * gl_FrontMaterial.ambient) * 0.1;
 
-    vec3 N = normalize(normal);
     vec3 L = normalize(lightDir);
 
     float lambertTerm = dot(N,L);
@@ -32,10 +33,9 @@ void main()
 
     final_color += gl_LightSource[0].specular *
                    vec4(pow(lul,4)*0.7, pow(lul, 3), pow(lul,5), 1) * 0.4;
+*/
 
-//    gl_FragColor = vec4(0, 1, 0, 1);
-
-    gl_FragData[0] = final_color;
-    gl_FragData[1] = vec4(1, 1, 0, 1);
-    gl_FragData[2] = vec4(1, 0, 1, 1);
+    gl_FragData[0] = vec4(0, 1, 0, 1);
+    vec3 N = normalize(normal);
+    gl_FragData[1] = vec4((N*0.5)+0.5, 1);
 }

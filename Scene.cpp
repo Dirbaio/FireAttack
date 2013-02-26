@@ -91,74 +91,39 @@ void Scene::render()
 }
 
 vector<vec3> vtxArray;
-vector<vec2> texArray;
+vector<float> texArray;
 vector<color> colArray;
 
 void Scene::renderParticles()
 {
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
-    glDisable(GL_CULL_FACE);
-    glDepthFunc(GL_LESS);
+    vtxArray.resize(0);
+    texArray.resize(0);
+    colArray.resize(0);
 
-    vec3 camVec = cameraLookAt - cameraPos;
-    normalize(camVec);
-    setCameraVec(camVec, false);
-    renderParticlePass();
-/*
-    glDepthFunc(GL_GREATER);
+    vtxArray.reserve(particles.size()*4);
+    texArray.reserve(particles.size()*4*4);
+    colArray.reserve(particles.size()*4);
 
-    camVec.y = -camVec.y;
-    setCameraVec(camVec, true);
+    int ct = 0;
+    for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
+    {
+        it->renderArray(vtxArray, texArray, colArray);
+        if(ct++ > 100)
+            break;
+    }
 
-    glPushMatrix();
-    glScalef(1, -1, 1);
-    renderParticlePass();
-    glPopMatrix();
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
-    glDepthFunc(GL_LESS);*/
-}
-
-void Scene::renderParticlePass()
-{
-    if(particles.size() == 0)
-        return;
-
-
-    //SORT DA PARTICLES!!!
-//	particles.sort();
-	
-    //Render them!
-	particleTex.bind();
-
-	vtxArray.resize(0);
-	texArray.resize(0);
-	colArray.resize(0);
-	
-	vtxArray.reserve(particles.size()*4);
-	texArray.reserve(particles.size()*4);
-	colArray.reserve(particles.size()*4);
-	
-	for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
-		it->renderArray(vtxArray, texArray, colArray);
-
-    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, &vtxArray[0]);
-	glTexCoordPointer(2, GL_FLOAT, 0, &texArray[0]);
-	glColorPointer(4, GL_FLOAT, 0, &colArray[0]);
-	
-/*	cout<<vtxArray.size()<<endl;
-	cout<<texArray.size()<<endl;*/
+    glVertexPointer(3, GL_FLOAT, 0, &vtxArray[0]);
+    glTexCoordPointer(4, GL_FLOAT, 0, &texArray[0]);
+    glColorPointer(4, GL_FLOAT, 0, &colArray[0]);
 
     glDrawArrays(GL_QUADS, 0, vtxArray.size());
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void Scene::addParticle(const Particle& p) 
