@@ -33,5 +33,9 @@ void main()
     final_color += gl_LightSource[0].specular *
                    vec4(pow(lul,4)*0.7, pow(lul, 3), pow(lul,5), 1) * 0.4;
 
-    gl_FragColor = final_color;
+//    gl_FragColor = vec4(0, 1, 0, 1);
+
+    gl_FragData[0] = final_color;
+    gl_FragData[1] = vec4(1, 1, 0, 1);
+    gl_FragData[2] = vec4(1, 0, 1, 1);
 }

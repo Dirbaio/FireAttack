@@ -30,29 +30,6 @@ GameScene::GameScene() : mdl("test.obj")
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));
 
-    float sz = 20;
-
-    vertexs.push_back(-sz); vertexs.push_back(0); vertexs.push_back(-sz);
-    vertexs.push_back(sz);  vertexs.push_back(0); vertexs.push_back(-sz);
-    vertexs.push_back(sz);  vertexs.push_back(0); vertexs.push_back(sz);
-    vertexs.push_back(-sz); vertexs.push_back(0); vertexs.push_back(sz);
-
-    texcoords.push_back(-sz); texcoords.push_back(-sz);
-    texcoords.push_back(sz);  texcoords.push_back(-sz);
-    texcoords.push_back(sz);  texcoords.push_back(sz);
-    texcoords.push_back(-sz); texcoords.push_back(sz);
-
-    float r = 1;
-    float g = 1;
-    float b = 1;
-
-    for(int i = 0; i < 4; i++)
-    {
-        colors.push_back(r);
-        colors.push_back(g);
-        colors.push_back(b);
-    }
-
 
     /*
     vector<b2Vec2> points2;
@@ -93,7 +70,6 @@ GameScene::GameScene() : mdl("test.obj")
             b2EdgeShape edge;
             edge.Set(b2Vec2(pts[0].x, pts[0].y), b2Vec2(pts[1].x, pts[1].y));
             body->CreateFixture(&edge, 0.0f);
-
         }
     }
 
