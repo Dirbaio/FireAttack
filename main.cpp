@@ -17,7 +17,6 @@
 using namespace std;
 using namespace sf;
 
-
 float rotx = 0;
 float roty = 0;
 
@@ -326,9 +325,8 @@ int main(int argc, char** argv)
         glBindTexture(GL_TEXTURE_2D, fbo_depth);
 
         sc->renderParticles();
-/*
 
-        glColor3f(1, 1, 1);
+/*        glColor3f(1, 1, 1);
 
         glBegin(GL_QUADS);
         glVertex3f(-1.0f, -1.0f, 0.0f);

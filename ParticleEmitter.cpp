@@ -102,16 +102,19 @@ void ParticleEmitter::update()
 	
 	if(!enabled) return;
 	
+    float div = 30;
+
 	state += dt;
-	while(state > period)
+    while(state > period*div)
 	{
-		state -= period;
+        state -= period*div;
         spawnParticle(state/dt);
 	}
 }
 
 void ParticleEmitter::boom(int count)
 {
+    count /= 30;
     for(int i = 0; i < count; i++)
         spawnParticle(0);
 }

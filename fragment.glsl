@@ -23,16 +23,10 @@ void main()
     vec4 c3 = texture2D(tex3, coord);
 
     vec3 color = c1.rgb;
-    vec3 normal = c2.xyz*2.0 - 1.0;
-
-
-    vec3 lightDir = vec3(1, 1, 1);
-    lightDir = normalize(lightDir);
-    float light = dot(normal, lightDir);
-    if(light < 0) light = 0;
+    vec3 normal = normalize(c2.xyz*2.0 - 1.0);
 
     float zNear = 0.01;
-    float zFar = 50;
+    float zFar = 50.0;
 
     float x = coord.x*2.0-1.0;
     float y = coord.y*2.0-1.0;
@@ -42,10 +36,18 @@ void main()
     vec3 ray = cameraUp*y+cameraRight*x+cameraFront;
     vec3 pos = cameraPos + ray*z;
 
+    vec3 lightPos = gl_TexCoord[0].xyz;
+    vec3 lightDir = lightPos - pos;
+    float dist = length(lightDir);
 
-    color = vec3(int(floor(pos.x)) & 1, int(floor(pos.y)) & 1, int(floor(pos.z)) & 1);
-    vec3 finalColor = color;
-    gl_FragColor += vec4(finalColor, 1);
+    float light = 1.0/(dist*dist) * gl_Color.a * gl_TexCoord[0].w;
+    vec3 lightCol = light * gl_Color.rgb;
+//    float light = dot(normal, lightDir);
+//    if(light < 0) light = 0;
+
+//    color = vec3(int(floor(pos.x)) & 1, int(floor(pos.y)) & 1, int(floor(pos.z)) & 1);
+    vec3 finalColor = color * lightCol;
+    gl_FragColor = vec4(finalColor, 1);
 }
 
 

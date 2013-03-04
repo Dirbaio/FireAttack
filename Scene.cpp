@@ -104,13 +104,8 @@ void Scene::renderParticles()
     texArray.reserve(particles.size()*4*4);
     colArray.reserve(particles.size()*4);
 
-    int ct = 0;
     for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
-    {
         it->renderArray(vtxArray, texArray, colArray);
-        if(ct++ > 100)
-            break;
-    }
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
