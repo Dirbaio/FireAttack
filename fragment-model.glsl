@@ -35,7 +35,7 @@ void main()
                    vec4(pow(lul,4)*0.7, pow(lul, 3), pow(lul,5), 1) * 0.4;
 */
 
-    gl_FragData[0] = vec4(1, 1, 1, 1);
+    gl_FragData[0] = vec4(1.0, 1.0, 1.0, 1.0);
     vec3 N = normalize(normal);
-    gl_FragData[1] = vec4((N*0.5)+0.5, 1);
+    gl_FragData[1] = vec4((N*0.5)+0.5, 1.0);
 }

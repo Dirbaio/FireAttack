@@ -43,12 +43,12 @@ void main()
     float dist = length(lightDir);
 
     float light = dot(normal, lightDir)+0.5;
-    if(light < 0) light = 0;
+    if(light < 0.0) light = 0.0;
     light *= 1.0/(dist*dist) * particleSize;
     vec3 lightCol = light * gl_Color.rgb;
 
     vec3 finalColor = color * lightCol;
 //    finalColor = vec3(int(floor(pos.x)) & 1, int(floor(pos.y)) & 1, int(floor(pos.z)) & 1);
-    gl_FragColor = vec4(finalColor, 1);
+    gl_FragColor = vec4(finalColor, 1.0);
 }
 
