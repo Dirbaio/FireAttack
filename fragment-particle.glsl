@@ -53,7 +53,7 @@ void main()
     float j = particle.y;
     float k = -particle.z;
     float r = particleSize;
-    float raiz = -a*a*j*j - a*a*k*k + a*a*r*r + 2*a*b*i*j + 2*a*i*k - b*b*i*i - b*b*k*k + b*b*r*r + 2*b*j*k - i*i - j*j + r*r;
+    float raiz = -a*a*j*j - a*a*k*k + a*a*r*r + 2.0*a*b*i*j + 2.0*a*i*k - b*b*i*i - b*b*k*k + b*b*r*r + 2.0*b*j*k - i*i - j*j + r*r;
     raiz = sqrt(raiz);
     float fraccion = (a*i + b*j + k);
     float pznear = (-raiz + fraccion) / (a*a + b*b + 1.0);
@@ -67,6 +67,6 @@ void main()
     vec3 lightCol = light * gl_Color.rgb;
 
 //    finalColor = vec3(int(floor(pos.x)) & 1, int(floor(pos.y)) & 1, int(floor(pos.z)) & 1);
-    gl_FragColor = vec4(lightCol, 1);
+    gl_FragColor = vec4(lightCol, 1.0);
 }
 
