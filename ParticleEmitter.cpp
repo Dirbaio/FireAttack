@@ -79,8 +79,10 @@ ParticleEmitter::ParticleEmitter(Actor* act)
     a = vec3(0, 0.2, 0);
     v = vec3(0, 0, 0);
 
+
 	//Private stuff
-	this->state = 0;
+    count = 0;
+    this->state = 0;
 	this->disableTimer = -1;
 	this->enabled = true;
 }
@@ -101,20 +103,17 @@ void ParticleEmitter::update()
 	}
 	
 	if(!enabled) return;
-	
-    float div = 30;
 
 	state += dt;
-    while(state > period*div)
+    while(state > period)
 	{
-        state -= period*div;
+        state -= period;
         spawnParticle(state/dt);
 	}
 }
 
 void ParticleEmitter::boom(int count)
 {
-    count /= 30;
     for(int i = 0; i < count; i++)
         spawnParticle(0);
 }
@@ -125,7 +124,7 @@ void ParticleEmitter::spawnParticle(float t)
     pt.p = act->oldp * (1-t) + act->p * t + randPos.get()*act->particlePosMult*act->sc->particlePosMult;
     pt.v = v + act->v*actorVelMult + randVel.get();
     pt.a = a;
-
+    pt.isLight = (++count) % 30 == 0;
 	pt.life = life + frand(randLife);
 	pt.startingLife = pt.life;
 	pt.startSize = startSize;

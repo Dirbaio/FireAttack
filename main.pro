@@ -42,5 +42,7 @@ else:unix:!symbian: PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/libB
 
 OTHER_FILES += \
     vertex.glsl \
-    fragment.glsl \
-    fragment2.glsl
+    fragment-particle.glsl \
+    fragment-light.glsl \
+    fragment-model.glsl \
+    vertex2.glsl

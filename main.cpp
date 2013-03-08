@@ -35,8 +35,8 @@ unsigned int fbo;
 unsigned int fbo_depth;
 unsigned int fbo_texture1, fbo_texture2;
 
-int window_width = 500;
-int window_height = 500;
+int window_width = 1200;
+int window_height = 800;
 
 void initFrameBuffer(void)
 {
@@ -98,13 +98,57 @@ void initFrameBuffer(void)
     glDrawBuffers(2, buffers);
 
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0); // Unbind our frame buffer
+}
 
+
+void renderParticles(Shader& sh, bool light)
+{
+    sh.bind();
+    float ratio = float(theApp->getSize().x) / float(theApp->getSize().y);
+    vec3 camVec = sc->cameraLookAt - sc->cameraPos;
+    normalize(camVec);
+    vec3 up2 (0, 1, 0);
+    vec3 right = cross(camVec, up2);
+    normalize(right);
+    right *= ratio;
+    vec3 up = cross(right, camVec);
+    normalize(up);
+/*    sh.setParameter("w", theApp->getSize().x);
+    sh.setParameter("h", theApp->getSize().y);
+    sh.setParameter("cameraUp", up);
+    sh.setParameter("cameraRight", right);
+    sh.setParameter("cameraFront", camVec);
+    sh.setParameter("cameraPos",  sc->cameraPos);
+*/
+    sh.setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+
+    int program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
+    GLint tex1Loc = glGetUniformLocation(program, "tex1");
+    GLint tex2Loc = glGetUniformLocation(program, "tex2");
+    GLint tex3Loc = glGetUniformLocation(program, "tex3");
+
+    glUniform1i(tex1Loc, 0);
+    glUniform1i(tex2Loc, 1);
+    glUniform1i(tex3Loc, 2);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fbo_texture1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, fbo_texture2);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, fbo_depth);
+
+    sc->renderParticles(light);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    sh.unbind();
 }
 
 int main(int argc, char** argv)
 {
     // Create the main window
-    Window app (sf::VideoMode(1024, 768, 32), "SFML OpenGL");
+    Window app (sf::VideoMode(window_width, window_height, 32), "SFML OpenGL");
     theApp = &app;
 
     //	app.setVerticalSyncEnabled(true);
@@ -117,66 +161,16 @@ int main(int argc, char** argv)
     glClearDepth(1.0f);
     glClearColor(0.f, 0.f, 0.f, 0.f);
 
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
     glEnable(GL_TEXTURE_2D);
 
     initFrameBuffer();
 
-    GLfloat mat_specular[] = { 0.5, 1.0 , 0.8, 1.0 };
-    GLfloat mat_shininess[] = { 50.0 };
-    GLfloat light_position[] = { 200.0, 100.0, 300.0, 0.0 };
-    //	glShadeModel (GL_SMOOTH);
-
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
-
-
-    //glDisable(GL_LIGHTING);
-    //    glEnable(GL_CULL_FACE);
     glDisable(GL_CULL_FACE);
 
-    /*
-    //TODO Hacerlo segun la ventana
-    int w = 512;
-    int h = 512;
-
-    GLuint mFBO;
-    GLuint mTexColor, mTexNormal, mTexDepth;
-
-    glGenFramebuffersEXT(1, &mFBO);
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFBO);
-
-    glGenTextures(1, &mTexColor);
-    glBindTexture(GL_TEXTURE_2D, mTexColor);
-    //<texture params>
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, mTexColor, 0);
-
-    glGenTextures(1, &mTexNormal);
-    glBindTexture(GL_TEXTURE_2D, mTexNormal);
-    //<Texture params>
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_TEXTURE_2D, mTexNormal, 0);
-
-    glGenTextures(1, &mTexDepth);
-    glBindTexture(GL_TEXTURE_2D, mTexDepth);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTexDepth, 0);
-
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-
-    GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT };
-    glDrawBuffers(2, buffers);
-    */
-
-    Shader sh; sh.loadFromFile("vertex.glsl", "fragment.glsl");
-    Shader sh2; sh2.loadFromFile("vertex.glsl", "fragment2.glsl");
+    Shader modelShader; modelShader.loadFromFile("vertex.glsl", "fragment-model.glsl");
+    Shader lightShader; lightShader.loadFromFile("vertex2.glsl", "fragment-light.glsl");
+    Shader particleShader; particleShader.loadFromFile("vertex2.glsl", "fragment-particle.glsl");
 
     srand(time(NULL));
 
@@ -189,7 +183,6 @@ int main(int argc, char** argv)
     float renderTime = 0;
     float renderPartTime = 0;
 
-    int windowWidth, windowHeight;
     // Start game loop
     while (app.isOpen())
     {
@@ -214,10 +207,16 @@ int main(int argc, char** argv)
             // Resize event : adjust viewport
             if (event.type == sf::Event::Resized)
             {
-                glViewport(0, 0, event.size.width, event.size.height);
-                // Setup a perspective projection
-                windowWidth = event.size.width;
-                windowHeight = event.size.height;
+                window_width = event.size.width;
+                window_height = event.size.height;
+                glBindTexture(GL_TEXTURE_2D, fbo_texture1);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+                glBindTexture(GL_TEXTURE_2D, fbo_texture2);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+                glBindTexture(GL_TEXTURE_2D, fbo_depth);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window_width, window_height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+
+                glViewport(0, 0, window_width, window_height);
             }
         }
 
@@ -237,32 +236,36 @@ int main(int argc, char** argv)
             frameCount = 0;
         }
 
+
+        //UPDATE SCENE
+        //============
         profiler.restart();
         sc->update();
         countTime(updateTime, profiler.getElapsedTime().asMilliseconds());
 
 
-
+        //FIRST PASS
+        //==========
 
         profiler.restart();
         glEnable(GL_LIGHTING);
         glDisable(GL_BLEND);
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo); // Bind our frame buffer for rendering
-        glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT); // Push our glEnable and glViewport states
-        glViewport(0, 0, window_width, window_height); // Set the size of the frame buffer view port
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+        glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
+        glViewport(0, 0, window_width, window_height);
 
-        glClearColor (0.0f, 0.0f, 0.0f, 1.0f); // Set the clear colour
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth and colour buffers
+        glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(90.f, float(windowWidth)/float(windowHeight), 0.01f, 50.f);
+        gluPerspective(90.f, float(window_width)/float(window_height), 0.01f, 50.f);
 
-        sh2.bind();
+        modelShader.bind();
         glEnable(GL_DEPTH_TEST);
         glDepthMask(GL_TRUE);
         sc->render();
-        sh2.unbind();
+        modelShader.unbind();
 
         glPopAttrib(); // Restore our glEnable and glViewport states
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0); // Unbind our texture
@@ -270,75 +273,27 @@ int main(int argc, char** argv)
         countTime(renderTime, profiler.getElapsedTime().asMilliseconds());
 
 
-
+        //SECOND PASS
+        //===========
 
         profiler.restart();
-
+/*
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-
+*/
         glDisable(GL_CULL_FACE);
         glDisable(GL_LIGHTING);
-
-        sh.bind();
-
-        float ratio = float(theApp->getSize().x) / float(theApp->getSize().y);
-        vec3 camVec = sc->cameraLookAt - sc->cameraPos;
-        normalize(camVec);
-        vec3 up2 (0, 1, 0);
-        vec3 right = cross(camVec, up2);
-        normalize(right);
-        right *= ratio;
-        vec3 up = cross(right, camVec);
-        normalize(up);
-        sh.setParameter("w", theApp->getSize().x);
-        sh.setParameter("h", theApp->getSize().y);
-        sh.setParameter("cameraUp", up);
-        sh.setParameter("cameraRight", right);
-        sh.setParameter("cameraFront", camVec);
-        sh.setParameter("cameraPos",  sc->cameraPos);
-
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
         glDisable(GL_DEPTH_TEST);
         glClearColor (0.0f, 0.0f, 0.0f, 1.0f); // Set the clear colour
+
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth and colour buffers
-
-        int program;
-        glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
-        GLint tex1Loc = glGetUniformLocation(program, "tex1");
-        GLint tex2Loc = glGetUniformLocation(program, "tex2");
-        GLint tex3Loc = glGetUniformLocation(program, "tex3");
-
-        glUniform1i(tex1Loc, 0);
-        glUniform1i(tex2Loc, 1);
-        glUniform1i(tex3Loc, 2);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, fbo_texture1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, fbo_texture2);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, fbo_depth);
-
-        sc->renderParticles();
-
-/*        glColor3f(1, 1, 1);
-
-        glBegin(GL_QUADS);
-        glVertex3f(-1.0f, -1.0f, 0.0f);
-        glVertex3f(-1.0f, 1.0f, 0.0f);
-        glVertex3f(1.0f, 1.0f, 0.0f);
-        glVertex3f(1.0f, -1.0f, 0.0f);
-        glEnd();*/
-
-
-
-        glBindTexture(GL_TEXTURE_2D, 0); // Unbind any textures
-        sh.unbind();
+        renderParticles(lightShader, true);
+        renderParticles(particleShader, false);
 
 
         if(sc->nextScene)

@@ -94,7 +94,7 @@ vector<vec3> vtxArray;
 vector<float> texArray;
 vector<color> colArray;
 
-void Scene::renderParticles()
+void Scene::renderParticles(bool light)
 {
     vtxArray.resize(0);
     texArray.resize(0);
@@ -104,8 +104,22 @@ void Scene::renderParticles()
     texArray.reserve(particles.size()*4*4);
     colArray.reserve(particles.size()*4);
 
+    Particle p;
+    p.startAlpha = 1.0f;
+    p.endAlpha = 1.0f;
+    p.startCol = vec3(1, 1, 1);
+    p.endCol = vec3(1, 1, 1);
+    p.startSize = 40;
+    p.endSize = 40;
+    p.life = 10;
+    p.startingLife = 10;
+    p.p = vec3(0, 0, 0);
+
+    p.renderArray(vtxArray, texArray, colArray, light);
+
     for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
-        it->renderArray(vtxArray, texArray, colArray);
+        it->renderArray(vtxArray, texArray, colArray, light);
+
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);

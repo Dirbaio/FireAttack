@@ -62,7 +62,8 @@ class ParticleEmitter
 	private:
     void spawnParticle(float t);
 	
-	float state;
+    int count;
+    float state;
 	float disableTimer; //-1 if no timer
 	bool enabled;
 	

@@ -72,8 +72,11 @@ void Particle::render()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void Particle::renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray)
+void Particle::renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool light)
 {
+    if(!isLight && light)
+        return;
+
 	float size = (startSize * (life) + endSize*(startingLife - life)) / startingLife;
 	float alpha = (startAlpha * (life) + endAlpha*(startingLife - life)) / startingLife;
 	vec3 col = (startCol * (life) + endCol*(startingLife - life)) / startingLife;
@@ -82,19 +85,18 @@ void Particle::renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vect
 	colr.g = col.y;
 	colr.b = col.z;
     colr.a = alpha;
-/*
-	vec3 dx = cross(cameraVec, vec3(0, 1, 0));
-	vec3 dy = cross(dx, cameraVec);
-	normalize(dx);
-	normalize(dy);
-	dx *= size;
-	dy *= size;
-    */
 
-    vtxArray.push_back(vec3(-1, -1, 0));
-    vtxArray.push_back(vec3(-1, 1, 0));
-    vtxArray.push_back(vec3(1, 1, 0));
-    vtxArray.push_back(vec3(1, -1, 0));
+    vec3 dx = cross(cameraVec, vec3(0, 1, 0));
+    vec3 dy = cross(dx, cameraVec);
+    normalize(dx);
+    normalize(dy);
+    float mult = light?20.0f:1.5f;
+    dx *= size*mult;
+    dy *= size*mult;
+    vtxArray.push_back(p+dx+dy);
+    vtxArray.push_back(p+dx-dy);
+    vtxArray.push_back(p-dx-dy);
+    vtxArray.push_back(p-dx+dy);
 
     for(int i = 0; i < 4; i++)
     {

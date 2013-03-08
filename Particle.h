@@ -15,11 +15,12 @@ class Particle {
 	float startSize, endSize;
 	vec3 startCol, endCol;
 	float startAlpha, endAlpha;
-	
+    bool isLight;
+
 	Particle();
 	void render();
 	void update();
-    void renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray);
+    void renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool light);
 	float getZOrder() const;
 };
 
