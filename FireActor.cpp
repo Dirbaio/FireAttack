@@ -59,10 +59,9 @@ FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
 
 void FireActor::update()
 {
-    if(p.y > 10) explode();
 
     p += v*dt;
-    if(p.y < 0 || p.y > 20 || p.x < -100 || p.x > 100)
+    if(p.y < 0 || p.y > 50 || p.x < -100 || p.x > 100)
         explode();
 
     body->SetTransform(b2Vec2(p.x, p.y), 0);

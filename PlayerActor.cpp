@@ -83,7 +83,7 @@ void PlayerActor::update()
     if(Keyboard::isKeyPressed(Keyboard::S))
         body->ApplyForceToCenter(b2Vec2(0, -f));
 
-    sc->cameraLookAt = vec3(p.x, p.y, 0);
+    sc->cameraLookAt = vec3(p.x, p.y+3, 0);
     float weight = exp(-dt*6);
     sc->cameraPos = sc->cameraPos * weight + (vec3(p.x, p.y , 0) + vec3(0, 2, 7)) * (1-weight);
 /*
@@ -94,7 +94,7 @@ void PlayerActor::update()
 
     particlePosMult = 1+mouseDownTime;
 */
-    if(!wasMouseDown && Mouse::isButtonPressed(Mouse::Left))
+    if(/*!wasMouseDown && */Mouse::isButtonPressed(Mouse::Left))
     {
         Vector2i ppos = Mouse::getPosition(*theApp);
 
