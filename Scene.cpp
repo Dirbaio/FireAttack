@@ -107,10 +107,10 @@ void Scene::renderParticles(bool light)
     Particle p;
     p.startAlpha = 1.0f;
     p.endAlpha = 1.0f;
-    p.startCol = vec3(1, 1, 1);
+    p.startCol = vec3(1, 0.5, 0.7);
     p.endCol = vec3(1, 1, 1);
-    p.startSize = 40;
-    p.endSize = 40;
+    p.startSize = 20;
+    p.endSize = 20;
     p.life = 10;
     p.startingLife = 10;
     p.p = vec3(0, 0, 0);

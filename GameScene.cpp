@@ -97,8 +97,8 @@ vector<list<line> > connectLines(const vector<line>& v)
 
 GameScene::GameScene() : mdl("test.obj")
 {
-//    for(int i = 0; i < 10; i++)
-//        actors.push_back(new BoxActor(this, false));
+    for(int i = 0; i < 10; i++)
+        actors.push_back(new BoxActor(this, false));
     actors.push_back(new PlayerActor(this));
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));
@@ -225,7 +225,7 @@ void GameScene::update()
     }
     if(deadTimer <= 0 && !nextScene)
         nextScene = new GameScene();
-/*
+
     spawnTimer -= dt;
     if(spawnTimer < 0)
     {
@@ -236,7 +236,7 @@ void GameScene::update()
         if(awesome && prand(0.05))
             for(int i = 0; i < 3; i++)
                 actors.push_back(new BoxActor(this, true));
-    }*/
+    }
 }
 
 void GameScene::render()
