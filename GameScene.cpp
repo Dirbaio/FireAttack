@@ -230,7 +230,7 @@ void GameScene::update()
     if(spawnTimer < 0)
     {
         spawnTimer = 1 + frand(1);
-        if(actors.size() < 20)
+//        if(actors.size() < 20)
             actors.push_back(new BoxActor(this, prand(awesome?0.9:0.1)));
 
         if(awesome && prand(0.05))
