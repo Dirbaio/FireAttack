@@ -48,7 +48,7 @@ Model::Model(string filename)
             faceCount++;
         }
     }
-    cout<<"FACES: "<<faceCount<<endl;
+//    cout<<"FACES: "<<faceCount<<endl;
 }
 
 void Model::draw()

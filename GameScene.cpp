@@ -64,14 +64,14 @@ vector<list<line> > connectLines(const vector<line>& v)
     vector<list<line> > res;
     vector<bool> vis (v.size(), false);
 
-    for (int i = 0; i < v.size(); i++)
+    for (int i = 0; i < int(v.size()); i++)
     {
         if (vis[i]) continue;
         vis[i] = true;
         list<line> l;
         l.push_back(v[i]);
 
-        for (int j = i+1; j < v.size(); j++)
+        for (int j = i+1; j < int(v.size()); j++)
         {
             if (vis[j]) continue;
             line x = v[j], a = l.front(), b = l.back();
