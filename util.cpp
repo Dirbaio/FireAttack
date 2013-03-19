@@ -2,6 +2,9 @@
 
 static map<string, Texture*> imgMap;
 
+vector<vec3> hexVert, hexNorm;
+vector<vec2> hexTexCoord;
+
 Texture* loadTexture(string path)
 {
         map<string, Texture*>::iterator it;
@@ -51,7 +54,6 @@ float cubeNormals[24][3] = {
     {0, 0, -1},{0, 0, -1},{0, 0, -1},{0, 0, -1},
     {1, 0, 0},{1, 0, 0},{1, 0, 0},{1, 0, 0},
     {-1, 0, 0},{-1, 0, 0},{-1, 0, 0},{-1, 0, 0},
-
     {0, -1, 0},{0, -1, 0},{0, -1, 0},{0, -1, 0},
     {0, 1, 0},{0, 1, 0},{0, 1, 0},{0, 1, 0},
 };

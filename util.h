@@ -12,6 +12,7 @@
 #include "GL/glext.h"
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 using namespace std;
 using namespace sf;
@@ -74,6 +75,9 @@ extern float tim;
 extern Window* theApp;
 extern Texture* loadTexture(string path);
 extern SoundBuffer* loadSound(string path);
+
+extern vector<vec3> hexVert, hexNorm;
+extern vector<vec2> hexTexCoord;
 
 void renderCube(float x, float y, float z, float sx, float sy, float sz, float rot);
 
