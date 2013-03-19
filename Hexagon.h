@@ -10,6 +10,7 @@ class Hexagon : public Actor
 private:
     int type;
     float rot;
+    float sx, sy, sz;
 
 public:
     Hexagon(GameScene* sc);

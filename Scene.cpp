@@ -23,8 +23,8 @@ Scene::~Scene()
 
 void Scene::update()
 {
-    int velIters = 5;
-    int posIters = 2;
+    int velIters = 20;
+    int posIters = 8;
     world.Step(dt, velIters, posIters);
 /*
     float step = 1.0f / 60.0f;
@@ -107,7 +107,7 @@ void Scene::renderParticles(bool light)
     Particle p;
     p.startAlpha = 1.0f;
     p.endAlpha = 1.0f;
-    p.startCol = vec3(1, 0.5, 0.7);
+    p.startCol = vec3(0.5, 0.8, 1.0);
     p.endCol = vec3(1, 1, 1);
     p.startSize = 20;
     p.endSize = 20;

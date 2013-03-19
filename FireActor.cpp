@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "BoxActor.h"
 #include "GameScene.h"
+#include "Hexagon.h"
 
 FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
 {
@@ -73,6 +74,12 @@ void FireActor::render()
 
 bool FireActor::collided(Actor *b)
 {
+    if(dynamic_cast<Hexagon*>(b))
+    {
+        explode();
+        return true;
+    }
+
     BoxActor* x = dynamic_cast<BoxActor*>(b);
     if(x && green)
     {
@@ -112,6 +119,7 @@ bool FireActor::collided(Actor *b)
         e.boom(200);
         gsc->goAwesome();
     }
+
 
     b->explode();
     alive = false;
