@@ -124,7 +124,7 @@ void ParticleEmitter::spawnParticle(float t)
     pt.p = act->oldp * (1-t) + act->p * t + randPos.get()*act->particlePosMult*act->sc->particlePosMult;
     pt.v = v + act->v*actorVelMult + randVel.get();
     pt.a = a;
-    pt.isLight = (++count) % 30 == 0;
+    pt.isLight = (++count) % 80 == 0;
 	pt.life = life + frand(randLife);
 	pt.startingLife = pt.life;
 	pt.startSize = startSize;

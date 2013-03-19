@@ -76,7 +76,11 @@ bool FireActor::collided(Actor *b)
 {
     if(dynamic_cast<Hexagon*>(b))
     {
-        explode();
+        bounceCount--;
+        if(bounceCount == 0)
+        {
+            explode();
+        }
         return true;
     }
 

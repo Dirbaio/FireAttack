@@ -94,7 +94,7 @@ void PlayerActor::update()
 
     particlePosMult = 1+mouseDownTime;
 */
-    if(/*!wasMouseDown &&*/ Mouse::isButtonPressed(Mouse::Left))
+    if(!wasMouseDown && Mouse::isButtonPressed(Mouse::Left))
     {
         Vector2i ppos = Mouse::getPosition(*theApp);
 

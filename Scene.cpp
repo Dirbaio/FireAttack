@@ -23,8 +23,8 @@ Scene::~Scene()
 
 void Scene::update()
 {
-    int velIters = 20;
-    int posIters = 8;
+    int velIters = 60;
+    int posIters = 30;
     world.Step(dt, velIters, posIters);
 /*
     float step = 1.0f / 60.0f;
