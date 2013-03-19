@@ -8,12 +8,12 @@ class GameScene;
 class Hexagon : public Actor
 {
 private:
-    int type;
     float rot;
     float sx, sy, sz;
+    bool destructible, movable, rotable;
 
 public:
-    Hexagon(GameScene* sc);
+    Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible);
 
     virtual void update();
     virtual void render();

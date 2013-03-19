@@ -2,18 +2,23 @@
 #include "util.h"
 #include "GameScene.h"
 
-Hexagon::Hexagon(GameScene* sc) : Actor(sc)
+Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible) : Actor(sc)
 {
     rot = 0;
     sx = sz = 1.0;
     sy = 0.4;
-    p.x = 0;
-    p.z = 0;
-    p.y = 16;
+    p.x = pos.x;
+    p.y = pos.y;
+    p.z = pos.z;
+
+    this->movable = movable;
+    this->rotable = rotable;
+    this->destructible = destructible;
 
     b2BodyDef bodyDef;
+    if (movable) bodyDef.type = b2_dynamicBody;
+    else bodyDef.type = b2_staticBody;
     bodyDef.position.Set(p.x, p.y);
-    bodyDef.type = b2_dynamicBody;
     body = sc->world.CreateBody(&bodyDef);
     body->SetLinearDamping(1.0f);
     b2PolygonShape box;
@@ -24,7 +29,7 @@ Hexagon::Hexagon(GameScene* sc) : Actor(sc)
     fixture.shape = &box;
     fixture.restitution = 0.3f;
     fixture.userData = this;
-    body->SetFixedRotation(true);
+    body->SetFixedRotation(!rotable);
     body->CreateFixture(&fixture);
     body->SetUserData(this);
 }
@@ -37,11 +42,7 @@ void Hexagon::render()
 {
     glPushMatrix();
 
-    float x = p.x, y = p.y, z = p.z;
-    sx = sz = 1;
-    sy = 0.4;
-
-    glTranslatef(x, y, z);
+    glTranslatef(p.x, p.y, p.z);
     glRotatef(toDeg(body->GetAngle()), 0, 0, 1);
     glRotatef(toDeg(rot), 0, 1, 0);
     glScalef(sx, sy, sz);

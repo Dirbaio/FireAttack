@@ -19,7 +19,9 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     WallActor.cpp \
     Model.cpp \
     Enemy.cpp \
-    Hexagon.cpp
+    Hexagon.cpp \
+    SolidHexagon.cpp \
+    BouncyHexagon.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     BoxActor.h \
     GameScene.h \
@@ -28,7 +30,9 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     WallActor.h \
     Model.h \
     Enemy.h \
-    Hexagon.h
+    Hexagon.h \
+    SolidHexagon.h \
+    BouncyHexagon.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/ -lBox2D
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/ -lBox2D
