@@ -16,8 +16,9 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     regen_time_window = reg;
     life = max_life = l;
 
-    dying = died = false;
+    dying = dead = false;
     dying_time = 0.0;
+
     if (movable)
         dying_time_window = 1.0;
     else
@@ -59,11 +60,11 @@ void Hexagon::update()
             life++;
         }
     }
-    if (dying && !died)
+    if (dying && !dead)
     {
         dying_time += dt;
         if (dying_time >= dying_time_window)
-            died = true;
+            dead = true;
         die();
     }
 }
@@ -99,7 +100,7 @@ bool Hexagon::collided(Actor* b)
 {
     if (dynamic_cast<FireActor*>(b))
     {
-        if (destructible && !dying && !died)
+        if (destructible && !dying && !dead)
         {
             life--;
             regen_time = 0;
@@ -113,15 +114,20 @@ bool Hexagon::collided(Actor* b)
 
 void Hexagon::die()
 {
-    if (died)
+    if (dead)
     {
         explode();
     }
     if (!dying)
     {
         body->SetFixedRotation(false);
-        body->ApplyAngularImpulse(frand(50.0));
+        body->ApplyAngularImpulse(frand(0.5)*100);
         dying = true;
     }
+}
 
+void Hexagon::swapRotable()
+{
+    rotable = !rotable;
+    body->SetFixedRotation(!rotable);
 }

@@ -13,9 +13,9 @@ private:
     bool destructible, movable, rotable;
     int life, max_life;
     float regen_time_window, regen_time;
-    void die();
 
-    bool dying, died;
+    void die();
+    bool dying, dead;
     float dying_time, dying_time_window;
 
 public:
@@ -25,6 +25,7 @@ public:
     virtual void render();
     virtual bool collided(Actor *b);
 
+    void swapRotable();
 };
 
 #endif // HEXAGON_H
