@@ -11,13 +11,20 @@ private:
     float rot;
     float sx, sy, sz;
     bool destructible, movable, rotable;
+    int life, max_life;
+    float regen_time_window, regen_time;
+    void die();
+
+    bool dying, died;
+    float dying_time, dying_time_window;
 
 public:
-    Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible);
+    Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible, float reg, int l);
 
     virtual void update();
     virtual void render();
-    void generateCollider();
+    virtual bool collided(Actor *b);
+
 };
 
 #endif // HEXAGON_H

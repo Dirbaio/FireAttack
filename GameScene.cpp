@@ -101,7 +101,7 @@ GameScene::GameScene() : mdl("test.obj")
   /*  for(int i = 0; i < 10; i++)
         actors.push_back(new BoxActor(this, false));*/
     actors.push_back(new PlayerActor(this));
-    for (int k = 0; k < 5; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, false));
+    for (int k = 0; k < 5; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 2.0, 5));
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));
 

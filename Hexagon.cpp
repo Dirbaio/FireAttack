@@ -1,8 +1,9 @@
 #include "Hexagon.h"
 #include "util.h"
 #include "GameScene.h"
+#include "FireActor.h"
 
-Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible) : Actor(sc)
+Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible, float reg, int l) : Actor(sc)
 {
     rot = 0;
     sx = sz = 1.0;
@@ -10,6 +11,17 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     p.x = pos.x;
     p.y = pos.y;
     p.z = pos.z;
+
+    regen_time = 0;
+    regen_time_window = reg;
+    life = max_life = l;
+
+    dying = died = false;
+    dying_time = 0.0;
+    if (movable)
+        dying_time_window = 1.0;
+    else
+        dying_time_window = 0.0;
 
     this->movable = movable;
     this->rotable = rotable;
@@ -36,6 +48,24 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
 
 void Hexagon::update()
 {
+    if (life == max_life)
+        regen_time = 0;
+    else
+    {
+        regen_time += dt;
+        if (regen_time >= regen_time_window)
+        {
+            regen_time = 0;
+            life++;
+        }
+    }
+    if (dying && !died)
+    {
+        dying_time += dt;
+        if (dying_time >= dying_time_window)
+            died = true;
+        die();
+    }
 }
 
 void Hexagon::render()
@@ -65,7 +95,33 @@ void Hexagon::render()
     glPopMatrix();
 }
 
-void Hexagon::generateCollider()
+bool Hexagon::collided(Actor* b)
 {
+    if (dynamic_cast<FireActor*>(b))
+    {
+        if (destructible && !dying && !died)
+        {
+            life--;
+            regen_time = 0;
+            if (life == 0)
+                die();
+        }
+        return true;
+    }
+    return false;
+}
+
+void Hexagon::die()
+{
+    if (died)
+    {
+        explode();
+    }
+    if (!dying)
+    {
+        body->SetFixedRotation(false);
+        body->ApplyAngularImpulse(frand(50.0));
+        dying = true;
+    }
 
 }
