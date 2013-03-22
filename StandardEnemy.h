@@ -11,7 +11,7 @@ private:
 
 public:
 
-    StandardEnemy(GameScene* sc, float size, vec3 pos);
+    StandardEnemy(GameScene* sc, float size, vec3 pos, vec3 col);
 
     virtual void update();
     virtual void render();

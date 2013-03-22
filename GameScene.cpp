@@ -6,6 +6,8 @@
 #include "WallActor.h"
 #include "SolidHexagon.h"
 #include "BouncyHexagon.h"
+#include "ShooterEnemy.h"
+#include "StandardEnemy.h"
 
 struct line
 {
@@ -99,8 +101,8 @@ vector<list<line> > connectLines(const vector<line>& v)
 
 GameScene::GameScene() : mdl("test.obj")
 {
-  /*  for(int i = 0; i < 10; i++)
-        actors.push_back(new BoxActor(this, false));*/
+    for(int i = 0; i < 2; i++)
+        actors.push_back(new ShooterEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0)));
     actors.push_back(new PlayerActor(this));
     for (int k = 0; k < 5; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 2.0, 5));
 //    actors.push_back(new WallActor(this, -10, -1));
