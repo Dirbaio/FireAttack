@@ -2,6 +2,8 @@
 #include "GameScene.h"
 #include "FireActor.h"
 #include "BoxActor.h"
+#include "BouncyHexagon.h"
+#include "SolidHexagon.h"
 
 PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
 {
@@ -176,6 +178,13 @@ bool PlayerActor::collided(Actor *b)
     {
         explode();
         return true;
+    }
+    if (dynamic_cast<Hexagon*>(b))
+    {
+        if (dynamic_cast<BouncyHexagon*>(b))
+        {
+
+        }
     }
     return false;
 }
