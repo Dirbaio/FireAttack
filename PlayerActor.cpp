@@ -15,6 +15,8 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
 
     bounce_cooldown = 0;
     bounce_cooldown_min = 0.1;
+    bounce_factor_x = 1.8;
+    bounce_factor_y = 3.0;
 
     b2BodyDef bodyDef;
     bodyDef.position.Set(p.x, p.y);
@@ -33,7 +35,6 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     body->CreateFixture(&fixture);
 
     playerTex = loadTexture("player.jpg");
-
 
     ParticleEmitter pe (this);
     pe.period = 1/500.0;
@@ -189,7 +190,7 @@ bool PlayerActor::collided(Actor *b)
     {
         if (dynamic_cast<BouncyHexagon*>(b) && bounce_cooldown >= bounce_cooldown_min)
         {
-            body->SetLinearVelocity(b2Vec2(v.x*2.0, v.y*3.0));
+            body->SetLinearVelocity(b2Vec2(v.x*bounce_factor_x, v.y*bounce_factor_y));
             bounce_cooldown = 0.0;
         }
         return true;
