@@ -7,7 +7,10 @@ class GameScene;
 
 class PlayerActor : public Actor
 {
-    public:
+private:
+    float bounce_cooldown, bounce_cooldown_min;
+
+public:
 
     float size;
 

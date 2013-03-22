@@ -13,11 +13,15 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     p.y = 10;
     size = 0.5;
 
+    bounce_cooldown = 0;
+    bounce_cooldown_min = 0.1;
+
     b2BodyDef bodyDef;
     bodyDef.position.Set(p.x, p.y);
     bodyDef.type = b2_dynamicBody;
     body = sc->world.CreateBody(&bodyDef);
     body->SetLinearDamping(1.0f);
+    body->SetGravityScale(2.5);
     b2CircleShape box;
     box.m_radius = size/2;
     b2FixtureDef fixture;
@@ -75,9 +79,11 @@ void PlayerActor::update()
 {
     sizeEmitter->randVel.rad = min(3.0f, norm(v)*0.3f);
 
+    bounce_cooldown += dt;
+
     float f = 5;
     if(Keyboard::isKeyPressed(Keyboard::Space))// && p.y < 0.3)
-        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 7.0f));
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
     if(Keyboard::isKeyPressed(Keyboard::A))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
     if(Keyboard::isKeyPressed(Keyboard::D))
@@ -181,10 +187,12 @@ bool PlayerActor::collided(Actor *b)
     }
     if (dynamic_cast<Hexagon*>(b))
     {
-        if (dynamic_cast<BouncyHexagon*>(b))
+        if (dynamic_cast<BouncyHexagon*>(b) && bounce_cooldown >= bounce_cooldown_min)
         {
-
+            body->SetLinearVelocity(b2Vec2(v.x*2.0, v.y*3.0));
+            bounce_cooldown = 0.0;
         }
+        return true;
     }
     return false;
 }
