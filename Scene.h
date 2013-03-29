@@ -33,6 +33,8 @@ public:
 
 	void addParticle(const Particle& p);
     void BeginContact(b2Contact *contact);
+
+    float GetRayCastDistance(b2Vec2 p1, b2Vec2 p2);
 };
 
 #endif

@@ -84,8 +84,15 @@ void PlayerActor::update()
 
     bounce_cooldown += dt;
 
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.1));
+    bool grounded = (dist < 1.0 && dist > 0.0);
+    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.1));
+    grounded = grounded || (dist < 1.0 && dist > 0.0);
+    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.1));
+    grounded = grounded || (dist < 1.0 && dist > 0.0);
+
     float f = 5;
-    if(Keyboard::isKeyPressed(Keyboard::Space))// && p.y < 0.3)
+    if(Keyboard::isKeyPressed(Keyboard::Space) && grounded)// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
     if(Keyboard::isKeyPressed(Keyboard::A))
         body->ApplyForceToCenter(b2Vec2(-f, 0));

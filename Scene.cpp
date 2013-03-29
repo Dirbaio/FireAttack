@@ -1,6 +1,30 @@
 #include "Scene.h"
 #include "Actor.h"
 
+class MyRayCastCallback : public b2RayCastCallback
+{
+public:
+
+    b2Fixture* m_fixture;
+    b2Vec2 m_point;
+    b2Vec2 m_normal;
+    float32 m_fraction;
+
+    MyRayCastCallback()
+    {
+        m_fixture = NULL;
+    }
+
+    float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction)
+    {
+        m_fixture = fixture;
+        m_point = point;
+        m_normal = normal;
+        m_fraction = fraction;
+        return fraction;
+    }
+};
+
 Scene::Scene() : world(b2Vec2(0.0f, -10.0f))
 {
 	cameraLookAt = vec3(0, 0, 0);
@@ -167,4 +191,14 @@ void Scene::BeginContact(b2Contact *contact)
         a->collidedWithGround();
     else if(b)
         b->collidedWithGround();
+}
+
+float Scene::GetRayCastDistance(b2Vec2 p1, b2Vec2 p2)
+{
+    MyRayCastCallback callback;
+    b2Vec2 point1(p1.x, p1.y);
+    b2Vec2 point2(p2.x, p2.y);
+    world.RayCast(&callback, point1, point2);
+    if (callback.m_fixture == NULL) return 123456;
+    return callback.m_fraction;
 }
