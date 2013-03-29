@@ -8,6 +8,7 @@ Actor::Actor(Scene* sc)
 //	emitters.push_back(ParticleEmitter(this));
     particlePosMult = 1;
     body = NULL;
+    shader = NULL;
 }
 
 void Actor::update() {}

@@ -102,25 +102,10 @@ void initFrameBuffer(void)
 }
 
 
-void renderParticles(Shader& sh, bool light)
+void setupShader(Shader& sh)
 {
     sh.bind();
-    float ratio = float(theApp->getSize().x) / float(theApp->getSize().y);
-    vec3 camVec = sc->cameraLookAt - sc->cameraPos;
-    normalize(camVec);
-    vec3 up2 (0, 1, 0);
-    vec3 right = cross(camVec, up2);
-    normalize(right);
-    right *= ratio;
-    vec3 up = cross(right, camVec);
-    normalize(up);
-/*    sh.setParameter("w", theApp->getSize().x);
-    sh.setParameter("h", theApp->getSize().y);
-    sh.setParameter("cameraUp", up);
-    sh.setParameter("cameraRight", right);
-    sh.setParameter("cameraFront", camVec);
-    sh.setParameter("cameraPos",  sc->cameraPos);
-*/
+
     sh.setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
 
     int program;
@@ -139,11 +124,6 @@ void renderParticles(Shader& sh, bool light)
     glBindTexture(GL_TEXTURE_2D, fbo_texture2);
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, fbo_depth);
-
-    sc->renderParticles(light);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    sh.unbind();
 }
 
 void makeHexagon()
@@ -228,6 +208,7 @@ int main(int argc, char** argv)
     Shader modelShader; modelShader.loadFromFile("vertex.glsl", "fragment-model.glsl");
     Shader lightShader; lightShader.loadFromFile("vertex2.glsl", "fragment-light.glsl");
     Shader particleShader; particleShader.loadFromFile("vertex2.glsl", "fragment-particle.glsl");
+    Shader glowShader; glowShader.loadFromFile("vertex-null.glsl", "fragment-glow.glsl");
 
     srand(time(NULL));
 
@@ -311,7 +292,7 @@ int main(int argc, char** argv)
         glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
         glViewport(0, 0, window_width, window_height);
 
-        glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glMatrixMode(GL_PROJECTION);
@@ -349,9 +330,18 @@ int main(int argc, char** argv)
         glClearColor (0.0f, 0.0f, 0.0f, 1.0f); // Set the clear colour
 
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth and colour buffers
-        renderParticles(lightShader, true);
-        renderParticles(particleShader, false);
 
+        setupShader(glowShader);
+        glBegin(GL_QUADS);
+        glTexCoord2f(-1, -1); glVertex2f(-1, -1);
+        glTexCoord2f(1, -1); glVertex2f(1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, 1);
+        glTexCoord2f(-1, 1); glVertex2f(-1, 1);
+        glEnd();
+        setupShader(lightShader);
+        sc->renderParticles(true);
+        setupShader(particleShader);
+        sc->renderParticles(false);
 
         if(sc->nextScene)
         {
