@@ -23,6 +23,7 @@ public:
 
     Scene* nextScene;
     float particlePosMult;
+    Shader* defaultShader;
 
 	Scene();
 	~Scene();

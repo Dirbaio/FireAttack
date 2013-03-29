@@ -7,37 +7,56 @@ vector<vec2> hexTexCoord;
 
 Texture* loadTexture(string path)
 {
-        map<string, Texture*>::iterator it;
-        it = imgMap.find(path);
-        if (it == imgMap.end()) {
-                cerr << "* Loading image: " << path << endl;
-                Texture* t = new Texture();
-                t->loadFromFile(path);
-                t->setSmooth(false);
+    map<string, Texture*>::iterator it;
+    it = imgMap.find(path);
+    if (it == imgMap.end()) {
+        cerr << "* Loading image: " << path << endl;
+        Texture* t = new Texture();
+        t->loadFromFile(path);
+        t->setSmooth(false);
 
-                imgMap[path] = t;
-                return t;
-        }
+        imgMap[path] = t;
+        return t;
+    }
 
-        return it->second;
+    return it->second;
 }
 
 static map<string, SoundBuffer*> sndMap;
 
 SoundBuffer* loadSound(string path)
 {
-        map<string, SoundBuffer*>::iterator it;
-        it = sndMap.find(path);
-        if (it == sndMap.end()) {
-                cerr << "* Loading sound: " << path << endl;
-                SoundBuffer* t = new SoundBuffer();
-                t->loadFromFile(path);
+    map<string, SoundBuffer*>::iterator it;
+    it = sndMap.find(path);
+    if (it == sndMap.end()) {
+        cerr << "* Loading sound: " << path << endl;
+        SoundBuffer* t = new SoundBuffer();
+        t->loadFromFile(path);
 
-                sndMap[path] = t;
-                return t;
-        }
+        sndMap[path] = t;
+        return t;
+    }
 
-        return it->second;
+    return it->second;
+}
+
+static map<pair<string, string>, Shader*> shaderMap;
+
+Shader* loadShader(string vertex, string fragment)
+{
+    pair<string, string> path (vertex, fragment);
+    map<pair<string, string>, Shader*>::iterator it;
+    it = shaderMap.find(path);
+    if (it == shaderMap.end()) {
+        cerr << "* Loading shader: " << vertex << " " << fragment << endl;
+        Shader* t = new Shader();
+        t->loadFromFile(vertex, fragment);
+
+        shaderMap[path] = t;
+        return t;
+    }
+
+    return it->second;
 }
 
 float cubeVert[24][3] = {

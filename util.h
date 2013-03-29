@@ -73,8 +73,10 @@ inline float toDeg(float rad)
 extern float dt;
 extern float tim;
 extern Window* theApp;
-extern Texture* loadTexture(string path);
-extern SoundBuffer* loadSound(string path);
+
+Texture* loadTexture(string path);
+SoundBuffer* loadSound(string path);
+Shader* loadShader(string vertex, string fragment);
 
 extern vector<vec3> hexVert, hexNorm;
 extern vector<vec2> hexTexCoord;

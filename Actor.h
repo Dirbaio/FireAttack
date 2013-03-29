@@ -19,6 +19,8 @@ class Actor
 	vec3 p, v;
     vec3 oldp;
 
+    Shader* shader;
+
 	Actor(Scene* sc);
 
     float particlePosMult;

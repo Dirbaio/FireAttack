@@ -10,6 +10,7 @@ Scene::Scene() : world(b2Vec2(0.0f, -10.0f))
 
     nextScene = NULL;
     particlePosMult = 1;
+    defaultShader = loadShader("vertex.glsl", "fragment-model.glsl");
 }
 
 Scene::~Scene()
@@ -83,7 +84,19 @@ void Scene::render()
     glEnable(GL_CULL_FACE);
 
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-		(*it)->render();
+    {
+        Actor* act = *it;
+        Shader* sh = act->shader == NULL ? defaultShader : act->shader;
+        sh->bind();
+
+        int program;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
+        GLint timeLoc = glGetUniformLocation(program, "time");
+        if(timeLoc != -1)
+            glUniform1f(timeLoc, tim);
+        act->render();
+        sh->unbind();
+    }
 
     vec3 camVec = cameraLookAt - cameraPos;
     normalize(camVec);
