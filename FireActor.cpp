@@ -6,6 +6,7 @@
 #include "BouncyHexagon.h"
 #include "SolidHexagon.h"
 #include "WaterHexagon.h"
+#include "Enemy.h"
 
 FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
 {
@@ -74,67 +75,33 @@ void FireActor::render()
 {
 }
 
-bool FireActor::collided(Actor *b)
+void FireActor::collided(Actor *b)
 {
-    if (dynamic_cast<WaterHexagon*>(b))
+
+    if(dynamic_cast<Hexagon*>(b))
     {
-        explode();
-        return true;
-    }
-    if(dynamic_cast<BouncyHexagon*>(b) || dynamic_cast<SolidHexagon*>(b))
-    {
+        if (dynamic_cast<WaterHexagon*>(b))
+        {
+            explode();
+            return;
+        }
         bounceCount--;
         if(bounceCount == 0)
         {
             explode();
         }
-        return true;
+        return;
     }
 
-    BoxActor* x = dynamic_cast<BoxActor*>(b);
-    if(x && green)
+    if(dynamic_cast<Enemy*>(b))
     {
         explode();
-        return false;
     }
 
-    if(x && x->op && !gsc->awesome)
+    if (dynamic_cast<PlayerActor*>(b))
     {
-        ParticleEmitter e(this);
-        e.randVel = RandomVec(3, CIRCLE_XY);
-        e.life = 1;
-        e.startAlpha = 1;
-        e.endAlpha = 0;
-        e.startCol = vec3(0, 0, 1);
-        e.endCol = vec3(0, 0.4, 0);
-        e.startSize = 0;
-        e.endSize = 0.4;
-        e.boom(2000);
-        e.randVel = RandomVec(2, CIRCLE_XY);
-        e.life = 1;
-        e.startAlpha = 1;
-        e.endAlpha = 0;
-        e.startCol = vec3(1, 0, 0);
-        e.endCol = vec3(0, 0.4, 0);
-        e.startSize = 0;
-        e.endSize = 0.4;
-        e.boom(2000);
-        e.randVel = RandomVec(20, CIRCLE_XY);
-        e.life = 1;
-        e.startAlpha = 1;
-        e.endAlpha = 0;
-        e.startCol = vec3(1, 0, 0);
-        e.endCol = vec3(0, 0.4, 0);
-        e.startSize = 0.3;
-        e.endSize = 0.4;
-        e.boom(200);
-        gsc->goAwesome();
+        explode();
     }
-
-
-    b->explode();
-    alive = false;
-    return true;
 }
 
 bool FireActor::collidedWithGround()
@@ -146,5 +113,4 @@ bool FireActor::collidedWithGround()
         return true;
     }
     return false;
-//    explode();
 }

@@ -27,7 +27,7 @@ class Actor
 
 	virtual void render();
 	virtual void update();
-    virtual bool collided(Actor* b);
+    virtual void collided(Actor* b);
     virtual bool collidedWithGround();
 
     void updateEmitters();

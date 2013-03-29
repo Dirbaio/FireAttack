@@ -4,6 +4,8 @@
 #include "BoxActor.h"
 #include "BouncyHexagon.h"
 #include "SolidHexagon.h"
+#include "WaterHexagon.h"
+#include "Enemy.h"
 
 PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
 {
@@ -179,23 +181,22 @@ void PlayerActor::render()
 //    renderCube(p.x, p.y, p.z, size/2, size/2, size/2, body->GetAngle());
 }
 
-bool PlayerActor::collided(Actor *b)
+void PlayerActor::collided(Actor *b)
 {
-    if(dynamic_cast<BoxActor*>(b))
+    if(dynamic_cast<Enemy*>(b))
     {
         explode();
-        return true;
+        return;
     }
-    if (dynamic_cast<Hexagon*>(b))
+    if (dynamic_cast<WaterHexagon*>(b))
     {
-        if (dynamic_cast<BouncyHexagon*>(b) && bounce_cooldown >= bounce_cooldown_min)
-        {
-            body->SetLinearVelocity(b2Vec2(v.x*bounce_factor_x, v.y*bounce_factor_y));
-            bounce_cooldown = 0.0;
-        }
-        return true;
+        explode();
     }
-    return false;
+
+    if (dynamic_cast<FireActor*>(b))
+    {
+        explode();
+    }
 }
 
 bool PlayerActor::collidedWithGround()

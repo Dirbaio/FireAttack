@@ -52,9 +52,9 @@ void Actor::explode()
     alive = false;
 }
 
-bool Actor::collided(Actor* b)
+void Actor::collided(Actor* b)
 {
-    return false;
+    return;
 }
 
 bool Actor::collidedWithGround()

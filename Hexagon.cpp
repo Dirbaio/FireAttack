@@ -99,7 +99,7 @@ void Hexagon::render()
     glPopMatrix();
 }
 
-bool Hexagon::collided(Actor* b)
+void Hexagon::collided(Actor* b)
 {
     if (dynamic_cast<FireActor*>(b))
     {
@@ -110,9 +110,9 @@ bool Hexagon::collided(Actor* b)
             if (life == 0)
                 die();
         }
-        return true;
+        return;
     }
-    return false;
+    return;
 }
 
 void Hexagon::die()

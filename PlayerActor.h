@@ -27,7 +27,7 @@ public:
     virtual void render();
     void explode();
 
-    virtual bool collided(Actor *b);
+    virtual void collided(Actor *b);
     virtual bool collidedWithGround();
 
 };

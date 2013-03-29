@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "PlayerActor.h"
 #include "GameScene.h"
+#include "WaterHexagon.h"
 
 Enemy::Enemy(GameScene* sc, float size, vec3 pos, vec3 col) : Actor(sc)
 {
@@ -61,4 +62,12 @@ void Enemy::update()
 void Enemy::render()
 {
 
+}
+
+void Enemy::collided(Actor* b)
+{
+    if (dynamic_cast<WaterHexagon*>(b))
+    {
+        explode();
+    }
 }

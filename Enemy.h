@@ -18,6 +18,8 @@ public:
     Enemy(GameScene* sc, float size, vec3 pos, vec3 col);
     virtual void update();
     virtual void render();
+
+    virtual void collided(Actor* b);
 };
 
 #endif // ENEMY_H

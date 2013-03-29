@@ -23,7 +23,7 @@ public:
 
     virtual void update();
     virtual void render();
-    virtual bool collided(Actor *b);
+    virtual void collided(Actor *b);
 
     void swapRotable();
 };
