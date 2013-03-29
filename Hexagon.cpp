@@ -73,6 +73,7 @@ void Hexagon::update()
 
 void Hexagon::render()
 {
+    shader->setParameter("time", tim+p.x/10.0);
     glPushMatrix();
 
     glTranslatef(p.x, p.y, p.z);

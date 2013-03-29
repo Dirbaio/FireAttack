@@ -106,8 +106,6 @@ void setupShader(Shader* sh)
 {
     sh->bind();
 
-    sh->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
-
     int program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
     GLint tex1Loc = glGetUniformLocation(program, "tex1");
@@ -336,8 +334,10 @@ int main(int argc, char** argv)
         glTexCoord2f(-1, 1); glVertex2f(-1, 1);
         glEnd();
         setupShader(lightShader);
+        lightShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
         sc->renderParticles(true);
         setupShader(particleShader);
+        particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
         sc->renderParticles(false);
 
         if(sc->nextScene)

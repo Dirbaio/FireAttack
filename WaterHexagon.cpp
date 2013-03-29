@@ -13,5 +13,6 @@ void WaterHexagon::update()
 
 void WaterHexagon::render()
 {
+    shader->setParameter("color", vec3(0.0, 1.0, 1.0));
     Hexagon::render();
 }

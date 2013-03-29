@@ -13,5 +13,6 @@ void SolidHexagon::update()
 
 void SolidHexagon::render()
 {
+    shader->setParameter("color", vec3(0.2, 0.2, 0.2));
     Hexagon::render();
 }

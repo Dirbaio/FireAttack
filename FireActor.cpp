@@ -3,7 +3,9 @@
 #include "Scene.h"
 #include "BoxActor.h"
 #include "GameScene.h"
-#include "Hexagon.h"
+#include "BouncyHexagon.h"
+#include "SolidHexagon.h"
+#include "WaterHexagon.h"
 
 FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
 {
@@ -74,7 +76,12 @@ void FireActor::render()
 
 bool FireActor::collided(Actor *b)
 {
-    if(dynamic_cast<Hexagon*>(b))
+    if (dynamic_cast<WaterHexagon*>(b))
+    {
+        explode();
+        return true;
+    }
+    if(dynamic_cast<BouncyHexagon*>(b) || dynamic_cast<SolidHexagon*>(b))
     {
         bounceCount--;
         if(bounceCount == 0)
