@@ -70,4 +70,8 @@ void Enemy::collided(Actor* b)
     {
         explode();
     }
+    if (dynamic_cast<FireActor*>(b))
+    {
+        explode();
+    }
 }
