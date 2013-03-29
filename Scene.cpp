@@ -153,3 +153,18 @@ void Scene::addParticle(const Particle& p)
 	particles.push_back(p);
 }
 
+void Scene::BeginContact(b2Contact *contact)
+{
+    Actor* a = (Actor*) contact->GetFixtureA()->GetBody()->GetUserData();
+    Actor* b = (Actor*) contact->GetFixtureB()->GetBody()->GetUserData();
+
+    if(a && b)
+    {
+        a->collided(b);
+        b->collided(a);
+    }
+    else if(a)
+        a->collidedWithGround();
+    else if(b)
+        b->collidedWithGround();
+}

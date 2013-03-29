@@ -115,19 +115,3 @@ void GameScene::render()
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 */
 }
-
-void GameScene::BeginContact(b2Contact *contact)
-{
-    Actor* a = (Actor*) contact->GetFixtureA()->GetBody()->GetUserData();
-    Actor* b = (Actor*) contact->GetFixtureB()->GetBody()->GetUserData();
-
-    if(a && b)
-    {
-        a->collided(b);
-        b->collided(a);
-    }
-    else if(a)
-        a->collidedWithGround();
-    else if(b)
-        b->collidedWithGround();
-}

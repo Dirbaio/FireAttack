@@ -25,7 +25,6 @@ class GameScene : public Scene
     virtual void render();
     vector<float> vertexs, texcoords, colors;
     PlayerActor* getPlayer();
-    void BeginContact(b2Contact *contact);
 };
 
 #endif // GAMESCENE_H

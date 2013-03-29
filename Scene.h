@@ -32,6 +32,7 @@ public:
     void renderParticles(bool light);
 
 	void addParticle(const Particle& p);
+    void BeginContact(b2Contact *contact);
 };
 
 #endif
