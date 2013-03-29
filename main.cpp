@@ -102,11 +102,11 @@ void initFrameBuffer(void)
 }
 
 
-void setupShader(Shader& sh)
+void setupShader(Shader* sh)
 {
-    sh.bind();
+    sh->bind();
 
-    sh.setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+    sh->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
 
     int program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
@@ -205,10 +205,9 @@ int main(int argc, char** argv)
 
     glDisable(GL_CULL_FACE);
 
-    Shader modelShader; modelShader.loadFromFile("vertex.glsl", "fragment-model.glsl");
-    Shader lightShader; lightShader.loadFromFile("vertex2.glsl", "fragment-light.glsl");
-    Shader particleShader; particleShader.loadFromFile("vertex2.glsl", "fragment-particle.glsl");
-    Shader glowShader; glowShader.loadFromFile("vertex-null.glsl", "fragment-glow.glsl");
+    Shader* lightShader = loadShader("vertex2.glsl", "fragment-light.glsl");
+    Shader* particleShader = loadShader("vertex2.glsl", "fragment-particle.glsl");
+    Shader* glowShader = loadShader("vertex-null.glsl", "fragment-glow.glsl");
 
     srand(time(NULL));
 
@@ -299,11 +298,9 @@ int main(int argc, char** argv)
         glLoadIdentity();
         gluPerspective(90.f, float(window_width)/float(window_height), 0.01f, 50.f);
 
-        modelShader.bind();
         glEnable(GL_DEPTH_TEST);
         glDepthMask(GL_TRUE);
         sc->render();
-        modelShader.unbind();
 
         glPopAttrib(); // Restore our glEnable and glViewport states
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0); // Unbind our texture

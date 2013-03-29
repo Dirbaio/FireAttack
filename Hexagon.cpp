@@ -45,6 +45,8 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     body->SetFixedRotation(!rotable);
     body->CreateFixture(&fixture);
     body->SetUserData(this);
+
+    shader = loadShader("vertex.glsl", "fragment-hexagons.glsl");
 }
 
 void Hexagon::update()
