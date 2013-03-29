@@ -9,7 +9,6 @@ class PlayerActor;
 class GameScene : public Scene
 {
     public:
-    Model mdl;
 
     GameScene();
 
