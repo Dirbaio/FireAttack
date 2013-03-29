@@ -14,8 +14,10 @@ public:
     vector<vec3> vertexArray;
     vector<vec3> texcoordArray;
 
+    Model();
     Model(string filename);
     void draw();
+    void CreateModel(string filename);
 };
 
 #endif // MODEL_H

@@ -4,6 +4,11 @@
 
 Model::Model(string filename)
 {
+    CreateModel(filename);
+}
+
+void Model::CreateModel(string filename)
+{
     ifstream in(filename.c_str(), ios::in);
     if (!in)
     {
