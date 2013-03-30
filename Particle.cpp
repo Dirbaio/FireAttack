@@ -126,7 +126,7 @@ void Particle::renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vect
     vec3 dy = cross(dx, cameraVec);
     normalize(dx);
     normalize(dy);
-    float sz = size * alpha * 60.0f;
+    float sz = size * alpha * 40.0f;
     dx *= sz;
     dy *= sz;
     vtxArray.push_back(p+dx+dy);
@@ -139,7 +139,7 @@ void Particle::renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vect
         texArray.push_back(p.x);
         texArray.push_back(p.y);
         texArray.push_back(p.z);
-        texArray.push_back(size);
+        texArray.push_back(size*alpha);
     }
 
     colArray.push_back(colr);
