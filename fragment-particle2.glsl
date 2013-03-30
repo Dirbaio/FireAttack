@@ -71,7 +71,7 @@ void main()
         gl_FragColor = vec4(lightCol, 1.0);
     }
     else
-        gl_FragColor = 0.0;
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
 
 }
 
