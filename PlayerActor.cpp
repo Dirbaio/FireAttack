@@ -46,22 +46,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
     pe.startSize = size/3;
     pe.endSize = size/16;
     pe.life = 0.01;
-    pe.startCol = config->color;
-    pe.endCol = vec3(1, 1, 1);
-    /*
-     *
-     *originales:
-     *
-     * pe.startCol = vec3(1, 1, 0.5);
-     *(1,1,1)
-     *
-     *(1,0,0)
-     *(1,1,0)
-     *
-     *(1,0,0)
-     *(0,1,0.4)
-     *
-     */
+    pe.startCol = config->col1;
+    pe.endCol = config->col2;
     pe.actorVelMult = 1;
     emitters.push_back(pe);
 
@@ -71,8 +57,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
     pe.endSize = size/16;
     pe.life = 1;
     pe.startAlpha = 0.2;
-    pe.startCol = config->color;
-    pe.endCol = config->color+vec3(0.5,0.5,0.5);
+    pe.startCol = config->col3;
+    pe.endCol = config->col4;
     pe.actorVelMult = 0.9;
     emitters.push_back(pe);
 
@@ -83,8 +69,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
     pe.startSize = size/2;
     pe.endSize = size/10;
     pe.life = 1;
-    pe.startCol = config->color;
-    pe.endCol = config->color-vec3(0.2,0.3,0.4);
+    pe.startCol = config->col5;
+    pe.endCol = config->col6;
     pe.actorVelMult = 0.9;
     sizeEmitter = addEmitter(pe);
 

@@ -10,7 +10,7 @@ class GameScene;
 struct PlayerConfig
 {
     vec3 initPos;
-    vec3 color;
+    vec3 col1, col2, col3, col4, col5, col6;
     vector<sf::Keyboard::Key> keyMap;
 };
 

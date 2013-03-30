@@ -52,7 +52,7 @@ void main()
 
     float tx = pos2.x;
     float ty = pos2.z;
-    bool sea = z_b < 0.99999 && pos.y > 0;
+    bool sea = z_b < 0.99999 && pos.y > 0.0;
     if(sea)
     {
         tx = pos.x;
@@ -112,7 +112,7 @@ void main()
     {
         glow += exp(-5.0*fract(-r*0.5+time2+d));
         glow += exp(-5.0*fract(r*0.5+time2+d));
-        if(dir.y > 0) glow = 0;
+        if(dir.y > 0.0) glow = 0.0;
     }
 
     float black = ty/40.0+1.0;

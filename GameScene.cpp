@@ -17,17 +17,32 @@
 
 void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
 {
-    player1.color = vec3(1,0,0);
-    player2.color = vec3(0,0,1);
-    player1.initPos = vec3(0,100,0);
-    player2.initPos = vec3(4,10,0);
+    player1.col1 = vec3(1.0, 1.0, 0.5);
+    player1.col2 = vec3(1.0, 1.0, 1.0);
+    player1.col3 = vec3(1.0, 0.0, 0.0);
+    player1.col4 = vec3(1.0, 1.0, 0.0);
+    player1.col5 = vec3(1.0, 0.0, 0.0);
+    player1.col6 = vec3(0.0, 1.0, 0.4);
+
+    player2.col1 = vec3(0.5, 1.0, 1.0);
+    player2.col2 = vec3(0.1, 1.0, 1.0);
+    player2.col3 = vec3(0.0, 0.0, 1.0);
+    player2.col4 = vec3(0.0, 1.0, 1.0);
+    player2.col5 = vec3(0.0, 0.0, 1.0);
+    player2.col6 = vec3(0.4, 1.0, 0.0);
+
+    player1.initPos = vec3(0, 10, 0);
+    player2.initPos = vec3(4, 10, 0);
+
     player1.keyMap.resize(MAPPINGSIZE);
     player2.keyMap.resize(MAPPINGSIZE);
+
     player1.keyMap[JUMP] = sf::Keyboard::Space;
     player1.keyMap[MOVERIGHT] = sf::Keyboard::D;
     player1.keyMap[MOVELEFT] = sf::Keyboard::A;
     player1.keyMap[SHOOT] = sf::Keyboard::LShift;
     player1.keyMap[SPAWN] = sf::Keyboard::E;
+
     player2.keyMap[JUMP] = sf::Keyboard::RShift;
     player2.keyMap[MOVERIGHT] = sf::Keyboard::L;
     player2.keyMap[MOVELEFT] = sf::Keyboard::J;
@@ -42,14 +57,14 @@ GameScene::GameScene()
     PlayerConfig player1, player2;
     configPlayers(player1, player2);
     actors.push_back(new PlayerActor(this, &player1));
-//    actors.push_back(new PlayerActor(this, &player2));
+    actors.push_back(new PlayerActor(this, &player2));
 //    actors.push_back(new WaterPlane(this));
     for (int k = -3; k < 0; k++) actors.push_back(new FloatingHexagon(this, vec3(k*2, 10, 0), (k%2)==0, true, true, 5.0, 4));
-    //or (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
-    //for (int k = 3; k < 6; k++) actors.push_back(new WaterHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
+    for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
+    for (int k = 3; k < 6; k++) actors.push_back(new WaterHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
     for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 5.0, 10));
-    for (int k = -5; k < 11; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.4f, 0), false, false, true, 3.0, 10));
-    for (int k = 2; k < 100; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0), true, true, true, 5.0, 4));
+    for (int k = -8; k < 11; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.4f, 0), false, false, true, 3.0, 10));
+    for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0), true, true, true, 5.0, 4));
 //    actors.push_back(new ModelActor(this, "test.obj"));
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));
@@ -129,7 +144,7 @@ void GameScene::update()
 
         cameraLookAt = vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0+1.0, 0);
         float weight = exp(-dt*6);
-        cameraPos = cameraPos * weight + (vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0 , 0) + vec3(0, 2, 7+0.2*norm(maxPos-minPos))) * (1-weight);
+        cameraPos = cameraPos * weight + (vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0 , 0) + vec3(0, 2, 7+0.25*norm(maxPos-minPos))) * (1-weight);
     }
 /*
     spawnTimer -= dt;
