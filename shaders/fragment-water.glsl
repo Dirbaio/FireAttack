@@ -18,7 +18,7 @@ uniform mat4 inverseLookAt;
 uniform vec3 cameraPos;
 uniform vec3 cameraDir;
 uniform vec3 cameraRight;
-uniform vec3 cameraTop;
+uniform vec3 cameraUp;
 
 const float PI = 3.14159265358979323846264;
 
@@ -42,16 +42,18 @@ void main()
     vec4 pos = vec4(gl_TexCoord[0].x*aspectRatio*z, gl_TexCoord[0].y*z, -z, 1.0);
     pos = inverseLookAt*pos;
 
-    vec3 pos2 = pos.xyz;
-    vec3 dir = pos.xyz - cameraPos;
+    vec3 dir = cameraDir;
+    dir += cameraRight * gl_TexCoord[0].x * aspectRatio;
+    dir += cameraUp * gl_TexCoord[0].y;
 
     //cameraPos + lambda*dir = (x, 0, y)
+    vec3 pos2 = cameraPos;
     pos2 -= dir*(pos2.y/dir.y);
-
 
     float tx = pos2.x;
     float ty = pos2.z;
-    if(pos.y > 0.0)
+    bool sea = z_b < 0.99999 && pos.y > 0;
+    if(sea)
     {
         tx = pos.x;
         ty = pos.z;
@@ -100,7 +102,7 @@ void main()
     float glow = 0.0;
     float time2 = time*0.4;
     float d = tx*0.04+sin(ty*0.1+time2)*0.7;
-    if(pos.y > 0.0)
+    if(sea)
     {
         glow = sin((r*0.5+time2+d)*2.0*PI)*0.5+0.5;
         glow *= 1.0-normal.y;
@@ -110,6 +112,7 @@ void main()
     {
         glow += exp(-5.0*fract(-r*0.5+time2+d));
         glow += exp(-5.0*fract(r*0.5+time2+d));
+        if(dir.y > 0) glow = 0;
     }
 
     float black = ty/40.0+1.0;

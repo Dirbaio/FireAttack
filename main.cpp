@@ -358,6 +358,17 @@ int main(int argc, char** argv)
         waterShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
         waterShader->setParameter("time", tim);
         waterShader->setParameter("cameraPos", sc->cameraPos);
+        vec3 camVec = sc->cameraLookAt - sc->cameraPos;
+        normalize(camVec);
+        vec3 up2 (0, 1, 0);
+        vec3 right = cross(camVec, up2);
+        normalize(right);
+        vec3 up = cross(right, camVec);
+        normalize(up);
+        waterShader->setParameter("cameraDir", camVec);
+        waterShader->setParameter("cameraRight", right);
+        waterShader->setParameter("cameraUp", up);
+
         glBegin(GL_QUADS);
         glTexCoord2f(-1, -1); glVertex2f(-1, -1);
         glTexCoord2f(1, -1); glVertex2f(1, -1);
