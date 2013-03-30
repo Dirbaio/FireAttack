@@ -58,7 +58,7 @@ class ParticleEmitter
 	void setOn();
 	void turnOnFor(float time);
     void boom(int count);
-
+    void renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray);
 	private:
     void spawnParticle(float t);
 	

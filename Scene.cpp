@@ -107,7 +107,7 @@ vector<vec3> vtxArray;
 vector<float> texArray;
 vector<color> colArray;
 
-void Scene::renderParticles(bool light)
+void Scene::renderParticles()
 {
     vtxArray.resize(0);
     texArray.resize(0);
@@ -117,22 +117,8 @@ void Scene::renderParticles(bool light)
     texArray.reserve(particles.size()*4*4);
     colArray.reserve(particles.size()*4);
 
-    Particle p;
-    p.startAlpha = 1.0f;
-    p.endAlpha = 1.0f;
-    p.startCol = vec3(0.5, 0.8, 1.0);
-    p.endCol = vec3(1, 1, 1);
-    p.startSize = 20;
-    p.endSize = 20;
-    p.life = 10;
-    p.startingLife = 10;
-    p.p = vec3(0, 0, 0);
-
-    p.renderArray(vtxArray, texArray, colArray, light);
-
     for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
-        it->renderArray(vtxArray, texArray, colArray, light);
-
+        it->render(vtxArray, texArray, colArray);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -142,6 +128,38 @@ void Scene::renderParticles(bool light)
     glTexCoordPointer(4, GL_FLOAT, 0, &texArray[0]);
     glColorPointer(4, GL_FLOAT, 0, &colArray[0]);
 
+    glDrawArrays(GL_QUADS, 0, vtxArray.size());
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+}
+
+void Scene::renderLights()
+{
+    vtxArray.resize(0);
+    texArray.resize(0);
+    colArray.resize(0);
+
+    for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+    {
+        Actor* a = *it;
+        for(list<ParticleEmitter>::iterator it2 = a->emitters.begin(); it2 != a->emitters.end(); it2++)
+            it2->renderLight(vtxArray, texArray, colArray);
+    }
+
+    for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
+        if(it->isLight)
+            it->renderLight(vtxArray, texArray, colArray);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glVertexPointer(3, GL_FLOAT, 0, &vtxArray[0]);
+    glTexCoordPointer(4, GL_FLOAT, 0, &texArray[0]);
+    glColorPointer(4, GL_FLOAT, 0, &colArray[0]);
+
+    lightCount = vtxArray.size() / 4;
     glDrawArrays(GL_QUADS, 0, vtxArray.size());
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);

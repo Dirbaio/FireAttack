@@ -126,6 +126,7 @@ void ParticleEmitter::spawnParticle(float t)
     pt.a = a;
     pt.isLight = (++count) % 100 == 0;
 	pt.life = life + frand(randLife);
+    if(pt.life < 0) return;
 	pt.startingLife = pt.life;
 	pt.startSize = startSize;
 	pt.endSize = endSize;
@@ -137,3 +138,40 @@ void ParticleEmitter::spawnParticle(float t)
 	act->sc->addParticle(pt);
 }
 
+void ParticleEmitter::renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray)
+{
+    float size = (startSize + endSize) * (startAlpha + endAlpha) * period * (life+randLife)* 10000.0;
+    vec3 col = (startCol+endCol)*0.5f;
+    color colr;
+    colr.r = col.x;
+    colr.g = col.y;
+    colr.b = col.z;
+    colr.a = 1;
+
+    vec3 cameraVec = act->sc->cameraLookAt - act->sc->cameraPos;
+    normalize(cameraVec);
+    vec3 dx = cross(cameraVec, vec3(0, 1, 0));
+    vec3 dy = cross(dx, cameraVec);
+    normalize(dx);
+    normalize(dy);
+    float sz = size * 60.0f;
+    dx *= sz;
+    dy *= sz;
+    vtxArray.push_back(act->p+dx+dy);
+    vtxArray.push_back(act->p+dx-dy);
+    vtxArray.push_back(act->p-dx-dy);
+    vtxArray.push_back(act->p-dx+dy);
+
+    for(int i = 0; i < 4; i++)
+    {
+        texArray.push_back(act->p.x);
+        texArray.push_back(act->p.y);
+        texArray.push_back(act->p.z);
+        texArray.push_back(size);
+    }
+
+    colArray.push_back(colr);
+    colArray.push_back(colr);
+    colArray.push_back(colr);
+    colArray.push_back(colr);
+}

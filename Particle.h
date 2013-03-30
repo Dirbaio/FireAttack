@@ -18,10 +18,10 @@ class Particle {
     bool isLight;
 
 	Particle();
-	void render();
 	void update();
-    void renderArray(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool light);
-	float getZOrder() const;
+    void render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray);
+    void renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray);
+    float getZOrder() const;
 };
 
 void setCameraVec(vec3 cv, bool r);

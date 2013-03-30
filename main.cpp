@@ -203,8 +203,8 @@ int main(int argc, char** argv)
 
     glDisable(GL_CULL_FACE);
 
-    Shader* lightShader = loadShader("vertex2.glsl", "fragment-light.glsl");
-    Shader* particleShader = loadShader("vertex2.glsl", "fragment-particle.glsl");
+    Shader* lightShader = loadShader("vertex-light.glsl", "fragment-light.glsl");
+    Shader* particleShader = loadShader("vertex-particle.glsl", "fragment-particle.glsl");
     Shader* glowShader = loadShader("vertex-null.glsl", "fragment-glow.glsl");
 
     srand(time(NULL));
@@ -335,10 +335,10 @@ int main(int argc, char** argv)
         glEnd();
         setupShader(lightShader);
         lightShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
-        sc->renderParticles(true);
+        sc->renderLights();
         setupShader(particleShader);
         particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
-        sc->renderParticles(false);
+        sc->renderParticles();
 
         if(sc->nextScene)
         {

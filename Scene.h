@@ -25,11 +25,14 @@ public:
     float particlePosMult;
     Shader* defaultShader;
 
+    int lightCount; //For debug
+
 	Scene();
 	~Scene();
 	virtual void update();
 	virtual void render();
-    void renderParticles(bool light);
+    void renderParticles();
+    void renderLights();
 
 	void addParticle(const Particle& p);
     void BeginContact(b2Contact *contact);

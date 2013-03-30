@@ -30,7 +30,7 @@ GameScene::GameScene()
     song2 = loadSound("game2.wav");
     song.setBuffer(*song1);
     song.setLoop(true);
-    song.play();
+//    song.play();
     awesome = false;
 }
 
@@ -40,7 +40,7 @@ void GameScene::goAwesome()
     awesome = true;
     song.setBuffer(*song2);
     song.setLoop(true);
-    song.play();
+//    song.play();
 }
 
 PlayerActor* GameScene::getPlayer()
@@ -73,7 +73,7 @@ void GameScene::update()
             song.stop();
             song.setBuffer(*song2);
             song.setPlayingOffset(seconds(60+30.9df));
-            song.play();
+//            song.play();
         }
         deadTimer -= dt;
     }

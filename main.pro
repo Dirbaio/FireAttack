@@ -59,7 +59,8 @@ OTHER_FILES += \
     fragment-particle.glsl \
     fragment-light.glsl \
     fragment-model.glsl \
-    vertex2.glsl \
     fragment-glow.glsl \
     vertex-null.glsl \
-    fragment-hexagons.glsl
+    fragment-hexagons.glsl \
+    vertex-light.glsl \
+    vertex-particle.glsl
