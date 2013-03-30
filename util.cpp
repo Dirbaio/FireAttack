@@ -50,7 +50,7 @@ Shader* loadShader(string vertex, string fragment)
     if (it == shaderMap.end()) {
         cerr << "* Loading shader: " << vertex << " " << fragment << endl;
         Shader* t = new Shader();
-        if (!t->loadFromFile(vertex, fragment))
+        if (!t->loadFromFile("shaders/"+vertex, "shaders/"+fragment))
             exit(1);
 
         shaderMap[path] = t;

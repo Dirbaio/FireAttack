@@ -65,9 +65,18 @@ OTHER_FILES += \
     fragment-particle.glsl \
     fragment-light.glsl \
     fragment-model.glsl \
-    fragment-glow.glsl \
     vertex-null.glsl \
     fragment-hexagons.glsl \
     vertex-light.glsl \
     vertex-particle.glsl \
-    fragment-water.glsl
+    fragment-water.glsl \
+    shaders/vertex-particle.glsl \
+    shaders/vertex-null.glsl \
+    shaders/vertex-light.glsl \
+    shaders/vertex.glsl \
+    shaders/fragment-water.glsl \
+    shaders/fragment-particle.glsl \
+    shaders/fragment-model.glsl \
+    shaders/fragment-light.glsl \
+    shaders/fragment-hexagons.glsl \
+    shaders/fragment-glow.glsl
