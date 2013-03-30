@@ -3,6 +3,8 @@
 
 #include "Actor.h"
 #include "FireActor.h"
+#include "Input.h"
+
 class GameScene;
 
 class PlayerActor : public Actor
@@ -17,6 +19,8 @@ public:
     GameScene* gsc;
     PlayerActor(GameScene* sc);
     Texture* playerTex;
+
+    Input* input;
 
     ParticleEmitter* sizeEmitter;
     FireActor* test;
