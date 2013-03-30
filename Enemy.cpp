@@ -55,6 +55,7 @@ Enemy::Enemy(GameScene* sc, float size, vec3 pos, vec3 col) : Actor(sc)
 
 void Enemy::update()
 {
+    Actor::update();
     player = gsc->getPlayer();
     if(!player) return;
 }

@@ -79,6 +79,7 @@ ParticleEmitter::ParticleEmitter(Actor* act)
     a = vec3(0, 0.2, 0);
     v = vec3(0, 0, 0);
 
+    lightPermil = 40;
 
 	//Private stuff
     count = 0;
@@ -124,7 +125,7 @@ void ParticleEmitter::spawnParticle(float t)
     pt.p = act->oldp * (1-t) + act->p * t + randPos.get()*act->particlePosMult*act->sc->particlePosMult;
     pt.v = v + act->v*actorVelMult + randVel.get();
     pt.a = a;
-    pt.isLight = (++count) % 50 == 0;
+    pt.isLight = (++count) % 1000 < lightPermil;
 	pt.life = life + frand(randLife);
     if(pt.life < 0) return;
 	pt.startingLife = pt.life;

@@ -142,6 +142,8 @@ void PlayerActor::update()
         //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
     }
 
+    if (p.y <= -0.2)
+        explodeWater();
     wasMouseDown = Mouse::isButtonPressed(Mouse::Left);
 }
 
@@ -174,6 +176,43 @@ void PlayerActor::explode()
     e.endAlpha = 0;
     e.startCol = vec3(1, 1, 1);
     e.endCol = vec3(1, 0.6d, 0);
+    e.startSize = 0;
+    e.endSize = 1;
+    e.boom(2000);
+
+    alive = false;
+}
+
+void PlayerActor::explodeWater()
+{
+    ParticleEmitter e(this);
+    e.lightPermil = 0;
+    e.randVel = RandomVec(3);
+    e.life = 1;
+    e.startAlpha = 1;
+    e.endAlpha = 0;
+    e.startCol = vec3(0, 0, 0.4);
+    e.endCol = vec3(0, 0, 1);
+    e.startSize = 0;
+    e.endSize = 1;
+    e.boom(2000);
+    e.randVel = RandomVec(2.5);
+    e.life = 1;
+    e.startAlpha = 1;
+    e.endAlpha = 0;
+    e.startCol = vec3(0, 0.3, 0.6);
+    e.endCol = vec3(0, 0, 1);
+    e.startSize = 0;
+    e.endSize = 1;
+    e.boom(2000);
+
+    e.randVel = RandomVec(0, 5, 0);
+    e.randPos = RandomVec(0, 1, 0);
+    e.life = 1;
+    e.startAlpha = 1;
+    e.endAlpha = 0;
+    e.startCol = vec3(0, 0, 0.2);
+    e.endCol = vec3(0, 0.6d, 1);
     e.startSize = 0;
     e.endSize = 1;
     e.boom(2000);

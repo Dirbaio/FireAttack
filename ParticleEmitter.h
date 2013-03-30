@@ -35,6 +35,8 @@ class ParticleEmitter
 	Actor* act;
     bool active;
 
+    int lightPermil;
+
     RandomVec randPos;
 
 	vec3 v;

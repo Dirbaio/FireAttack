@@ -32,6 +32,7 @@ class Actor
 
     void updateEmitters();
     virtual void explode();
+    virtual void explodeWater();
     ParticleEmitter* addEmitter(const ParticleEmitter& e);
 };
 #endif

@@ -25,7 +25,9 @@ public:
 
     virtual void update();
     virtual void render();
+
     void explode();
+    void explodeWater();
 
     virtual void collided(Actor *b);
     virtual bool collidedWithGround();

@@ -55,6 +55,7 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
 
 void Hexagon::update()
 {
+    Actor::update();
     timer += dt;
     timer2 += dt*2;
     timer3 += dt*3;
