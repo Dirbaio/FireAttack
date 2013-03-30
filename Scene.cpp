@@ -131,7 +131,7 @@ vector<vec3> vtxArray;
 vector<float> texArray;
 vector<color> colArray;
 
-void Scene::renderParticles()
+void Scene::renderParticles(bool reflex)
 {
     vtxArray.resize(0);
     texArray.resize(0);
@@ -142,7 +142,7 @@ void Scene::renderParticles()
     colArray.reserve(particles.size()*4);
 
     for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
-        it->render(vtxArray, texArray, colArray);
+        it->render(vtxArray, texArray, colArray, reflex);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);

@@ -205,6 +205,7 @@ int main(int argc, char** argv)
 
     Shader* lightShader = loadShader("vertex-light.glsl", "fragment-light.glsl");
     Shader* particleShader = loadShader("vertex-particle.glsl", "fragment-particle.glsl");
+    Shader* particleShader2 = loadShader("vertex-particle.glsl", "fragment-particle2.glsl");
     Shader* glowShader = loadShader("vertex-null.glsl", "fragment-glow.glsl");
 
     srand(time(NULL));
@@ -338,7 +339,10 @@ int main(int argc, char** argv)
         sc->renderLights();
         setupShader(particleShader);
         particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
-        sc->renderParticles();
+        sc->renderParticles(false);
+        setupShader(particleShader2);
+        particleShader2->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        sc->renderParticles(true);
 
         if(sc->nextScene)
         {

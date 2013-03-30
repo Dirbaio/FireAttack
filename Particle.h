@@ -19,7 +19,7 @@ class Particle {
 
 	Particle();
 	void update();
-    void render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray);
+    void render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool reflex);
     void renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray);
     float getZOrder() const;
 };

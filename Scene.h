@@ -31,7 +31,7 @@ public:
 	~Scene();
 	virtual void update();
 	virtual void render();
-    void renderParticles();
+    void renderParticles(bool reflex);
     void renderLights();
 
 	void addParticle(const Particle& p);

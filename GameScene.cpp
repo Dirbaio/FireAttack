@@ -22,7 +22,7 @@ GameScene::GameScene()
     for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
     for (int k = 3; k < 6; k++) actors.push_back(new WaterHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
     for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 5.0, 10));
-    for (int k = -10; k < 11; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 1, 0), false, false, true, 3.0, 10));
+    for (int k = -10; k < 11; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.5f, 0), false, false, true, 3.0, 10));
 //    actors.push_back(new ModelActor(this, "test.obj"));
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));
