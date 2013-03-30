@@ -16,6 +16,9 @@ uniform sampler2D tex3;
 uniform float time;
 uniform mat4 inverseLookAt;
 uniform vec3 cameraPos;
+uniform vec3 cameraDir;
+uniform vec3 cameraRight;
+uniform vec3 cameraTop;
 
 const float PI = 3.14159265358979323846264;
 
