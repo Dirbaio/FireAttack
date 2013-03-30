@@ -84,11 +84,11 @@ void PlayerActor::update()
 
     bounce_cooldown += dt;
 
-    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.1));
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.02));
     bool grounded = (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.1));
+    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.02));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.1));
+    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.02));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
     float f = 5;
@@ -98,8 +98,8 @@ void PlayerActor::update()
         body->ApplyForceToCenter(b2Vec2(-f, 0));
     if(Keyboard::isKeyPressed(Keyboard::D))
         body->ApplyForceToCenter(b2Vec2(f, 0));
-    if(Keyboard::isKeyPressed(Keyboard::S))
-        body->ApplyForceToCenter(b2Vec2(0, -f));
+ /*   if(Keyboard::isKeyPressed(Keyboard::S))
+        body->ApplyForceToCenter(b2Vec2(0, -f));*/
 
     sc->cameraLookAt = vec3(p.x, p.y+3, 0);
     float weight = exp(-dt*6);
