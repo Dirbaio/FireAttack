@@ -7,6 +7,13 @@
 
 class GameScene;
 
+struct PlayerConfig
+{
+    vec3 initPos;
+    vec3 color;
+    vector<sf::Keyboard::Key> keyMap;
+};
+
 class PlayerActor : public Actor
 {
 private:
@@ -17,7 +24,7 @@ public:
     float size;
 
     GameScene* gsc;
-    PlayerActor(GameScene* sc);
+    PlayerActor(GameScene* sc, PlayerConfig *config);
     Texture* playerTex;
 
     Input* input;

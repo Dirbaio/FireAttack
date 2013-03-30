@@ -8,12 +8,12 @@
 #include "Enemy.h"
 #include "Input.h"
 
-PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
+PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
 {
     this->gsc = sc;
 
-    p.x = 0;
-    p.y = 10;
+    p.x = config->initPos.x;
+    p.y = config->initPos.y;
     size = 0.5;
 
     bounce_cooldown = 0;
@@ -46,8 +46,22 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     pe.startSize = size/3;
     pe.endSize = size/16;
     pe.life = 0.01;
-    pe.startCol = vec3(1, 1, 0.5);
+    pe.startCol = config->color;
     pe.endCol = vec3(1, 1, 1);
+    /*
+     *
+     *originales:
+     *
+     * pe.startCol = vec3(1, 1, 0.5);
+     *(1,1,1)
+     *
+     *(1,0,0)
+     *(1,1,0)
+     *
+     *(1,0,0)
+     *(0,1,0.4)
+     *
+     */
     pe.actorVelMult = 1;
     emitters.push_back(pe);
 
@@ -57,8 +71,8 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     pe.endSize = size/16;
     pe.life = 1;
     pe.startAlpha = 0.2;
-    pe.startCol = vec3(1, 0, 0);
-    pe.endCol = vec3(1, 1, 0);
+    pe.startCol = config->color;
+    pe.endCol = config->color+vec3(0.5,0.5,0.5);
     pe.actorVelMult = 0.9;
     emitters.push_back(pe);
 
@@ -69,8 +83,8 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     pe.startSize = size/2;
     pe.endSize = size/10;
     pe.life = 1;
-    pe.startCol = vec3(1, 0, 0);
-    pe.endCol = vec3(0, 1, 0.4);
+    pe.startCol = config->color;
+    pe.endCol = config->color-vec3(0.2,0.3,0.4);
     pe.actorVelMult = 0.9;
     sizeEmitter = addEmitter(pe);
 
@@ -78,13 +92,7 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     wasMouseDown = false;
     mouseDownTime = 0;
 
-    vector<sf::Keyboard::Key> keyMap (MAPPINGSIZE);
-    keyMap[JUMP] = sf::Keyboard::Space;
-    keyMap[MOVERIGHT] = sf::Keyboard::D;
-    keyMap[MOVELEFT] = sf::Keyboard::A;
-    keyMap[SHOOT] = sf::Keyboard::LShift;
-    keyMap[SPAWN] = sf::Keyboard::E;
-    input = new Input(keyMap);
+    input = new Input(config->keyMap);
 }
 
 void PlayerActor::update()
@@ -103,7 +111,7 @@ void PlayerActor::update()
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
     float f = 5;
-    if(input->getKeyPressed(JUMP))// && grounded)// && p.y < 0.3)
+    if(input->getKeyPressed(JUMP) && grounded)// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
     if(input->getKeyPressed(MOVELEFT))
         body->ApplyForceToCenter(b2Vec2(-f, 0));

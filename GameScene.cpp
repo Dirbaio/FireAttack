@@ -12,11 +12,36 @@
 #include "StandardEnemy.h"
 #include "ModelActor.h"
 #include "WaterPlane.h"
+#include "Input.h"
+
+void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
+{
+    player1.color = vec3(1,0,0);
+    player2.color = vec3(0,0,1);
+    player1.initPos = vec3(0,10,0);
+    player2.initPos = vec3(4,10,0);
+    player1.keyMap.resize(MAPPINGSIZE);
+    player2.keyMap.resize(MAPPINGSIZE);
+    player1.keyMap[JUMP] = sf::Keyboard::Space;
+    player1.keyMap[MOVERIGHT] = sf::Keyboard::D;
+    player1.keyMap[MOVELEFT] = sf::Keyboard::A;
+    player1.keyMap[SHOOT] = sf::Keyboard::LShift;
+    player1.keyMap[SPAWN] = sf::Keyboard::E;
+    player2.keyMap[JUMP] = sf::Keyboard::RShift;
+    player2.keyMap[MOVERIGHT] = sf::Keyboard::L;
+    player2.keyMap[MOVELEFT] = sf::Keyboard::J;
+    player2.keyMap[SHOOT] = sf::Keyboard::Return;
+    player2.keyMap[SPAWN] = sf::Keyboard::O;
+}
+
 GameScene::GameScene()
 {
     /*for(int i = 0; i < 2; i++)
         actors.push_back(new ShooterEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0)));*/
-    actors.push_back(new PlayerActor(this));
+    PlayerConfig player1, player2;
+    configPlayers(player1, player2);
+    actors.push_back(new PlayerActor(this, &player1));
+    actors.push_back(new PlayerActor(this, &player2));
 //    actors.push_back(new WaterPlane(this));
     for (int k = -3; k < 0; k++) actors.push_back(new FloatingHexagon(this, vec3(k*2, 10, 0), (k%2)==0, true, true, 5.0, 4));
     for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
