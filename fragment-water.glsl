@@ -32,26 +32,26 @@ void main()
 
     if(!a)
     {
-        x2 = 1-x2;
-        y2 = 1-y2;
+        x2 = 1.0-x2;
+        y2 = 1.0-y2;
     }
 
-    float r = 0;
+    float r = 0.0;
 
     if(y2*3.0 + x2 > 1.0)
         r = (y2*1.5 - x2*0.5)+0.5;
     else
-        r = 1-x2;
+        r = 1.0-x2;
 
     vec3 col = vec3(0.5, 0.7, 1.0);
-    float glow = 0;
+    float glow = 0.0;
     float time2 = time*0.4;
     float d = tx*0.04+sin(ty*0.1+time2)*0.7;
     glow += exp(-5.0*fract(-r*0.5+time2+d));
     glow += exp(-5.0*fract(r*0.5+time2+d));
 
-    float black = ty/40+1;
-    black = clamp(black, 0, 1);
+    float black = ty/40.0+1.0;
+    black = clamp(black, 0.0, 1.0);
     glow *= black;
 
     gl_FragData[0] = vec4(col, glow);
