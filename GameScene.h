@@ -24,6 +24,7 @@ class GameScene : public Scene
     virtual void update();
     virtual void render();
     vector<float> vertexs, texcoords, colors;
+    vector<PlayerActor*> getPlayerList();
     PlayerActor* getPlayer();
 };
 

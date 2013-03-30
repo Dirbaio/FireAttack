@@ -13,6 +13,7 @@
 #include "ModelActor.h"
 #include "WaterPlane.h"
 #include "Input.h"
+#include <vector>
 
 void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
 {
@@ -73,6 +74,18 @@ void GameScene::goAwesome()
 //    song.play();
 }
 
+vector<PlayerActor*> GameScene::getPlayerList()
+{
+    vector<PlayerActor*> ret;
+    for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+    {
+        PlayerActor* r = dynamic_cast<PlayerActor*>(*it);
+        if(r) ret.push_back(r);
+    }
+
+    return ret;
+}
+
 PlayerActor* GameScene::getPlayer()
 {
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -87,16 +100,9 @@ PlayerActor* GameScene::getPlayer()
 void GameScene::update()
 {
     Scene::update();
-    if(awesome)
-    {
-        float pos = song.getPlayingOffset().asSeconds();
-        pos *= 132.0f / 60.0f;
-        pos = fmod(pos, 1)*3 - 2;
-        particlePosMult = 1 + pos;
-    }
 
-    PlayerActor* pl = getPlayer();
-    if(!pl)
+    vector<PlayerActor*> playerList = getPlayerList();
+    if(playerList.empty())
     {
         if(deadTimer == 6)
         {
@@ -109,6 +115,22 @@ void GameScene::update()
     }
     if(deadTimer <= 0 && !nextScene)
         nextScene = new GameScene();
+
+    if (!playerList.empty())
+    {
+        vec3 minPos, maxPos;
+        minPos = maxPos = playerList[0]->p;
+        for (int i = 1; i < playerList.size(); i++)
+        {
+            PlayerActor* pl = playerList[i];
+            if (pl->p.x < minPos.x) minPos = pl->p;
+            if (pl->p.x > maxPos.x) maxPos = pl->p;
+        }
+
+        cameraLookAt = vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0+1.0, 0);
+        float weight = exp(-dt*6);
+        cameraPos = cameraPos * weight + (vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0 , 0) + vec3(0, 2, 7+0.2*norm(maxPos-minPos))) * (1-weight);
+    }
 /*
     spawnTimer -= dt;
     if(spawnTimer < 0)
