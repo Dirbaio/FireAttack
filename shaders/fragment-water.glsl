@@ -102,8 +102,8 @@ void main()
     float d = tx*0.04+sin(ty*0.1+time2)*0.7;
     if(pos.y > 0.0)
     {
-        glow = sin((r*0.5+time2+d)*2*PI)*0.5+0.5;
-        glow *= 1-normal.y;
+        glow = sin((r*0.5+time2+d)*2.0*PI)*0.5+0.5;
+        glow *= 1.0-normal.y;
         glow *= exp(-pos.y);
     }
     else
