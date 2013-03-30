@@ -3,7 +3,7 @@ uniform float time;
 
 void main()
 {
-    float tx = gl_TexCoord[0].x;
+    float tx = gl_TexCoord[0].x+1;
     float ty = gl_TexCoord[0].y;
     float py = floor(ty / (1.154700538*3.0));
     float px = floor(tx / 2.0)+py;

@@ -186,37 +186,27 @@ void PlayerActor::explode()
 void PlayerActor::explodeWater()
 {
     ParticleEmitter e(this);
+    e.a = vec3(0, -7, 0);
     e.lightPermil = 0;
-    e.randVel = RandomVec(3);
-    e.life = 1;
+    e.randVel = RandomVec(2, CIRCLE_XZ);
+    e.randCol = RandomVec(0, 0.2, 0.3);
+    e.randVel.lol = 2;
+    e.v = vec3(0, 3, 0);
+    e.life = 2;
     e.startAlpha = 1;
-    e.endAlpha = 0;
-    e.startCol = vec3(0, 0, 0.4);
-    e.endCol = vec3(0, 0, 1);
-    e.startSize = 0;
-    e.endSize = 1;
-    e.boom(2000);
-    e.randVel = RandomVec(2.5);
-    e.life = 1;
-    e.startAlpha = 1;
-    e.endAlpha = 0;
-    e.startCol = vec3(0, 0.3, 0.6);
-    e.endCol = vec3(0, 0, 1);
-    e.startSize = 0;
-    e.endSize = 1;
-    e.boom(2000);
+    e.endAlpha = 1;
+    e.startCol = vec3(0.1, 0.2, 0.7);
+    e.endCol = vec3(0, 0.1, 0.2);
+    e.startSize = 0.7;
+    e.endSize = 0;
+    e.boom(1000);
 
-    e.randVel = RandomVec(0, 5, 0);
-    e.randPos = RandomVec(0, 1, 0);
-    e.life = 1;
-    e.startAlpha = 1;
-    e.endAlpha = 0;
-    e.startCol = vec3(0, 0, 0.2);
-    e.endCol = vec3(0, 0.6d, 1);
-    e.startSize = 0;
-    e.endSize = 1;
-    e.boom(2000);
-
+    e.randVel = RandomVec(0.3, 5, 0.4);
+    e.boom(1000);
+    e.a = vec3(0, 0, 0);
+    e.randVel = RandomVec(3, CIRCLE_XZ);
+    e.v = vec3(0, 1, 0);
+    e.boom(1000);
     alive = false;
 }
 

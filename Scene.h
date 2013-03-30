@@ -26,11 +26,13 @@ public:
     Shader* defaultShader;
 
     int lightCount; //For debug
+    float inverseLookAt[16];
 
 	Scene();
 	~Scene();
 	virtual void update();
 	virtual void render();
+    void renderSingle();
     void renderParticles(bool reflex);
     void renderLights();
 

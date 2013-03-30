@@ -96,16 +96,8 @@ void Scene::update()
 	}
 }
 
-void Scene::render()
+void Scene::renderSingle()
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(  cameraPos.x, cameraPos.y, cameraPos.z, 
-				cameraLookAt.x, cameraLookAt.y, cameraLookAt.z,
-                0, 1, 0);
-
-    glDisable(GL_LIGHTING);
-    glEnable(GL_CULL_FACE);
 
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
     {
@@ -115,12 +107,44 @@ void Scene::render()
 
         int program;
         glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
-        GLint timeLoc = glGetUniformLocation(program, "time");
-        if(timeLoc != -1)
-            glUniform1f(timeLoc, tim);
+        GLint loc = glGetUniformLocation(program, "time");
+        if(loc != -1)
+            glUniform1f(loc, tim);
+        loc = glGetUniformLocation(program, "inverseLookAt");
+        if(loc != -1)
+            glUniformMatrix4fv(loc, 1, false, inverseLookAt);
         act->render();
         sh->unbind();
     }
+
+}
+
+void Scene::render()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(  cameraPos.x, cameraPos.y, cameraPos.z,
+				cameraLookAt.x, cameraLookAt.y, cameraLookAt.z,
+                0, 1, 0);
+
+    float modelview[16];
+    glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+    gluInvertMatrix(modelview, inverseLookAt);
+
+    glDisable(GL_LIGHTING);
+    glEnable(GL_CULL_FACE);
+
+    glCullFace(GL_BACK);
+
+    renderSingle();
+    glCullFace(GL_FRONT);
+    glEnable(GL_NORMALIZE);
+    glPushMatrix();
+    glScalef(1, -1, 1);
+    glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+    gluInvertMatrix(modelview, inverseLookAt);
+    renderSingle();
+    glPopMatrix();
 
     vec3 camVec = cameraLookAt - cameraPos;
     normalize(camVec);

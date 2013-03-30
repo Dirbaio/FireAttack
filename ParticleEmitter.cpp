@@ -6,18 +6,21 @@
 RandomVec::RandomVec()
 {
     type = NONE;
+    this->lol = 0;
 }
 
 RandomVec::RandomVec(float rad)
 {
     type = SPHERE;
     this->rad = rad;
+    this->lol = 0;
 }
 
 RandomVec::RandomVec(float rad, int type)
 {
     this->type = type;
     this->rad = rad;
+    this->lol = 0;
 }
 
 RandomVec::RandomVec(float sx, float sy, float sz)
@@ -26,6 +29,7 @@ RandomVec::RandomVec(float sx, float sy, float sz)
     this->sx = sx;
     this->sy = sy;
     this->sz = sz;
+    this->lol = 0;
 }
 
 vec3 RandomVec::get()
@@ -47,11 +51,16 @@ vec3 RandomVec::get()
         float x = cos(angle)*rad;
         float y = sin(angle)*rad;
 
+        float angle2= frand(2*M_PI);
+        float z = frand(1);
+        float mult = sqrt(1-z*z);
+        vec3 randLol(cos(angle2)*mult*lol, sin(angle2)*mult*lol, z*lol);
+
         switch(type)
         {
-        case CIRCLE_XY: return vec3(x, y, 0);
-        case CIRCLE_YZ: return vec3(0, x, y);
-        case CIRCLE_XZ: return vec3(x, 0, y);
+        case CIRCLE_XY: return vec3(x, y, 0)+randLol;
+        case CIRCLE_YZ: return vec3(0, x, y)+randLol;
+        case CIRCLE_XZ: return vec3(x, 0, y)+randLol;
         }
     }
     case BOX:
@@ -76,7 +85,7 @@ ParticleEmitter::ParticleEmitter(Actor* act)
 	startCol = vec3(0, 0, 1);
     endCol = vec3(0.1, 1, 0);
     actorVelMult = 0;
-    a = vec3(0, 0.2, 0);
+    a = vec3(0, 0, 0);
     v = vec3(0, 0, 0);
 
     lightPermil = 40;
@@ -119,6 +128,14 @@ void ParticleEmitter::boom(int count)
         spawnParticle(0);
 }
 
+vec3 colorClamp(vec3 v)
+{
+    if(v.x < 0) v.x = 0; if(v.x > 1) v.x = 1;
+    if(v.y < 0) v.y = 0; if(v.y > 1) v.y = 1;
+    if(v.z < 0) v.z = 0; if(v.z > 1) v.z = 1;
+    return v;
+}
+
 void ParticleEmitter::spawnParticle(float t)
 {
     Particle pt;
@@ -130,9 +147,9 @@ void ParticleEmitter::spawnParticle(float t)
     if(pt.life < 0) return;
 	pt.startingLife = pt.life;
 	pt.startSize = startSize;
-	pt.endSize = endSize;
-	pt.startCol = startCol;
-	pt.endCol = endCol;
+    pt.endSize = endSize;
+    pt.startCol = colorClamp(startCol+randCol.get());
+    pt.endCol = colorClamp(endCol+randCol.get());
 	pt.startAlpha = startAlpha;
 	pt.endAlpha = endAlpha;
 	

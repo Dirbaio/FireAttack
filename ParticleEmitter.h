@@ -12,6 +12,7 @@ class RandomVec
     float rad;
     float sx, sy, sz;
     int type;
+    float lol;
 
     RandomVec();
     RandomVec(float rad);
@@ -42,6 +43,7 @@ class ParticleEmitter
 	vec3 v;
 	float actorVelMult;
     RandomVec randVel;
+    RandomVec randCol;
 
 	vec3 a;
 

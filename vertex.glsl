@@ -1,9 +1,10 @@
 varying vec3 normal, vertex;
+uniform mat4 inverseLookAt;
 
 void main()
 {
         normal = gl_NormalMatrix * gl_Normal;
-        vertex = vec3(gl_ModelViewMatrix * gl_Vertex);
+        vertex = inverseLookAt*gl_ModelViewMatrix * gl_Vertex;
 
         gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex;
         gl_FrontColor  = gl_Color;
