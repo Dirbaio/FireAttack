@@ -27,7 +27,8 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     WaterHexagon.cpp \
     ModelActor.cpp \
     FloatingHexagon.cpp \
-    WaterPlane.cpp
+    WaterPlane.cpp \
+    Input.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     BoxActor.h \
     GameScene.h \
@@ -44,7 +45,8 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     WaterHexagon.h \
     ModelActor.h \
     FloatingHexagon.h \
-    WaterPlane.h
+    WaterPlane.h \
+    Input.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/ -lBox2D
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/ -lBox2D

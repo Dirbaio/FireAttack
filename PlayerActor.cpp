@@ -6,6 +6,7 @@
 #include "SolidHexagon.h"
 #include "WaterHexagon.h"
 #include "Enemy.h"
+#include "Input.h"
 
 PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
 {
@@ -76,10 +77,20 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     body->SetUserData(this);
     wasMouseDown = false;
     mouseDownTime = 0;
+
+    vector<sf::Keyboard::Key> keyMap (MAPPINGSIZE);
+    keyMap[JUMP] = sf::Keyboard::Space;
+    keyMap[MOVERIGHT] = sf::Keyboard::D;
+    keyMap[MOVELEFT] = sf::Keyboard::A;
+    keyMap[SHOOT] = sf::Keyboard::LShift;
+    keyMap[SPAWN] = sf::Keyboard::E;
+    input = new Input(keyMap);
 }
 
 void PlayerActor::update()
 {
+    input->update();
+
     sizeEmitter->randVel.rad = min(3.0f, norm(v)*0.3f);
 
     bounce_cooldown += dt;
@@ -92,11 +103,11 @@ void PlayerActor::update()
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
     float f = 5;
-    if(Keyboard::isKeyPressed(Keyboard::Space))// && grounded)// && p.y < 0.3)
+    if(input->getKeyPressed(JUMP))// && grounded)// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
-    if(Keyboard::isKeyPressed(Keyboard::A))
+    if(input->getKeyPressed(MOVELEFT))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
-    if(Keyboard::isKeyPressed(Keyboard::D))
+    if(input->getKeyPressed(MOVERIGHT))
         body->ApplyForceToCenter(b2Vec2(f, 0));
  /*   if(Keyboard::isKeyPressed(Keyboard::S))
         body->ApplyForceToCenter(b2Vec2(0, -f));*/
@@ -112,7 +123,7 @@ void PlayerActor::update()
 
     particlePosMult = 1+mouseDownTime;
 */
-    if(!wasMouseDown && Mouse::isButtonPressed(Mouse::Left))
+    if(!wasMouseDown && (Mouse::isButtonPressed(Mouse::Left) || input->getKeyPressed(SHOOT)))
     {
         Vector2i ppos = Mouse::getPosition(*theApp);
 
@@ -144,7 +155,7 @@ void PlayerActor::update()
 
     if (p.y <= -0.2)
         explodeWater();
-    wasMouseDown = Mouse::isButtonPressed(Mouse::Left);
+    wasMouseDown = (Mouse::isButtonPressed(Mouse::Left) || input->getKeyPressed(SHOOT));
 }
 
 void PlayerActor::explode()
