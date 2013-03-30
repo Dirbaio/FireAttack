@@ -9,7 +9,6 @@ Actor::Actor(Scene* sc)
     particlePosMult = 1;
     body = NULL;
     shader = NULL;
-    waterExploded = false;
 }
 
 void Actor::update()
