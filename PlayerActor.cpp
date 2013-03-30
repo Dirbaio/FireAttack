@@ -29,7 +29,7 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     b2CircleShape box;
     box.m_radius = size/2;
     b2FixtureDef fixture;
-    fixture.density = 1.0f;
+    fixture.density = 2.0f;
     fixture.friction = 0.0f;
     fixture.shape = &box;
     fixture.restitution = 0.3f;

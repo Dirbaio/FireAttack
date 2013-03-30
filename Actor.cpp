@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include "Scene.h"
+#include "FloatingHexagon.h"
 
 Actor::Actor(Scene* sc)
 {
@@ -13,7 +14,7 @@ Actor::Actor(Scene* sc)
 
 void Actor::update()
 {
-    if (p.y <= -0.1)
+    if (p.y <= -0.1 && dynamic_cast<FloatingHexagon*>(this) == NULL)
         explodeWater();
 }
 void Actor::render() {}

@@ -4,7 +4,7 @@ uniform mat4 inverseLookAt;
 void main()
 {
         normal = gl_NormalMatrix * gl_Normal;
-        vertex = inverseLookAt*gl_ModelViewMatrix * gl_Vertex;
+        vertex = vec4(inverseLookAt*gl_ModelViewMatrix * gl_Vertex).xyz;
 
         gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex;
         gl_FrontColor  = gl_Color;
