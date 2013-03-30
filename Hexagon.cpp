@@ -2,6 +2,8 @@
 #include "util.h"
 #include "GameScene.h"
 #include "FireActor.h"
+#include "PlayerActor.h"
+#include "Enemy.h"
 
 Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible, float reg, int l) : Actor(sc)
 {
@@ -15,6 +17,8 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     regen_time = 0;
     regen_time_window = reg;
     life = max_life = l;
+
+    timer = timer2 = timer3 = colTimer = 0.0;
 
     dying = dead = false;
     dying_time = 0.0;
@@ -51,6 +55,14 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
 
 void Hexagon::update()
 {
+    timer += dt;
+    timer2 += dt*2;
+    timer3 += dt*3;
+    colTimer += dt;
+
+    timer2 = min(timer2, 1.0f);
+    timer3 = min(timer3, 1.0f);
+
     if (life == max_life)
         regen_time = 0;
     else
@@ -73,7 +85,10 @@ void Hexagon::update()
 
 void Hexagon::render()
 {
-    shader->setParameter("time", tim+p.x/10.0);
+    shader->setParameter("time", timer);
+    shader->setParameter("time2", timer2);
+    shader->setParameter("time3", timer3);
+
     glPushMatrix();
 
     glTranslatef(p.x, p.y, p.z);
@@ -110,9 +125,9 @@ void Hexagon::collided(Actor* b)
             if (life == 0)
                 die();
         }
-        return;
     }
-    return;
+    if (colTimer >= 0.4 && (dynamic_cast<PlayerActor*>(b) || dynamic_cast<FireActor*>(b) || dynamic_cast<Enemy*>(b)))
+        timer2 = timer3 = colTimer = 0.0;
 }
 
 void Hexagon::die()
