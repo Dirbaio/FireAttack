@@ -44,7 +44,7 @@ void main()
 
     float light = dot(normal, lightDir)+0.5;
     light *= 1.0/(dist*dist);//(2.5 - sqrt(dist/sqrt(particleSize)));
-    light = min(light, (particleSize/dist*30.0-1));
+    light = min(light, (particleSize/dist*30.0-1.0));
     light = max(0.0, light) * 0.5;
     vec3 lightCol = light * gl_Color.rgb;
 
