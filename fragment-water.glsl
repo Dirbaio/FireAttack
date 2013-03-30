@@ -16,6 +16,63 @@ uniform sampler2D tex3;
 uniform float time;
 uniform mat4 inverseLookAt;
 uniform vec3 cameraPos;
+
+vec3 calcPattern(float tx, float ty)
+{
+    tx += 1.0;
+    float py = floor(ty / (1.154700538*3.0));
+    float px = floor(tx / 2.0)+py;
+    py *= 2.0;
+    float x = fract(tx / 2.0);
+    float y = fract(ty / (1.154700538*3.0));
+    float x2 = abs(x-0.5)*2.0;
+    float y2 = abs(y-0.5)*2.0;
+
+    bool a = y2 < 1.0/3.0 + x2 / 3.0;
+    bool top = y > 0.5;
+    bool right = x > 0.5;
+
+    if(a)
+    {
+        py += 1.0;
+        if(right)
+            px += 1.0;
+    }
+    else
+        if(top)
+
+        {
+            py += 2.0;
+            px += 1.0;
+        }
+
+    if(!a)
+    {
+        x2 = 1.0-x2;
+        y2 = 1.0-y2;
+    }
+
+    float r = 0.0;
+
+    if(y2*3.0 + x2 > 1.0)
+        r = (y2*1.5 - x2*0.5)+0.5;
+    else
+        r = 1.0-x2;
+
+    float glow = 0.0;
+    float time2 = time*0.4;
+    float d = tx*0.04+sin(ty*0.1+time2)*0.7;
+    glow += exp(-5.0*fract(-r*0.5+time2+d));
+    glow += exp(-5.0*fract(r*0.5+time2+d));
+
+    float black = ty/40.0+1.0;
+    black = clamp(black, 0.0, 1.0);
+    glow *= black;
+
+    vec3 col = vec3(0.5, 0.7, 1.0);
+    return glow*col;
+}
+
 void main()
 {
 
@@ -42,58 +99,11 @@ void main()
     //cameraPos + lambda*dir = (x, 0, y)
     pos2 -= dir*(pos2.y/dir.y);
 
-    if(pos.y > 0.0) discard;
-    float tx = pos2.x+1.0;
-    float ty = pos2.z;
-    float py = floor(ty / (1.154700538*3.0));
-    float px = floor(tx / 2.0)+py;
-    py *= 2.0;
-    float x = fract(tx / 2.0);
-    float y = fract(ty / (1.154700538*3.0));
-    float x2 = abs(x-0.5)*2.0;
-    float y2 = abs(y-0.5)*2.0;
-
-    bool a = y2 < 1.0/3.0 + x2 / 3.0;
-    bool top = y > 0.5;
-    bool right = x > 0.5;
-
-    if(a)
+    if(pos.y > 0.0)
     {
-        py += 1.0;
-        if(right)
-            px += 1.0;
+        discard;
+//         gl_FragColor = vec4(calcPattern(pos.x, pos.z), 1.0);
     }
     else
-        if(top)
-        {
-            py += 2.0;
-            px += 1.0;
-        }
-
-    if(!a)
-    {
-        x2 = 1.0-x2;
-        y2 = 1.0-y2;
-    }
-
-    float r = 0.0;
-
-    if(y2*3.0 + x2 > 1.0)
-        r = (y2*1.5 - x2*0.5)+0.5;
-    else
-        r = 1.0-x2;
-
-    vec3 col = vec3(0.5, 0.7, 1.0);
-    float glow = 0.0;
-    float time2 = time*0.4;
-    float d = tx*0.04+sin(ty*0.1+time2)*0.7;
-    glow += exp(-5.0*fract(-r*0.5+time2+d));
-    glow += exp(-5.0*fract(r*0.5+time2+d));
-
-    float black = ty/40.0+1.0;
-    black = clamp(black, 0.0, 1.0);
-    glow *= black;
-
-
-    gl_FragColor = vec4(col*glow, 1.0);
+        gl_FragColor = vec4(calcPattern(pos2.x, pos2.z), 1.0);
 }
