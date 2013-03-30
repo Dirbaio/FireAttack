@@ -18,10 +18,6 @@ varying float particleSize;
 
 void main()
 {
-    /*    float a = 1.0 - sqrt(gl_TexCoord[0].x*gl_TexCoord[0].x + gl_TexCoord[0].y*gl_TexCoord[0].y);
-    a = clamp(a, 0, 1);
-    gl_FragColor = vec4(a, a, a, 1) * gl_Color;*/
-
     vec2 coord = gl_TexCoord[0].xy*0.5 + 0.5;
     vec4 c1 = texture2D(tex1, coord); //Color texture
     vec4 c2 = texture2D(tex2, coord); //Normal texture

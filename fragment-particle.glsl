@@ -17,10 +17,6 @@ varying vec3 particle;
 varying float particleSize;
 void main()
 {
-    /*    float a = 1.0 - sqrt(gl_TexCoord[0].x*gl_TexCoord[0].x + gl_TexCoord[0].y*gl_TexCoord[0].y);
-    a = clamp(a, 0, 1);
-    gl_FragColor = vec4(a, a, a, 1) * gl_Color;*/
-
     vec2 coord = gl_TexCoord[0].xy*0.5 + 0.5;
     vec4 c1 = texture2D(tex1, coord); //Color texture
     vec4 c2 = texture2D(tex2, coord); //Normal texture
@@ -37,14 +33,6 @@ void main()
     float z = 2.0 * zNear * zFar / (zFar + zNear - z_n * (zFar - zNear));
     //    vec3 pos = vec3(gl_TexCoord[0].x*aspectRatio*z, gl_TexCoord[0].y*z, -z);
 
-    //WTFLOL
-/*    vec2 v = vec2(gl_TexCoord[0].x*aspectRatio, gl_TexCoord[0].y);
-    float a = v.x*v.x + v.y*v.y + 1.0;
-    float b = -2.0*(v.x*particle.x + v.y*particle.y + particle.z);
-    float c = particle.x*particle.x + particle.y*particle.y + particle.z*particle.z - particleSize*particleSize;
-    float z1 = (-b + sqrt(b*b - 4.0*a*c))/2.0/a;
-    float z2 = (-b - sqrt(b*b - 4.0*a*c))/2.0/a;
-*/
     vec2 v = vec2(gl_TexCoord[0].x*aspectRatio, gl_TexCoord[0].y);
 
     float a = v.x;
@@ -66,7 +54,6 @@ void main()
     light = light*light;
     vec3 lightCol = light * gl_Color.rgb;
 
-//    finalColor = vec3(int(floor(pos.x)) & 1, int(floor(pos.y)) & 1, int(floor(pos.z)) & 1);
     gl_FragColor = vec4(lightCol, 1.0);
 }
 
