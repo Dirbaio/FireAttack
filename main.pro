@@ -26,7 +26,8 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     ShooterEnemy.cpp \
     WaterHexagon.cpp \
     ModelActor.cpp \
-    FloatingHexagon.cpp
+    FloatingHexagon.cpp \
+    WaterPlane.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     BoxActor.h \
     GameScene.h \
@@ -42,7 +43,8 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     ShooterEnemy.h \
     WaterHexagon.h \
     ModelActor.h \
-    FloatingHexagon.h
+    FloatingHexagon.h \
+    WaterPlane.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/ -lBox2D
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/ -lBox2D
@@ -65,4 +67,5 @@ OTHER_FILES += \
     vertex-null.glsl \
     fragment-hexagons.glsl \
     vertex-light.glsl \
-    vertex-particle.glsl
+    vertex-particle.glsl \
+    fragment-water.glsl
