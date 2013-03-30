@@ -73,8 +73,10 @@ void Particle::render()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }*/
 
-void Particle::render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray)
+void Particle::render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool reflex)
 {
+    vec3 pp = p;
+    if(reflex) pp.y = -pp.y;
     float size = (startSize * (life) + endSize*(startingLife - life)) / startingLife;
     float alpha = (startAlpha * (life) + endAlpha*(startingLife - life)) / startingLife;
     vec3 col = (startCol * (life) + endCol*(startingLife - life)) / startingLife;
@@ -91,16 +93,16 @@ void Particle::render(vector<vec3>& vtxArray, vector<float>& texArray, vector<co
     float sz = size*1.5f;
     dx *= sz;
     dy *= sz;
-    vtxArray.push_back(p+dx+dy);
-    vtxArray.push_back(p+dx-dy);
-    vtxArray.push_back(p-dx-dy);
-    vtxArray.push_back(p-dx+dy);
+    vtxArray.push_back(pp+dx+dy);
+    vtxArray.push_back(pp+dx-dy);
+    vtxArray.push_back(pp-dx-dy);
+    vtxArray.push_back(pp-dx+dy);
 
     for(int i = 0; i < 4; i++)
     {
-        texArray.push_back(p.x);
-        texArray.push_back(p.y);
-        texArray.push_back(p.z);
+        texArray.push_back(pp.x);
+        texArray.push_back(pp.y);
+        texArray.push_back(pp.z);
         texArray.push_back(size);
     }
 

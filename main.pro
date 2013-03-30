@@ -68,4 +68,5 @@ OTHER_FILES += \
     fragment-hexagons.glsl \
     vertex-light.glsl \
     vertex-particle.glsl \
-    fragment-water.glsl
+    fragment-water.glsl \
+    fragment-particle2.glsl

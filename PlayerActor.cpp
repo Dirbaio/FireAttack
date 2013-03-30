@@ -92,7 +92,7 @@ void PlayerActor::update()
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
     float f = 5;
-    if(Keyboard::isKeyPressed(Keyboard::Space) && grounded)// && p.y < 0.3)
+    if(Keyboard::isKeyPressed(Keyboard::Space))// && grounded)// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
     if(Keyboard::isKeyPressed(Keyboard::A))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
