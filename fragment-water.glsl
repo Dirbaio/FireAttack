@@ -1,10 +1,50 @@
-varying vec3 normal;
-uniform float time;
 
+/*uniform vec3 cameraUp;
+uniform vec3 cameraRight;
+uniform vec3 cameraFront;
+uniform vec3 cameraPos;
+
+uniform float w;
+uniform float h;
+*/
+uniform float aspectRatio;
+
+uniform sampler2D tex1;
+uniform sampler2D tex2;
+uniform sampler2D tex3;
+
+uniform float time;
+uniform mat4 inverseLookAt;
+uniform vec3 cameraPos;
 void main()
 {
-    float tx = gl_TexCoord[0].x+1;
-    float ty = gl_TexCoord[0].y;
+
+    vec2 coord = gl_TexCoord[0].xy*0.5 + 0.5;
+    vec4 c1 = texture2D(tex1, coord); //Color texture
+    vec4 c2 = texture2D(tex2, coord); //Normal texture
+    vec4 c3 = texture2D(tex3, coord); //Depth texture
+
+    vec3 color = c1.rgb;
+    vec3 normal = c2.xyz*2.0 - 1.0;
+
+    float zNear = 0.01;
+    float zFar = 50.0;
+
+    float z_b = c3.r;
+    float z_n = 2.0 * z_b - 1.0;
+    float z = 2.0 * zNear * zFar / (zFar + zNear - z_n * (zFar - zNear));
+    vec4 pos = vec4(gl_TexCoord[0].x*aspectRatio*z, gl_TexCoord[0].y*z, -z, 1.0);
+    pos = inverseLookAt*pos;
+
+    vec3 pos2 = pos.xyz;
+    vec3 dir = pos.xyz - cameraPos;
+
+    //cameraPos + lambda*dir = (x, 0, y)
+    pos2 -= dir*(pos2.y/dir.y);
+
+    if(pos.y > 0.0) discard;
+    float tx = pos2.x+1.0;
+    float ty = pos2.z;
     float py = floor(ty / (1.154700538*3.0));
     float px = floor(tx / 2.0)+py;
     py *= 2.0;
@@ -54,7 +94,6 @@ void main()
     black = clamp(black, 0.0, 1.0);
     glow *= black;
 
-    gl_FragData[0] = vec4(col, glow);
-    vec3 N = normalize(normal);
-    gl_FragData[1] = vec4((N*0.5)+0.5, 0.0);
+
+    gl_FragColor = vec4(col*glow, 1.0);
 }

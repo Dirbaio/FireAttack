@@ -75,6 +75,7 @@ void Particle::render()
 
 void Particle::render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool reflex)
 {
+    if(p.y < 0.0f) return;
     vec3 pp = p;
     if(reflex) pp.y = -pp.y;
     float size = (startSize * (life) + endSize*(startingLife - life)) / startingLife;

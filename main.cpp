@@ -205,8 +205,8 @@ int main(int argc, char** argv)
 
     Shader* lightShader = loadShader("vertex-light.glsl", "fragment-light.glsl");
     Shader* particleShader = loadShader("vertex-particle.glsl", "fragment-particle.glsl");
-    Shader* particleShader2 = loadShader("vertex-particle.glsl", "fragment-particle2.glsl");
     Shader* glowShader = loadShader("vertex-null.glsl", "fragment-glow.glsl");
+    Shader* waterShader = loadShader("vertex-null.glsl", "fragment-water.glsl");
 
     srand(time(NULL));
 
@@ -334,15 +334,40 @@ int main(int argc, char** argv)
         glTexCoord2f(1, 1); glVertex2f(1, 1);
         glTexCoord2f(-1, 1); glVertex2f(-1, 1);
         glEnd();
+
         setupShader(lightShader);
         lightShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
         sc->renderLights();
+
+        setupShader(particleShader);
+        particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        sc->renderParticles(true);
+
+        setupShader(waterShader);
+
+        float modelview[16];
+        float inverseLookAt[16];
+        glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+        gluInvertMatrix(modelview, inverseLookAt);
+        int program;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
+        int loc = glGetUniformLocation(program, "inverseLookAt");
+        if(loc != -1)
+            glUniformMatrix4fv(loc, 1, false, inverseLookAt);
+
+        waterShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        waterShader->setParameter("time", tim);
+        waterShader->setParameter("cameraPos", sc->cameraPos);
+        glBegin(GL_QUADS);
+        glTexCoord2f(-1, -1); glVertex2f(-1, -1);
+        glTexCoord2f(1, -1); glVertex2f(1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, 1);
+        glTexCoord2f(-1, 1); glVertex2f(-1, 1);
+        glEnd();
+
         setupShader(particleShader);
         particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
         sc->renderParticles(false);
-        setupShader(particleShader2);
-        particleShader2->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
-        sc->renderParticles(true);
 
         if(sc->nextScene)
         {
