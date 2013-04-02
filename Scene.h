@@ -40,6 +40,8 @@ public:
     void BeginContact(b2Contact *contact);
 
     float GetRayCastDistance(b2Vec2 p1, b2Vec2 p2);
+
+    void makeExplosion(vec3 pos, float force, bool explodes, bool destroys);
 };
 
 #endif

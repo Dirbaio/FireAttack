@@ -20,6 +20,8 @@ public:
     virtual void render();
 
     virtual void collided(Actor *b);
+
+    void ActivateExplosion();
 };
 
 #endif // EXPLOSIVEHEXAGON_H

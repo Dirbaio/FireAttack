@@ -150,3 +150,8 @@ void Hexagon::swapRotable()
     rotable = !rotable;
     body->SetFixedRotation(!rotable);
 }
+
+bool Hexagon::isMovable()
+{
+    return movable;
+}

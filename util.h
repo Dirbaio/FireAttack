@@ -30,6 +30,11 @@ inline float dot(const vec3& a, const vec3& b)
 	return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
+inline float dot(const vec2& a, const vec2& b)
+{
+    return a.x*b.x + a.y*b.y;
+}
+
 //Cross product
 inline vec3 cross(const vec3& a, const vec3& b)
 {
@@ -52,6 +57,11 @@ inline bool prand(float f)
 inline float norm(vec3 v)
 {
 	return sqrt(dot(v, v));
+}
+
+inline float norm(vec2 v)
+{
+    return sqrt(dot(v, v));
 }
 
 inline void normalize(vec3& v)
@@ -213,4 +223,15 @@ inline bool gluInvertMatrix(const float m[16], float invOut[16])
 
     return true;
 }
+
+inline bool isZero(const vec2& v)
+{
+    return norm(v) <= 0.00001;
+}
+
+inline bool isZero(const vec3& v)
+{
+    return norm(v) <= 0.00001;
+}
+
 #endif

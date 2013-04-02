@@ -1,5 +1,7 @@
 #include "Scene.h"
 #include "Actor.h"
+#include "Hexagon.h"
+#include "ExplosionActor.h"
 
 class MyRayCastCallback : public b2RayCastCallback
 {
@@ -243,4 +245,9 @@ float Scene::GetRayCastDistance(b2Vec2 p1, b2Vec2 p2)
     world.RayCast(&callback, point1, point2);
     if (callback.m_fixture == NULL) return 123456;
     return callback.m_fraction;
+}
+
+void Scene::makeExplosion(vec3 pos, float force, bool explodes, bool destroys)
+{
+    actors.push_back(new ExplosionActor(this, pos, force, explodes, destroys));
 }

@@ -54,7 +54,7 @@ void Actor::explode()
     e.endCol = vec3(1, 0.4, 0.2);
     e.startSize = 0;
     e.endSize = 0.3;
-    e.boom(500);
+    e.boom(1500);
     alive = false;
 }
 
