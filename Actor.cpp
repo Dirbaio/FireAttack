@@ -11,6 +11,7 @@ Actor::Actor(Scene* sc)
     body = NULL;
     shader = NULL;
 }
+Actor::~Actor() {}
 
 void Actor::update()
 {

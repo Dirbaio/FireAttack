@@ -22,6 +22,7 @@ class Actor
     Shader* shader;
 
 	Actor(Scene* sc);
+	virtual ~Actor();
 
     float particlePosMult;
 

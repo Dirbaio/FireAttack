@@ -5,7 +5,8 @@
 
 class GameScene;
 
-class ShooterEnemy : public Enemy
+class ShooterEnemy : public En
+		emy
 {
 private:
     float shootTimer;
