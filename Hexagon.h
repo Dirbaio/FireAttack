@@ -27,6 +27,8 @@ public:
     virtual void collided(Actor *b);
 
     void swapRotable();
+
+    bool isMovable();
 };
 
 #endif // HEXAGON_H

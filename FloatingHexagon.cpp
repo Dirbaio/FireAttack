@@ -10,7 +10,7 @@ void FloatingHexagon::update()
     Hexagon::update();
     if (p.y <= 0.1)
     {
-        body->ApplyForceToCenter(b2Vec2(0.0, 34.0*60.0*dt));
+        body->ApplyForceToCenter(b2Vec2(0.0, 34.0));
         float ang = body->GetAngle();
         ang = fmod(ang, 2*M_PI);
         if(ang < 0) ang += 2*M_PI;

@@ -30,7 +30,10 @@ void ExplosiveHexagon::update()
             parpadeoTime = 0.0;
         explodeTime += dt;
         if (explodeTime >= explodeTimeMax)
-            explode();
+        {
+            sc->makeExplosion(p, 50.0, true, true);
+            alive = false;
+        }
     }
 }
 
@@ -57,4 +60,9 @@ void ExplosiveHexagon::collided(Actor* b)
         exploded = true;
         return;
     }
+}
+
+void ExplosiveHexagon::ActivateExplosion()
+{
+    exploded = true;
 }
