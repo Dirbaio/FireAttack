@@ -18,8 +18,8 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     regen_time_window = reg;
     life = max_life = l;
 
-    timer = timer2 = colTimer = 0.0;
-
+    timer = colTimer = 10.0;
+    timer2 = 10.0;
     dying = dead = false;
     dying_time = 0.0;
 
@@ -84,6 +84,7 @@ void Hexagon::render()
 {
     shader->setParameter("time", timer);
     shader->setParameter("time2", timer2);
+    shader->setParameter("hexpos", p);
 
     glPushMatrix();
 

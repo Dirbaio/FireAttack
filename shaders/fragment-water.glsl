@@ -117,8 +117,8 @@ void main()
 
     float black = ty/40.0+1.0;
     black = clamp(black, 0.0, 1.0);
-    glow *= black;
 
-    vec3 col = vec3(0.1, 0.5, 0.9);
-    gl_FragColor = vec4(col*glow, 1.0);
+    vec3 col = vec3(0.0+0.1*glow, 0.1+glow*0.2, 0.4+glow*0.4);
+    col *= black;
+    gl_FragColor = vec4(col, 1.0);
 }
