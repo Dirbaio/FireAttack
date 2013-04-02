@@ -1,7 +1,6 @@
 #include "PlayerActor.h"
 #include "GameScene.h"
 #include "FireActor.h"
-#include "BoxActor.h"
 #include "BouncyHexagon.h"
 #include "SolidHexagon.h"
 #include "WaterHexagon.h"
@@ -76,6 +75,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
     wasMouseDown = false;
     mouseDownTime = 0;
 
+    cfg = *config;
     input = new Input(config->keyMap);
 }
 
@@ -94,7 +94,7 @@ void PlayerActor::update()
     dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.02));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
-    float f = 5;
+    float f = 5.0;
     if(input->getKeyPressed(JUMP) && grounded)// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
     if(input->getKeyPressed(MOVELEFT))
@@ -138,7 +138,12 @@ void PlayerActor::update()
         vec3 dir = res - p;
         normalize(dir);
 
-        FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, false);
+        BulletConfig config;
+        config.col1 = cfg.col1;
+        config.col2 = cfg.col2;
+        config.col3 = cfg.col3;
+        config.col4 = cfg.col4;
+        FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, &config);
         sc->actors.push_back(bullet);
         //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
     }

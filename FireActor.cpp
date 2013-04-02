@@ -1,14 +1,13 @@
 #include "FireActor.h"
 #include "util.h"
 #include "Scene.h"
-#include "BoxActor.h"
 #include "GameScene.h"
 #include "BouncyHexagon.h"
 #include "SolidHexagon.h"
 #include "WaterHexagon.h"
 #include "Enemy.h"
 
-FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
+FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, BulletConfig* config) : Actor(sc)
 {
     gsc = sc;
     this->green = green;
@@ -21,8 +20,8 @@ FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
     pe.startSize = size/1;
     pe.endSize = size/16;
     pe.life = 0.01;
-    pe.startCol = green?vec3(0, 1, 0):vec3(1, 0, 0);
-    pe.endCol = vec3(1, 1, 0);
+    pe.startCol = config->col1;
+    pe.endCol = config->col2;
     pe.actorVelMult = 1;
     emitters.push_back(pe);
 
@@ -33,8 +32,8 @@ FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green) : Actor(sc)
     pe.startSize = 0.1;
     pe.endSize = 0.6;
     pe.life = 0.01;
-    pe.startCol = vec3(1, 1, 0);
-    pe.endCol = green?vec3(0, 1, 1):vec3(1, 0, 1);
+    pe.startCol = config->col3;
+    pe.endCol = config->col4;
     pe.actorVelMult = 0;
     emitters.push_back(pe);
 

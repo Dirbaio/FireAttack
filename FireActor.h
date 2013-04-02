@@ -4,6 +4,11 @@
 
 class GameScene;
 
+struct BulletConfig
+{
+    vec3 col1, col2, col3, col4;
+};
+
 class FireActor : public Actor
 {
 	public:
@@ -11,7 +16,7 @@ class FireActor : public Actor
 	float size;
 	float timeSinceGround;
     GameScene* gsc;
-    FireActor(vec3 pos, vec3 vel, GameScene* sc, bool green);
+    FireActor(vec3 pos, vec3 vel, GameScene* sc, BulletConfig* config);
     bool green;
 
 	Texture* playerTex;

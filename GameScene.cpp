@@ -1,5 +1,4 @@
 #include "GameScene.h"
-#include "BoxActor.h"
 #include "GroundActor.h"
 #include "PlayerActor.h"
 #include "FireActor.h"

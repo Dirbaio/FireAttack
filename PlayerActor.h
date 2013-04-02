@@ -27,6 +27,7 @@ public:
     PlayerActor(GameScene* sc, PlayerConfig *config);
     Texture* playerTex;
 
+    PlayerConfig cfg;
     Input* input;
 
     ParticleEmitter* sizeEmitter;

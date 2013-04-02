@@ -22,7 +22,12 @@ void ShooterEnemy::update()
         vec3 dir = player->p - p;
         normalize(dir);
 
-        FireActor* bullet = new FireActor(p+dir*0.9f, dir*10.0f, gsc, true);
+        BulletConfig config;
+        config.col1 = vec3(0, 1, 0);
+        config.col2 = vec3(1, 1, 0);
+        config.col3 = vec3(1, 1, 0);
+        config.col4 = vec3(0, 1, 1);
+        FireActor* bullet = new FireActor(p+dir*0.9f, dir*10.0f, gsc, &config);
         gsc->actors.push_back(bullet);
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
     }
