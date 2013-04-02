@@ -29,7 +29,6 @@ Scene::Scene() : world(b2Vec2(0.0f, -10.0f))
 {
 	cameraLookAt = vec3(0, 0, 0);
     cameraPos = vec3(0, 20, 20);
-	particleTex.loadFromFile("particle.png");
     world.SetContactListener(this);
 
     nextScene = NULL;
@@ -88,6 +87,7 @@ void Scene::update()
 			it2++;
             if((*it)->body)
                 world.DestroyBody((*it)->body);
+			delete *it;
 			actors.erase(it);
 			it = it2;
 		}

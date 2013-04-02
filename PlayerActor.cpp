@@ -37,8 +37,6 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
     fixture.userData = this;
     body->CreateFixture(&fixture);
 
-    playerTex = loadTexture("player.jpg");
-
     ParticleEmitter pe (this);
     pe.period = 1/500.0;
     pe.startAlpha = 0.1;
