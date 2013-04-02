@@ -24,7 +24,7 @@ void main()
     float z = 2.0 * zNear * zFar / (zFar + zNear - z_n * (zFar - zNear));
     vec3 pos = vec3(coord.x*aspectRatio*z, coord.y*z, -z);
 
-    gl_FragColor = vec4(color * c1.a, 1.0);
+    gl_FragColor = vec4(color * c1.a * 8, 1.0);
 
    /* vec3 res = vec3(0.0, 0.0, 0.0);
     vec2 pos = gl_TexCoord[0].xy*0.5 + 0.5;

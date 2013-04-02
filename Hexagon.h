@@ -17,7 +17,7 @@ private:
     void die();
     bool dying, dead;
     float dying_time, dying_time_window;
-    float timer, timer2, timer3, colTimer;
+    float timer, timer2, colTimer;
 
 public:
     Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destructible, float reg, int l);

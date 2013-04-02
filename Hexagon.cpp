@@ -18,7 +18,7 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     regen_time_window = reg;
     life = max_life = l;
 
-    timer = timer2 = timer3 = colTimer = 0.0;
+    timer = timer2 = colTimer = 0.0;
 
     dying = dead = false;
     dying_time = 0.0;
@@ -57,12 +57,8 @@ void Hexagon::update()
 {
     Actor::update();
     timer += dt;
-    timer2 += dt*2;
-    timer3 += dt*3;
+    timer2 += dt;
     colTimer += dt;
-
-    timer2 = min(timer2, 1.0f);
-    timer3 = min(timer3, 1.0f);
 
     if (life == max_life)
         regen_time = 0;
@@ -88,7 +84,6 @@ void Hexagon::render()
 {
     shader->setParameter("time", timer);
     shader->setParameter("time2", timer2);
-    shader->setParameter("time3", timer3);
 
     glPushMatrix();
 
@@ -128,7 +123,7 @@ void Hexagon::collided(Actor* b)
         }
     }
     if (colTimer >= 0.4 && (dynamic_cast<PlayerActor*>(b) || dynamic_cast<FireActor*>(b) || dynamic_cast<Enemy*>(b)))
-        timer2 = timer3 = colTimer = 0.0;
+        timer2 = colTimer = 0.0;
 }
 
 void Hexagon::die()
