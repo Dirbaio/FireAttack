@@ -247,7 +247,7 @@ float Scene::GetRayCastDistance(b2Vec2 p1, b2Vec2 p2)
     return callback.m_fraction;
 }
 
-void Scene::makeExplosion(vec3 pos, float force, bool explodes, bool destroys)
+void Scene::makeExplosion(vec3 pos, float force, bool explodes, bool destroys, float inc)
 {
-    actors.push_back(new ExplosionActor(this, pos, force, explodes, destroys));
+    actors.push_back(new ExplosionActor(this, pos, force, explodes, destroys, inc));
 }

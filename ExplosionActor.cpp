@@ -2,17 +2,19 @@
 #include "ExplosiveHexagon.h"
 #include "Hexagon.h"
 
-ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, bool destroys) : Actor(sc)
+ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, bool destroys, float inc) : Actor(sc)
 {
     p.x = pos.x;
     p.y = pos.y;
     p.z = pos.z;
     oldp = p;
 
+    increase = inc;
+
     if (explodes)
     {
         ParticleEmitter e(this);
-        e.randVel = RandomVec(6);
+        e.randVel = RandomVec(inc*0.75);
         e.life = 1.3;
         e.startAlpha = 1;
         e.endAlpha = 0;
@@ -21,7 +23,7 @@ ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, 
         e.startSize = 0;
         e.endSize = 1;
         e.boom(800);
-        e.randVel = RandomVec(6);
+        e.randVel = RandomVec(inc*0.75);
         e.life = 1.3;
         e.startAlpha = 1;
         e.endAlpha = 0;
@@ -60,7 +62,7 @@ void ExplosionActor::update()
         return;
     }
 
-    radio += dt*12.0;
+    radio += dt*increase;
 
     for(list<Actor*>::iterator it = sc->actors.begin(); it != sc->actors.end(); ++it)
     {
