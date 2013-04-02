@@ -4,10 +4,19 @@ uniform vec3 color;
 uniform float time;
 uniform float time2;
 
+float g(float i)
+{
+    if(i < 0) return 0;
+
+    return exp(-5.0*i) + exp(-14.0*i)*2;
+}
+
 void main()
 {
     float y = 0.0-gl_TexCoord[0].y + time;
-    float glow = exp(-5.0*fract(y))*0.1;
+    float glow = 0;
+    glow += g(-gl_TexCoord[0].y + time);
+    glow += g(-gl_TexCoord[0].y + time2*2.0);
 
     float y2;
 

@@ -14,8 +14,8 @@ ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, 
     if (explodes)
     {
         ParticleEmitter e(this);
-        e.randVel = RandomVec(inc*0.75);
-        e.life = 1.3;
+        e.randVel = RandomVec(inc);
+        e.life = 0.7;
         e.startAlpha = 1;
         e.endAlpha = 0;
         e.startCol = vec3(1, 0, 0);
@@ -23,8 +23,8 @@ ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, 
         e.startSize = 0;
         e.endSize = 1;
         e.boom(800);
-        e.randVel = RandomVec(inc*0.75);
-        e.life = 1.3;
+        e.randVel = RandomVec(inc);
+        e.life = 0.7;
         e.startAlpha = 1;
         e.endAlpha = 0;
         e.startCol = vec3(1, 0, 0);
@@ -56,13 +56,13 @@ ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, 
 void ExplosionActor::update()
 {
     timer += dt;
-    if (timer >= 1.3)
+    if (timer >= 0.65)
     {
         alive = false;
         return;
     }
 
-    radio += dt*increase;
+    radio += dt*increase*2.0;
 
     for(list<Actor*>::iterator it = sc->actors.begin(); it != sc->actors.end(); ++it)
     {
