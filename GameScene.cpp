@@ -57,7 +57,7 @@ GameScene::GameScene()
     PlayerConfig player1, player2;
     configPlayers(player1, player2);
     actors.push_back(new PlayerActor(this, &player1));
-   // actors.push_back(new PlayerActor(this, &player2));
+    actors.push_back(new PlayerActor(this, &player2));
 //    actors.push_back(new WaterPlane(this));
     for (int k = -3; k < 0; k++) actors.push_back(new FloatingHexagon(this, vec3(k*2, 10, 0), (k%2)==0, true, true, 5.0, 4));
     for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));

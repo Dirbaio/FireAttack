@@ -56,7 +56,7 @@ void Actor::explode()
     e.endSize = 0.3;
     e.boom(1500);
 
-    sc->makeExplosion(p, 25.0, false, false, 4.0);
+    sc->makeExplosion(p, 15.0, false, false, 3.0);
 
     alive = false;
 }
@@ -86,7 +86,7 @@ void Actor::explodeWater()
     e.v = vec3(0, 1, 0);
     e.boom(1000);
 
-    sc->makeExplosion(p, 50.0, false, false, 12.0);
+    sc->makeExplosion(p, 25.0, false, false, 5.0);
 
     alive = false;
 }

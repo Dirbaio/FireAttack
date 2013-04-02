@@ -216,7 +216,7 @@ void PlayerActor::explodeWater()
     e.v = vec3(0, 1, 0);
     e.boom(1000);
 
-    sc->makeExplosion(p, 50.0, false, false, 12.0);
+    sc->makeExplosion(p, 40.0, false, false, 6.0);
 
     alive = false;
 }
