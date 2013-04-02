@@ -31,7 +31,7 @@ void ExplosiveHexagon::update()
         explodeTime += dt;
         if (explodeTime >= explodeTimeMax)
         {
-            sc->makeExplosion(p, 50.0, true, true);
+            sc->makeExplosion(p, 50.0, true, true, 12.0f);
             alive = false;
         }
     }

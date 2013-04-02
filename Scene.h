@@ -41,7 +41,7 @@ public:
 
     float GetRayCastDistance(b2Vec2 p1, b2Vec2 p2);
 
-    void makeExplosion(vec3 pos, float force, bool explodes, bool destroys);
+    void makeExplosion(vec3 pos, float force, bool explodes, bool destroys, float inc);
 };
 
 #endif

@@ -11,10 +11,10 @@ private:
     float timer;
     float force;
     bool destroys;
-    float radio;
+    float radio, increase;
 
 public:
-    ExplosionActor(Scene *sc, vec3 pos, float force, bool explodes, bool destroys);
+    ExplosionActor(Scene *sc, vec3 pos, float force, bool explodes, bool destroys, float inc);
 
     virtual void update();
 };
