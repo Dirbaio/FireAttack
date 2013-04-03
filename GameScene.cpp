@@ -54,9 +54,11 @@ void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
 
 GameScene::GameScene()
 {
-   /* for(int i = 0; i < 2; i++)
-        actors.push_back(new StickyEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0), 20.0));*/
     numPlayers = 1;
+
+    for(int i = 0; i < 2; i++)
+        actors.push_back(new StickyEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0), 20.0));
+
     PlayerConfig player1, player2;
     configPlayers(player1, player2);
     if (numPlayers >= 1)
@@ -69,7 +71,6 @@ GameScene::GameScene()
     for (int k = 3; k < 6; k++) actors.push_back(new ExplosiveHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
     for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 5.0, 10));
     for (int k = -8; k < 20; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.4f, 0), false, false, true, 3.0, 10));
-    //for (int k = -8; k < 20; k++) actors.push_back(new TrapHexagon(this, vec3(k*2, 0.4f, 0), true, 3.0, 10));
     for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0), true, true, true, 5.0, 4));
 //    actors.push_back(new ModelActor(this, "test.obj"));
 //    actors.push_back(new WallActor(this, -10, -1));
