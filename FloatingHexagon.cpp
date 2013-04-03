@@ -21,6 +21,6 @@ void FloatingHexagon::update()
 
 void FloatingHexagon::render()
 {
-    shader->setParameter("color", vec3(0.7, 0.9, 0.9));
+    shader->setParameter("color", vec3(0.8, 0.9, 0.9));
     Hexagon::render();
 }

@@ -30,7 +30,8 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     Input.cpp \
     ExplosiveHexagon.cpp \
     ExplosionActor.cpp \
-    StickyEnemy.cpp
+    StickyEnemy.cpp \
+    TrapHexagon.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     GameScene.h \
     GroundActor.h \
@@ -50,7 +51,8 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     Input.h \
     ExplosiveHexagon.h \
     ExplosionActor.h \
-    StickyEnemy.h
+    StickyEnemy.h \
+    TrapHexagon.h
 
 OTHER_FILES += \
     vertex.glsl \
