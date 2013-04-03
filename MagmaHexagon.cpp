@@ -1,7 +1,7 @@
 #include "MagmaHexagon.h"
 #include "GameScene.h"
 
-MagmaHexagon::MagmaHexagon(GameScene *sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l) : Hexagon(sc, pos, movable, rotable, dest, r, l)
+MagmaHexagon::MagmaHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, true, false, 10.0, 50)
 {
     body->GetFixtureList()->SetFriction(0.1);
 }

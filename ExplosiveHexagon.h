@@ -14,7 +14,7 @@ private:
     vec3 hexColor;
 
 public:
-    ExplosiveHexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l);
+    ExplosiveHexagon(GameScene* sc, vec3 pos);
 
     virtual void update();
     virtual void render();

@@ -5,10 +5,11 @@
 #include "WallActor.h"
 #include "SolidHexagon.h"
 #include "BouncyHexagon.h"
-#include "WaterHexagon.h"
+#include "MagmaHexagon.h"
 #include "FloatingHexagon.h"
 #include "ExplosiveHexagon.h"
 #include "TrapHexagon.h"
+#include "StaticHexagon.h"
 #include "ShooterEnemy.h"
 #include "StandardEnemy.h"
 #include "StickyEnemy.h"
@@ -66,12 +67,12 @@ GameScene::GameScene()
     if (numPlayers >= 2)
         actors.push_back(new PlayerActor(this, &player2));
 //    actors.push_back(new WaterPlane(this));
-    for (int k = -3; k < 0; k++) actors.push_back(new TrapHexagon(this, vec3(k*3, 8, 0), true, 5.0, 4));
-    for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
-    for (int k = 3; k < 6; k++) actors.push_back(new ExplosiveHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
-    for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 5.0, 10));
-    for (int k = -8; k < 20; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.4f, 0), false, false, true, 3.0, 10));
-    for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0), true, true, true, 5.0, 4));
+    for (int k = -3; k < 0; k++) actors.push_back(new TrapHexagon(this, vec3(k*3, 8, 0)));
+    for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0)));
+    for (int k = 3; k < 6; k++) actors.push_back(new ExplosiveHexagon(this, vec3(k*2, 10, 0)));
+    for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0)));
+    for (int k = -8; k < 20; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));
+    for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0)));
 //    actors.push_back(new ModelActor(this, "test.obj"));
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));

@@ -1,7 +1,7 @@
 #include "BouncyHexagon.h"
 #include "GameScene.h"
 
-BouncyHexagon::BouncyHexagon(GameScene *sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l) : Hexagon(sc, pos, movable, rotable, dest, r, l)
+BouncyHexagon::BouncyHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, false, false, true, 1.0, 8)
 {
     body->GetFixtureList()->SetRestitution(1.4);
 }

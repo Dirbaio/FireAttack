@@ -12,7 +12,7 @@ private:
     float trapTimer, trapTimerMax;
 
 public:
-    TrapHexagon(GameScene* sc, vec3 pos, bool dest, float r, int l);
+    TrapHexagon(GameScene* sc, vec3 pos);
 
     virtual void update();
     virtual void render();

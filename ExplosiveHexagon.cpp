@@ -6,7 +6,7 @@
 #include "Enemy.h"
 #include "GameScene.h"
 
-ExplosiveHexagon::ExplosiveHexagon(GameScene *sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l) : Hexagon(sc, pos, movable, rotable, dest, r, l)
+ExplosiveHexagon::ExplosiveHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, true, false, 10.0, 50)
 {
     exploded = false;
     explodeTime = 0.0;

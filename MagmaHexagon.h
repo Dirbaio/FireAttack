@@ -9,7 +9,7 @@ class MagmaHexagon : public Hexagon
 {
 
 public:
-    MagmaHexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l);
+    MagmaHexagon(GameScene* sc, vec3 pos);
 
     virtual void update();
     virtual void render();

@@ -9,7 +9,7 @@ class FloatingHexagon : public Hexagon
 {
 
 public:
-    FloatingHexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l);
+    FloatingHexagon(GameScene *sc, vec3 pos);
 
     virtual void update();
     virtual void render();

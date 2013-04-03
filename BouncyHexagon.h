@@ -9,7 +9,7 @@ class BouncyHexagon : public Hexagon
 {
 
 public:
-    BouncyHexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l);
+    BouncyHexagon(GameScene* sc, vec3 pos);
 
     virtual void update();
     virtual void render();

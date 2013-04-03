@@ -1,8 +1,9 @@
 #include "FloatingHexagon.h"
 #include "GameScene.h"
 
-FloatingHexagon::FloatingHexagon(GameScene *sc, vec3 pos, bool movable, bool rotable, bool dest, float r, int l) : Hexagon(sc, pos, movable, rotable, dest, r, l)
+FloatingHexagon::FloatingHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, true, true, 3.0, 5)
 {
+
 }
 
 void FloatingHexagon::update()
