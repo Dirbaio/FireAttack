@@ -9,7 +9,7 @@ private:
     float speed;
 
 public:
-    StickyEnemy(GameScene* sc, float size, vec3 pos, vec3 col, float speed);
+    StickyEnemy(GameScene* sc, vec3 pos);
 
     virtual void update();
     virtual void render();

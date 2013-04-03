@@ -2,10 +2,10 @@
 #include "GameScene.h"
 #include "util.h"
 
-StickyEnemy::StickyEnemy(GameScene* sc, float size, vec3 pos, vec3 col, float speed) : Enemy(sc, size, pos, col)
+StickyEnemy::StickyEnemy(GameScene* sc, vec3 pos) : Enemy(sc, 1.0, pos, vec3(1.0, 0.2, 0.6))
 {
     body->SetGravityScale(0);
-    this->speed = speed;
+    this->speed = 20.0;
 }
 
 void StickyEnemy::update()

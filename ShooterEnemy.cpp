@@ -3,7 +3,7 @@
 #include "PlayerActor.h"
 #include "GameScene.h"
 
-ShooterEnemy::ShooterEnemy(GameScene* sc, float size, vec3 pos, vec3 col) : Enemy(sc, size, pos, col)
+ShooterEnemy::ShooterEnemy(GameScene* sc, vec3 pos) : Enemy(sc, 1.0, pos, vec3(0.0, 1.0, 0.0))
 {
     shootTimer = 1;
 }

@@ -1,81 +1,34 @@
 #include "GameScene.h"
-#include "GroundActor.h"
 #include "PlayerActor.h"
 #include "FireActor.h"
-#include "WallActor.h"
-#include "SolidHexagon.h"
-#include "BouncyHexagon.h"
-#include "MagmaHexagon.h"
-#include "FloatingHexagon.h"
-#include "ExplosiveHexagon.h"
-#include "TrapHexagon.h"
-#include "StaticHexagon.h"
-#include "ShooterEnemy.h"
-#include "StandardEnemy.h"
-#include "StickyEnemy.h"
 #include "ModelActor.h"
-#include "WaterPlane.h"
 #include "Input.h"
+#include "Level.h"
 #include <vector>
-
-void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
-{
-    player1.col1 = vec3(1.0, 1.0, 0.5);
-    player1.col2 = vec3(1.0, 1.0, 1.0);
-    player1.col3 = vec3(1.0, 0.0, 0.0);
-    player1.col4 = vec3(1.0, 1.0, 0.0);
-    player1.col5 = vec3(1.0, 0.0, 0.0);
-    player1.col6 = vec3(0.0, 1.0, 0.4);
-
-    player2.col1 = vec3(0.5, 1.0, 1.0);
-    player2.col2 = vec3(0.1, 1.0, 1.0);
-    player2.col3 = vec3(0.0, 0.0, 1.0);
-    player2.col4 = vec3(0.0, 1.0, 1.0);
-    player2.col5 = vec3(0.0, 0.0, 1.0);
-    player2.col6 = vec3(0.4, 1.0, 0.0);
-
-    player1.initPos = vec3(0, 10, 0);
-    player2.initPos = vec3(4, 10, 0);
-
-    player1.keyMap.resize(MAPPINGSIZE);
-    player2.keyMap.resize(MAPPINGSIZE);
-
-    player1.keyMap[JUMP] = sf::Keyboard::Space;
-    player1.keyMap[MOVERIGHT] = sf::Keyboard::D;
-    player1.keyMap[MOVELEFT] = sf::Keyboard::A;
-    player1.keyMap[SHOOT] = sf::Keyboard::LShift;
-    player1.keyMap[SPAWN] = sf::Keyboard::E;
-
-    player2.keyMap[JUMP] = sf::Keyboard::RShift;
-    player2.keyMap[MOVERIGHT] = sf::Keyboard::L;
-    player2.keyMap[MOVELEFT] = sf::Keyboard::J;
-    player2.keyMap[SHOOT] = sf::Keyboard::Return;
-    player2.keyMap[SPAWN] = sf::Keyboard::O;
-}
 
 GameScene::GameScene()
 {
     numPlayers = 1;
 
-    for(int i = 0; i < 2; i++)
-        actors.push_back(new StickyEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0), 20.0));
+    list<Asset> assetList;
 
-    PlayerConfig player1, player2;
-    configPlayers(player1, player2);
+    for(int i = 0; i < 2; i++)
+        assetList.push_back(Asset(ENEMSTICKY, vec3(i*2, 15.0, 0.0)));
+
     if (numPlayers >= 1)
-        actors.push_back(new PlayerActor(this, &player1));
+        assetList.push_back(Asset(PLAYER1, vec3(0.0, 0.0, 0.0)));
     if (numPlayers >= 2)
-        actors.push_back(new PlayerActor(this, &player2));
-//    actors.push_back(new WaterPlane(this));
-    for (int k = -3; k < 0; k++) actors.push_back(new TrapHexagon(this, vec3(k*3, 8, 0)));
-    for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0)));
-    for (int k = 3; k < 6; k++) actors.push_back(new ExplosiveHexagon(this, vec3(k*2, 10, 0)));
-    for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0)));
-    for (int k = -8; k < 20; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));
-    for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0)));
-//    actors.push_back(new ModelActor(this, "test.obj"));
-//    actors.push_back(new WallActor(this, -10, -1));
-//    actors.push_back(new WallActor(this, 10, 1));
+        assetList.push_back(Asset(PLAYER2, vec3(0.0, 0.0, 0.0)));
+
+    for (int k = -3; k < 0; k++) assetList.push_back(Asset(HEXTRAP, vec3(k*3, 8, 0)));
+    for (int k = 0; k < 3; k++) assetList.push_back(Asset(HEXBOUNCY, vec3(k*2, k*2+5, 0)));
+    for (int k = 3; k < 6; k++) assetList.push_back(Asset(HEXEXPLOSIVE, vec3(k*2, 10, 0)));
+    for (int k = 6; k < 9; k++) assetList.push_back(Asset(HEXSOLID, vec3(k*2, 10, 0)));
+    for (int k = -8; k < 20; k++) assetList.push_back(Asset(HEXSTATIC, vec3(k*2, 0.4f, 0)));
+    for (int k = 2; k < 6; k++) assetList.push_back(Asset(HEXFLOATING, vec3(-16+0.5*k, k, 0)));
+
+    Level* lvl = new Level(this, "Test", "Test.lvl", assetList);
+    lvl->Build();
 
     deadTimer = 6;
     spawnTimer = 1;
