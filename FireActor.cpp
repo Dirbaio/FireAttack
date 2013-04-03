@@ -4,7 +4,7 @@
 #include "GameScene.h"
 #include "BouncyHexagon.h"
 #include "SolidHexagon.h"
-#include "WaterHexagon.h"
+#include "MagmaHexagon.h"
 #include "Enemy.h"
 
 FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, BulletConfig* config) : Actor(sc)
@@ -79,7 +79,7 @@ void FireActor::collided(Actor *b)
 
     if(dynamic_cast<Hexagon*>(b))
     {
-        if (dynamic_cast<WaterHexagon*>(b))
+        if (dynamic_cast<MagmaHexagon*>(b))
         {
             explode();
             return;

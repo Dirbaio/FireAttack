@@ -3,7 +3,7 @@
 #include "FireActor.h"
 #include "BouncyHexagon.h"
 #include "SolidHexagon.h"
-#include "WaterHexagon.h"
+#include "MagmaHexagon.h"
 #include "Enemy.h"
 #include "Input.h"
 
@@ -235,7 +235,7 @@ void PlayerActor::collided(Actor *b)
         explode();
         return;
     }
-    if (dynamic_cast<WaterHexagon*>(b))
+    if (dynamic_cast<MagmaHexagon*>(b))
     {
         explode();
     }

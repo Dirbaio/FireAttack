@@ -1,4 +1,5 @@
 #include "ExplosiveHexagon.h"
+#include "MagmaHexagon.h"
 #include "util.h"
 #include "FireActor.h"
 #include "PlayerActor.h"
@@ -56,6 +57,11 @@ void ExplosiveHexagon::collided(Actor* b)
         return;
     }
     if (dynamic_cast<PlayerActor*>(b))
+    {
+        exploded = true;
+        return;
+    }
+    if (dynamic_cast<MagmaHexagon*>(b))
     {
         exploded = true;
         return;

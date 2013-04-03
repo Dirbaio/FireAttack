@@ -23,7 +23,6 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     BouncyHexagon.cpp \
     StandardEnemy.cpp \
     ShooterEnemy.cpp \
-    WaterHexagon.cpp \
     ModelActor.cpp \
     FloatingHexagon.cpp \
     WaterPlane.cpp \
@@ -31,7 +30,8 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     ExplosiveHexagon.cpp \
     ExplosionActor.cpp \
     StickyEnemy.cpp \
-    TrapHexagon.cpp
+    TrapHexagon.cpp \
+    MagmaHexagon.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     GameScene.h \
     GroundActor.h \
@@ -44,7 +44,6 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     BouncyHexagon.h \
     StandardEnemy.h \
     ShooterEnemy.h \
-    WaterHexagon.h \
     ModelActor.h \
     FloatingHexagon.h \
     WaterPlane.h \
@@ -52,7 +51,8 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     ExplosiveHexagon.h \
     ExplosionActor.h \
     StickyEnemy.h \
-    TrapHexagon.h
+    TrapHexagon.h \
+    MagmaHexagon.h
 
 OTHER_FILES += \
     vertex.glsl \
