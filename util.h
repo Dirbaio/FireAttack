@@ -69,6 +69,11 @@ inline void normalize(vec3& v)
 	v /= norm(v);
 }
 
+inline void normalize(vec2& v)
+{
+    v /= norm(v);
+}
+
 inline float toRad(float deg)
 {
     return deg/180.0*M_PI;

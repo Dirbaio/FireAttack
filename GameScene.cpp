@@ -54,7 +54,7 @@ void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
 GameScene::GameScene()
 {
     for(int i = 0; i < 2; i++)
-        actors.push_back(new StickyEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0), 2.0));
+        actors.push_back(new StickyEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0), 20.0));
     numPlayers = 1;
     PlayerConfig player1, player2;
     configPlayers(player1, player2);

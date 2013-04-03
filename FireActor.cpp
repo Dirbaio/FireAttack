@@ -64,7 +64,7 @@ void FireActor::update()
 {
     Actor::update();
     p += v*dt;
-    if(p.y > 50 || p.x < -100 || p.x > 100)
+    if(p.y > 1000 || p.x < -2000 || p.x > 2000)
         explode();
 
     body->SetTransform(b2Vec2(p.x, p.y), 0);
