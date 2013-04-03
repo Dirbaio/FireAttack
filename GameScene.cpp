@@ -10,6 +10,7 @@
 #include "ExplosiveHexagon.h"
 #include "ShooterEnemy.h"
 #include "StandardEnemy.h"
+#include "StickyEnemy.h"
 #include "ModelActor.h"
 #include "WaterPlane.h"
 #include "Input.h"
@@ -52,19 +53,22 @@ void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
 
 GameScene::GameScene()
 {
-    /*for(int i = 0; i < 2; i++)
-        actors.push_back(new ShooterEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0)));*/
+    for(int i = 0; i < 2; i++)
+        actors.push_back(new StickyEnemy(this, 1.0, vec3(frand(10.0), 15.0, 0), vec3(0,1,0), 2.0));
+    numPlayers = 1;
     PlayerConfig player1, player2;
     configPlayers(player1, player2);
-    actors.push_back(new PlayerActor(this, &player1));
- //   actors.push_back(new PlayerActor(this, &player2));
+    if (numPlayers >= 1)
+        actors.push_back(new PlayerActor(this, &player1));
+    if (numPlayers >= 2)
+        actors.push_back(new PlayerActor(this, &player2));
 //    actors.push_back(new WaterPlane(this));
-//    for (int k = -3; k < 0; k++) actors.push_back(new FloatingHexagon(this, vec3(k*2, 10, 0), (k%2)==0, true, true, 5.0, 4));
- //   for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
-    for (int k = 3; k < 60; k++) actors.push_back(new ExplosiveHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
- //   for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 5.0, 10));
-    for (int k = -8; k < 80; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.4f, 0), false, false, true, 3.0, 10));
- //   for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0), true, true, true, 5.0, 4));
+    for (int k = -3; k < 0; k++) actors.push_back(new FloatingHexagon(this, vec3(k*2, 10, 0), (k%2)==0, true, true, 5.0, 4));
+    for (int k = 0; k < 3; k++) actors.push_back(new BouncyHexagon(this, vec3(k*2, k*2+5, 0), false, false, true, 2.0, 2));
+    for (int k = 3; k < 6; k++) actors.push_back(new ExplosiveHexagon(this, vec3(k*2, 10, 0), true, true, false, 2.0, 5));
+    for (int k = 6; k < 9; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 10, 0), (k%2)==0, false, true, 5.0, 10));
+    for (int k = -8; k < 20; k++) actors.push_back(new SolidHexagon(this, vec3(k*2, 0.4f, 0), false, false, true, 3.0, 10));
+    for (int k = 2; k < 6; k++) actors.push_back(new FloatingHexagon(this, vec3(-16+0.5*k, k, 0), true, true, true, 5.0, 4));
 //    actors.push_back(new ModelActor(this, "test.obj"));
 //    actors.push_back(new WallActor(this, -10, -1));
 //    actors.push_back(new WallActor(this, 10, 1));
@@ -181,4 +185,27 @@ void GameScene::render()
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 */
+}
+
+PlayerActor* GameScene::GetNearestPlayerInView(vec3 pos)
+{
+    float bestDist = -1;
+    PlayerActor* best = NULL;
+    for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); it++)
+    {
+        if (dynamic_cast<PlayerActor*>(*it))
+        {
+            float dist = norm(pos-(*it)->p);
+            if (bestDist != -1 && dist > bestDist)
+                continue;
+
+            float rayFract = GetRayCastDistance(b2Vec2(pos.x, pos.y), b2Vec2((*it)->p.x, (*it)->p.y));
+            if (rayFract >= 1 - 0.5/dist - 0.1 && (dist < bestDist || bestDist == -1))
+            {
+                best = dynamic_cast<PlayerActor*>(*it);
+                bestDist = dist;
+            }
+        }
+    }
+    return best;
 }
