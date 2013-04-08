@@ -1,6 +1,7 @@
 #include "ExplosionActor.h"
 #include "ExplosiveHexagon.h"
 #include "Hexagon.h"
+#include "FireActor.h"
 
 ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, bool destroys, float inc) : Actor(sc)
 {
@@ -66,7 +67,7 @@ void ExplosionActor::update()
 
     for(list<Actor*>::iterator it = sc->actors.begin(); it != sc->actors.end(); ++it)
     {
-        if (dynamic_cast<ExplosionActor*>(*it))
+        if (dynamic_cast<ExplosionActor*>(*it) or dynamic_cast<FireActor*>(*it))
             continue;
         vec3 dir = (*it)->p - p;
         if (isZero(dir)) continue;
