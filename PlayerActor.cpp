@@ -87,11 +87,11 @@ void PlayerActor::update()
 
     bounce_cooldown += dt;
 
-    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.02));
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.015));
     bool grounded = (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.02));
+    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.015));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.02));
+    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.015));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
     float f = 5.0;

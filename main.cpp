@@ -213,7 +213,7 @@ int main(int argc, char** argv)
     float frameTime = 0;
     int frameCount = 0;
 
-    sc = new GameScene();
+    sc = new GameScene(FREEMODE);
 
     float updateTime = 0;
     float renderTime = 0;

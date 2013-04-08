@@ -8,23 +8,27 @@
 
 class PlayerActor;
 
+enum GameMode
+{
+    FREEMODE,
+    VERSUS
+};
+
 class GameScene : public Scene
 {
     public:
 
-    GameScene();
+    GameScene(GameMode mode);
 
     SoundBuffer* song1;
     SoundBuffer* song2;
     Sound song;
 
-    bool awesome;
-    void goAwesome();
-
     float deadTimer;
     float spawnTimer;
 
     int numPlayers;
+    GameMode gameMode;
 
     virtual void update();
     virtual void render();
