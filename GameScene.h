@@ -24,9 +24,6 @@ class GameScene : public Scene
     SoundBuffer* song2;
     Sound song;
 
-    bool awesome;
-    void goAwesome();
-
     float deadTimer;
     float spawnTimer;
 

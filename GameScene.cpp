@@ -9,6 +9,7 @@
 GameScene::GameScene(GameMode mode)
 {
     numPlayers = 1;
+    gameMode = mode;
 
     list<Asset> assetList;
 
@@ -36,16 +37,6 @@ GameScene::GameScene(GameMode mode)
     song1 = loadSound("game1.wav");
     song2 = loadSound("game2.wav");
     song.setBuffer(*song1);
-    song.setLoop(true);
-//    song.play();
-    awesome = false;
-}
-
-void GameScene::goAwesome()
-{
-    if(awesome) return;
-    awesome = true;
-    song.setBuffer(*song2);
     song.setLoop(true);
 //    song.play();
 }
