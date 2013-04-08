@@ -6,7 +6,7 @@
 #include "Level.h"
 #include <vector>
 
-GameScene::GameScene()
+GameScene::GameScene(GameMode mode)
 {
     numPlayers = 1;
 
@@ -90,7 +90,7 @@ void GameScene::update()
         deadTimer -= dt;
     }
     if(deadTimer <= 0 && !nextScene)
-        nextScene = new GameScene();
+        nextScene = new GameScene(FREEMODE);
 
     if (!playerList.empty())
     {
