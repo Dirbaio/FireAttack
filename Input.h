@@ -20,9 +20,13 @@ private:
     vector<bool> keysPressed;
 
     int mapSize;
+    bool wiiMote;
+    int wiiMoteNum;
+
+    wiimote** wiimotes;
 
 public:
-    Input();
+    Input(int wiiMoteNum);
     Input(vector<sf::Keyboard::Key> v);
 
     bool getKeyPressed(int n);

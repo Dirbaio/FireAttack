@@ -10,6 +10,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "GL/glext.h"
+#include <wiiuse.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
