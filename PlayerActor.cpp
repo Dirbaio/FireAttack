@@ -76,7 +76,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     mouseDownTime = 0;
 
     cfg = *config;
-    input = new Input(numPlayer);
+    input = new Input(config->keyMap);
 }
 
 void PlayerActor::update()

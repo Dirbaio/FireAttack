@@ -45,10 +45,12 @@ void handle_event(struct wiimote_t* wm) {
     printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
 
     /* if a button is pressed, report it */
-    inpoint->keysPressed[SHOOT] = false;
-    inpoint->keysPressed[JUMP] = false;
-    if (!IS_PRESSED(wm, WIIMOTE_BUTTON_A))      printf("A pressed\n");
-    if (!IS_PRESSED(wm, WIIMOTE_BUTTON_B))      printf("B pressed\n");
+    //inpoint->keysPressed[SHOOT] = false;
+    //inpoint->keysPressed[JUMP] = false;
+    inpoint->keysPressed[SHOOT] = IS_PRESSED(wm, WIIMOTE_BUTTON_B);
+    inpoint->keysPressed[JUMP] = IS_PRESSED(wm, WIIMOTE_BUTTON_A);
+    if (IS_PRESSED(wm, WIIMOTE_BUTTON_A))      printf("A pressed\n");
+    if (IS_PRESSED(wm, WIIMOTE_BUTTON_B))      printf("B pressed\n");
     if (IS_PRESSED(wm, WIIMOTE_BUTTON_UP))		printf("UP pressed\n");
     if (IS_PRESSED(wm, WIIMOTE_BUTTON_DOWN))	printf("DOWN pressed\n");
     if (IS_PRESSED(wm, WIIMOTE_BUTTON_LEFT))	printf("LEFT pressed\n");
@@ -74,12 +76,6 @@ void handle_event(struct wiimote_t* wm) {
     if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_PLUS))
         wiiuse_motion_sensing(wm, 1);
 */
-    if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_B))
-        inpoint->keysPressed[SHOOT] = true;
-
-    if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_A))
-        inpoint->keysPressed[JUMP] = true;
-
 
  /*
     if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_UP))
