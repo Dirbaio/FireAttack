@@ -49,17 +49,6 @@ void handle_event(struct wiimote_t* wm) {
     //inpoint->keysPressed[JUMP] = false;
     inpoint->keysPressed[SHOOT] = IS_PRESSED(wm, WIIMOTE_BUTTON_B);
     inpoint->keysPressed[JUMP] = IS_PRESSED(wm, WIIMOTE_BUTTON_A);
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_A))      printf("A pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_B))      printf("B pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_UP))		printf("UP pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_DOWN))	printf("DOWN pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_LEFT))	printf("LEFT pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_RIGHT))	printf("RIGHT pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_MINUS))	printf("MINUS pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_PLUS))	printf("PLUS pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_ONE))		printf("ONE pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_TWO))		printf("TWO pressed\n");
-    if (IS_PRESSED(wm, WIIMOTE_BUTTON_HOME))	printf("HOME pressed\n");
 
     /*
      *	Pressing minus will tell the wiimote we are no longer interested in movement.
@@ -84,11 +73,11 @@ void handle_event(struct wiimote_t* wm) {
         wiiuse_set_ir(wm, 0);
 */
     /* if the accelerometer is turned on then print angles */
-    if (WIIUSE_USING_ACC(wm)) {
+/*    if (WIIUSE_USING_ACC(wm)) {
         printf("wiimote roll  = %f [%f]\n", wm->orient.roll, wm->orient.a_roll);
         printf("wiimote pitch = %f [%f]\n", wm->orient.pitch, wm->orient.a_pitch);
         printf("wiimote yaw   = %f\n", wm->orient.yaw);
-    }
+    }*/
 
     /*
      *	If IR tracking is enabled then print the coordinates
@@ -96,34 +85,38 @@ void handle_event(struct wiimote_t* wm) {
      *
      *	Also make sure that we see at least 1 dot.
      */
+    /*
     if (WIIUSE_USING_IR(wm)) {
         int i = 0;
-
+*/ /*
         /* go through each of the 4 possible IR sources */
-        for (; i < 4; ++i) {
+  //      for (; i < 4; ++i) {
             /* check if the source is visible */
-            if (wm->ir.dot[i].visible)
+ /*           if (wm->ir.dot[i].visible)
                 printf("IR source %i: (%u, %u)\n", i, wm->ir.dot[i].x, wm->ir.dot[i].y);
         }
 
         printf("IR cursor: (%u, %u)\n", wm->ir.x, wm->ir.y);
         printf("IR z distance: %f\n", wm->ir.z);
     }
-
+*/
     /* show events specific to supported expansions */
     if (wm->exp.type == EXP_NUNCHUK) {
         /* nunchuk */
         struct nunchuk_t* nc = (nunchuk_t*)&wm->exp.nunchuk;
-
+/*
         if (IS_PRESSED(nc, NUNCHUK_BUTTON_C))		printf("Nunchuk: C pressed\n");
-        if (IS_PRESSED(nc, NUNCHUK_BUTTON_Z))		printf("Nunchuk: Z pressed\n");
-
+        if (IS_PRESSED(nc, NUNCHUK_BUTTON_Z))		printf("Nunchuk: Z pressed\n");*/
+/*
         printf("nunchuk roll  = %f\n", nc->orient.roll);
         printf("nunchuk pitch = %f\n", nc->orient.pitch);
         printf("nunchuk yaw   = %f\n", nc->orient.yaw);
-
+*/
+        inpoint->keysPressed[MOVERIGHT] = nc->js.ang >= 44.0 && nc->js.ang <= 136.0 && nc->js.mag >= 0.5;
+        inpoint->keysPressed[MOVELEFT] = nc->js.ang >= 224.0 && nc->js.ang <= 316.0 && nc->js.mag >= 0.5;
+/*
         printf("nunchuk joystick angle:     %f\n", nc->js.ang);
-        printf("nunchuk joystick magnitude: %f\n", nc->js.mag);
+        printf("nunchuk joystick magnitude: %f\n", nc->js.mag);*/
     }
 }
 
