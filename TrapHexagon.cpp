@@ -36,6 +36,7 @@ void TrapHexagon::render()
 
 void TrapHexagon::collided(Actor* b)
 {
+    Hexagon::collided(b);
     if (dynamic_cast<PlayerActor*>(b))
     {
         activated = true;
