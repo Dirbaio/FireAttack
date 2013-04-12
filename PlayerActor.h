@@ -12,6 +12,7 @@ struct PlayerConfig
     vec3 initPos;
     vec3 col1, col2, col3, col4, col5, col6;
     vector<sf::Keyboard::Key> keyMap;
+    int numPlayer;
 };
 
 class PlayerActor : public Actor
@@ -24,7 +25,7 @@ public:
     float size;
 
     GameScene* gsc;
-    PlayerActor(GameScene* sc, PlayerConfig *config);
+    PlayerActor(GameScene* sc, PlayerConfig *config, int numPlayer);
     Texture* playerTex;
 
     PlayerConfig cfg;

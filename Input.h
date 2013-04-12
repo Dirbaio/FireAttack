@@ -13,19 +13,20 @@
 
 #define MAPPINGSIZE 5
 
+#define MAX_WIIMOTES 4
+
 class Input
 {
 private:
     vector<sf::Keyboard::Key> keys;
-    vector<bool> keysPressed;
 
     int mapSize;
     bool wiiMote;
     int wiiMoteNum;
 
-    wiimote** wiimotes;
-
 public:
+
+    vector<bool> keysPressed;
     Input(int wiiMoteNum);
     Input(vector<sf::Keyboard::Key> v);
 
@@ -36,6 +37,7 @@ public:
     sf::Keyboard::Key getKey(int n);
 
     void update();
+
 };
 
 #endif // INPUT_H

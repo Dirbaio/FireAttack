@@ -51,16 +51,16 @@ void Level::BuildAsset(const Asset& asset)
     switch (asset.type)
     {
     case PLAYER1:
-        gsc->actors.push_back(new PlayerActor(gsc, &player1));
+        gsc->actors.push_back(new PlayerActor(gsc, &player1, 0));
         break;
     case PLAYER2:
-        gsc->actors.push_back(new PlayerActor(gsc, &player2));
+        gsc->actors.push_back(new PlayerActor(gsc, &player2, 1));
         break;
     case PLAYER3:
-        gsc->actors.push_back(new PlayerActor(gsc, &player1));
+        gsc->actors.push_back(new PlayerActor(gsc, &player1, 2));
         break;
     case PLAYER4:
-        gsc->actors.push_back(new PlayerActor(gsc, &player2));
+        gsc->actors.push_back(new PlayerActor(gsc, &player2, 3));
         break;
     case HEXFLOATING:
         gsc->actors.push_back(new FloatingHexagon(gsc, asset.pos));

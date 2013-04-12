@@ -13,8 +13,8 @@ GameScene::GameScene(GameMode mode)
 
     list<Asset> assetList;
 
-    for(int i = 0; i < 2; i++)
-        assetList.push_back(Asset(ENEMSTICKY, vec3(i*2, 15.0, 0.0)));
+   /* for(int i = 0; i < 2; i++)
+        assetList.push_back(Asset(ENEMSTICKY, vec3(i*2, 15.0, 0.0)));*/
 
     if (numPlayers >= 1)
         assetList.push_back(Asset(PLAYER1, vec3(0.0, 0.0, 0.0)));

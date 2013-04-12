@@ -7,7 +7,7 @@
 #include "Enemy.h"
 #include "Input.h"
 
-PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
+PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : Actor(sc)
 {
     this->gsc = sc;
 
@@ -76,7 +76,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config) : Actor(sc)
     mouseDownTime = 0;
 
     cfg = *config;
-    input = new Input(config->keyMap);
+    input = new Input(numPlayer);
 }
 
 void PlayerActor::update()

@@ -10,7 +10,7 @@ QMAKE_LFLAGS_RELEASE += -O3
 QMAKE_LDFLAGS -= -O1
 QMAKE_LDFLAGS += -O3
 
-LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lGL -lGLU -lBox2D
+LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lGL -lGLU -lBox2D -lwiiuse
 SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireActor.cpp util.cpp \
     GameScene.cpp \
     GroundActor.cpp \

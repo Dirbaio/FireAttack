@@ -18,6 +18,8 @@
 using namespace std;
 using namespace sf;
 
+extern wiimote** wiimotes;
+
 typedef Vector3<float> vec3;
 typedef Vector2<float> vec2;
 
