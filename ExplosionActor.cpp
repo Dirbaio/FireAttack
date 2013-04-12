@@ -67,7 +67,7 @@ void ExplosionActor::update()
 
     for(list<Actor*>::iterator it = sc->actors.begin(); it != sc->actors.end(); ++it)
     {
-        if (dynamic_cast<ExplosionActor*>(*it) || dynamic_cast<FireActor*>(*it))
+        if (dynamic_cast<ExplosionActor*>(*it) or dynamic_cast<FireActor*>(*it))
             continue;
         vec3 dir = (*it)->p - p;
         if (isZero(dir)) continue;
