@@ -35,7 +35,8 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     Level.cpp \
     LevelIO.cpp \
     StaticHexagon.cpp \
-    MenuScene.cpp
+    MenuScene.cpp \
+    WiimoteInput.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     GameScene.h \
     GroundActor.h \
@@ -60,7 +61,8 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     Level.h \
     LevelIO.h \
     StaticHexagon.h \
-    MenuScene.h
+    MenuScene.h \
+    WiimoteInput.h
 
 OTHER_FILES += \
     vertex.glsl \

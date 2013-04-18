@@ -98,7 +98,7 @@ void Scene::update()
 	}
 }
 
-void Scene::renderSingle()
+void Scene::renderSingle(bool isReflection)
 {
 
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -115,6 +115,9 @@ void Scene::renderSingle()
         loc = glGetUniformLocation(program, "inverseLookAt");
         if(loc != -1)
             glUniformMatrix4fv(loc, 1, false, inverseLookAt);
+        loc = glGetUniformLocation(program, "isReflection");
+        if(loc != -1)
+            glUniform1i(loc, isReflection);
         act->render();
         sh->unbind();
     }
@@ -129,28 +132,33 @@ void Scene::render()
 				cameraLookAt.x, cameraLookAt.y, cameraLookAt.z,
                 0, 1, 0);
 
-    float modelview[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
-    gluInvertMatrix(modelview, inverseLookAt);
-
     glDisable(GL_LIGHTING);
     glEnable(GL_CULL_FACE);
-
-    glCullFace(GL_BACK);
-
-    renderSingle();
-    glCullFace(GL_FRONT);
     glEnable(GL_NORMALIZE);
-    glPushMatrix();
-    glScalef(1, -1, 1);
-    glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
-    gluInvertMatrix(modelview, inverseLookAt);
-    renderSingle();
-    glPopMatrix();
 
     vec3 camVec = cameraLookAt - cameraPos;
     normalize(camVec);
     setCameraVec(camVec, false);
+
+    float modelview[16];
+
+    //Normal rendering
+    glPolygonOffset(1,1);
+    glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+    gluInvertMatrix(modelview, inverseLookAt);
+    glCullFace(GL_BACK);
+    renderSingle(false);
+
+    //Reflections
+    glPolygonOffset(0,0);
+    glCullFace(GL_FRONT);
+    glPushMatrix();
+    glScalef(1, -1, 1);
+    glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+    gluInvertMatrix(modelview, inverseLookAt);
+    renderSingle(true);
+    glPopMatrix();
+
 }
 
 vector<vec3> vtxArray;

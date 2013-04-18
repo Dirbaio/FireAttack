@@ -12,7 +12,8 @@ struct PlayerConfig
     vec3 initPos;
     vec3 col1, col2, col3, col4, col5, col6;
     vector<sf::Keyboard::Key> keyMap;
-    int numPlayer;
+    int numWiimote;
+    bool useWiimote;
 };
 
 class PlayerActor : public Actor

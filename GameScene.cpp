@@ -8,7 +8,7 @@
 
 GameScene::GameScene(GameMode mode)
 {
-    numPlayers = 1;
+    numPlayers = 2;
     gameMode = mode;
 
     list<Asset> assetList;

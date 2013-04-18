@@ -76,7 +76,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     mouseDownTime = 0;
 
     cfg = *config;
-    input = new Input(numPlayer);
+    if (config->useWiimote) input = new Input(config->numWiimote);
+    else input = new Input(config->keyMap);
 }
 
 void PlayerActor::update()

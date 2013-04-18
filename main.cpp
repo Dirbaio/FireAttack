@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "GameScene.h"
 #include "util.h"
+#include "WiimoteInput.h"
 
 using namespace std;
 using namespace sf;
@@ -26,7 +27,6 @@ float dt;
 float tim = 0;
 Scene* sc;
 Window* theApp;
-wiimote** wiimotes;
 
 void countTime(float& t, float t2)
 {
@@ -187,28 +187,9 @@ int main(int argc, char** argv)
 
     //	app.setVerticalSyncEnabled(true);
 
+    wInput.init();
+
     // Create a clock for measuring time elapsed
-
-    int found, connected;
-
-    wiimotes =  wiiuse_init(MAX_WIIMOTES);
-
-    found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
-    if (!found) {
-        cerr << "No wiimotes found." << endl;
-    }
-
-    connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
-    if (connected)
-        cerr << "Connected to " << connected << " wiimotes (of " << found << " found).\n";
-    else {
-        cerr << "Failed to connect to any wiimote.\n";
-    }
-
-    wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
-    wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
-    wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
-    wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
 
     sf::Clock clock;
     sf::Clock profiler;
@@ -299,8 +280,10 @@ int main(int argc, char** argv)
         //UPDATE SCENE
         //============
         profiler.restart();
+        wInput.updateWiimotes();
         sc->update();
         countTime(updateTime, profiler.getElapsedTime().asMilliseconds());
+
 
 
         //FIRST PASS
@@ -364,6 +347,7 @@ int main(int argc, char** argv)
 
         setupShader(particleShader);
         particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        particleShader->setParameter("isReflection", 1);
         sc->renderParticles(true);
 
         setupShader(waterShader);
@@ -401,6 +385,7 @@ int main(int argc, char** argv)
 
         setupShader(particleShader);
         particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        particleShader->setParameter("isReflection", 0);
         sc->renderParticles(false);
 
         if(sc->nextScene)

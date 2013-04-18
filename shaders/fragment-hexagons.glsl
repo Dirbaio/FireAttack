@@ -4,7 +4,7 @@ uniform vec3 color;
 uniform float time;
 uniform float time2;
 uniform vec3 hexpos;
-
+uniform bool isReflection;
 float g(float i)
 {
     if(i < 0.0) return 0.0;
@@ -28,7 +28,11 @@ void main()
     if(y2 > 0.0) glow += exp(-5.0*y2)*1.5;
 */
     //glow += max(0.0, 1.0-abs(vertex.y));
-    if(vertex.y < 0.0) discard;
+    if(vertex.y < 0.0 && isReflection)
+        discard;
+    if(isReflection || vertex.y < 0.0)
+        color *= vec3(0.3, 0.4, 0.6);
+
     gl_FragData[0] = vec4(color.xyz, glow);
     vec3 N = normalize(normal);
     gl_FragData[1] = vec4((N*0.5)+0.5, 1.0);

@@ -32,7 +32,7 @@ public:
 	~Scene();
 	virtual void update();
 	virtual void render();
-    void renderSingle();
+    void renderSingle(bool isReflection);
     void renderParticles(bool reflex);
     void renderLights();
 

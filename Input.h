@@ -13,8 +13,6 @@
 
 #define MAPPINGSIZE 5
 
-#define MAX_WIIMOTES 4
-
 class Input
 {
 private:

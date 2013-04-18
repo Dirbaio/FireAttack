@@ -15,6 +15,8 @@ uniform sampler2D tex3;
 
 varying vec3 particle;
 varying float particleSize;
+
+uniform bool isReflection;
 void main()
 {
     vec2 coord = gl_TexCoord[0].xy*0.5 + 0.5;
@@ -53,7 +55,8 @@ void main()
     float light = abs(pznear - pzfar) / (r*2.0);
     light = light*light;
     vec3 lightCol = light * gl_Color.rgb;
-
+    if(isReflection)
+        lightCol *= vec3(0.1, 0.2, 0.5);
     gl_FragColor = vec4(lightCol, 1.0);
 }
 

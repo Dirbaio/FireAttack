@@ -10,15 +10,13 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "GL/glext.h"
-#include <wiiuse.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <WiimoteInput.h>
 
 using namespace std;
 using namespace sf;
-
-extern wiimote** wiimotes;
 
 typedef Vector3<float> vec3;
 typedef Vector2<float> vec2;
