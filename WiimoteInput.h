@@ -27,7 +27,19 @@ enum WiiButtons
 enum WiiValues
 {
     WV_ANG,
-    WV_MAG
+    WV_MAG,
+    WV_ACC_X,
+    WV_ACC_Y,
+    WV_ACC_Z,
+    NUN_ACC_X,
+    NUN_ACC_Y,
+    NUN_ACC_Z,
+    WV_OR_R,
+    WV_OR_P,
+    WV_OR_Y,
+    NUN_OR_R,
+    NUN_OR_P,
+    NUN_OR_Y
 };
 
 class WiimoteInput

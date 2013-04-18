@@ -101,23 +101,17 @@ void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
         wiiControl[i][W_C] = IS_PRESSED(nc, NUNCHUK_BUTTON_C);
         wiiControl[i][W_Z] = IS_PRESSED(nc, NUNCHUK_BUTTON_Z);
 /*
-        if (IS_PRESSED(nc, NUNCHUK_BUTTON_C))		printf("Nunchuk: C pressed\n");
-        if (IS_PRESSED(nc, NUNCHUK_BUTTON_Z))		printf("Nunchuk: Z pressed\n");*/
-/*
         printf("nunchuk roll  = %f\n", nc->orient.roll);
         printf("nunchuk pitch = %f\n", nc->orient.pitch);
         printf("nunchuk yaw   = %f\n", nc->orient.yaw);
 */
+
         wiiValues[i][WV_ANG] = nc->js.ang;
         wiiValues[i][WV_MAG] = nc->js.mag;
 
-        /*
-        inpoint->keysPressed[MOVERIGHT] = nc->js.ang >= 44.0 && nc->js.ang <= 136.0 && nc->js.mag >= 0.5;
-        inpoint->keysPressed[MOVELEFT] = nc->js.ang >= 224.0 && nc->js.ang <= 316.0 && nc->js.mag >= 0.5;
-        */
-/*
-        printf("nunchuk joystick angle:     %f\n", nc->js.ang);
-        printf("nunchuk joystick magnitude: %f\n", nc->js.mag);*/
+        wiiValues[i][NUN_ACC_X] = nc->accel.x;
+        wiiValues[i][NUN_ACC_Y] = nc->accel.y;
+        wiiValues[i][NUN_ACC_Z] = nc->accel.z;
     }
 }
 

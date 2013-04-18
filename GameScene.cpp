@@ -8,7 +8,7 @@
 
 GameScene::GameScene(GameMode mode)
 {
-    numPlayers = 2;
+    numPlayers = 1;
     gameMode = mode;
 
     list<Asset> assetList;
@@ -17,9 +17,9 @@ GameScene::GameScene(GameMode mode)
         assetList.push_back(Asset(ENEMSTICKY, vec3(i*2, 15.0, 0.0)));*/
 
     if (numPlayers >= 1)
-        assetList.push_back(Asset(PLAYER1, vec3(0.0, 0.0, 0.0)));
-    if (numPlayers >= 2)
         assetList.push_back(Asset(PLAYER2, vec3(0.0, 0.0, 0.0)));
+    if (numPlayers >= 2)
+        assetList.push_back(Asset(PLAYER1, vec3(0.0, 0.0, 0.0)));
 
     for (int k = -3; k < 0; k++) assetList.push_back(Asset(HEXTRAP, vec3(k*3, 8, 0)));
     for (int k = 0; k < 3; k++) assetList.push_back(Asset(HEXBOUNCY, vec3(k*2, k*2+5, 0)));

@@ -11,7 +11,12 @@
 #define SHOOT 3
 #define SPAWN 4
 
+#define DASHX 0
+#define DASHY 1
+#define DASHZ 2
+
 #define MAPPINGSIZE 5
+#define VALUESIZE 3
 
 class Input
 {
@@ -19,16 +24,19 @@ private:
     vector<sf::Keyboard::Key> keys;
 
     int mapSize;
+    int valueMapSize;
     bool wiiMote;
     int wiiMoteNum;
 
 public:
 
     vector<bool> keysPressed;
+    vector<float> keyValues;
     Input(int wiiMoteNum);
     Input(vector<sf::Keyboard::Key> v);
 
     bool getKeyPressed(int n);
+    float getValue(int n);
 
     void setKey(int n, sf::Keyboard::Key val);
 

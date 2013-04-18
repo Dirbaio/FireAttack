@@ -20,6 +20,9 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     bounce_factor_x = 1.8;
     bounce_factor_y = 3.0;
 
+    dashCooldownTime = 0.0;
+    dashCooldownTimeMax = 0.2;
+
     b2BodyDef bodyDef;
     bodyDef.position.Set(p.x, p.y);
     bodyDef.type = b2_dynamicBody;
@@ -74,6 +77,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     body->SetUserData(this);
     wasMouseDown = false;
     mouseDownTime = 0;
+    canDash = false;
 
     cfg = *config;
     if (config->useWiimote) input = new Input(config->numWiimote);
@@ -87,12 +91,13 @@ void PlayerActor::update()
     sizeEmitter->randVel.rad = min(3.0f, norm(v)*0.3f);
 
     bounce_cooldown += dt;
+    dashCooldownTime += dt;
 
-    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.015));
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.04));
     bool grounded = (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.015));
+    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.04));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.015));
+    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.04));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
     float f = 5.0;
@@ -102,6 +107,31 @@ void PlayerActor::update()
         body->ApplyForceToCenter(b2Vec2(-f, 0));
     if(input->getKeyPressed(MOVERIGHT))
         body->ApplyForceToCenter(b2Vec2(f, 0));
+
+    float dashx = (input->getValue(DASHX)-128)/128.0;
+    float dashy = (input->getValue(DASHY)-128)/128.0;
+    float dashz = (input->getValue(DASHZ)-128)/128.0;
+
+    if (dashCooldownTime >= dashCooldownTimeMax && canDash && (abs(dashx) > 0.7 || abs(dashz) > 0.7))
+    {
+        ParticleEmitter pe (this);
+        pe.startAlpha = 0.1;
+        pe.endAlpha = 0.6;
+        pe.randPos = RandomVec(0);
+        pe.randVel = RandomVec(5, CIRCLE_XZ);
+        pe.startSize = size;
+        pe.endSize = 0;
+        pe.life = 0.2;
+        pe.startCol = cfg.col1;
+        pe.endCol = cfg.col2;
+        pe.actorVelMult = 0;
+        pe.boom(300);
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, f*3));
+        canDash = false;
+        dashCooldownTime = 0.0;
+    }
+
+
  /*   if(Keyboard::isKeyPressed(Keyboard::S))
         body->ApplyForceToCenter(b2Vec2(0, -f));*/
 
@@ -231,6 +261,14 @@ void PlayerActor::render()
 
 void PlayerActor::collided(Actor *b)
 {
+
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.5));
+    canDash |= (dist < 1.0 && dist > 0.0);
+    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.5));
+    canDash |= (dist < 1.0 && dist > 0.0);
+    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.5));
+    canDash |= (dist < 1.0 && dist > 0.0);
+
     if(dynamic_cast<Enemy*>(b))
     {
         explode();
