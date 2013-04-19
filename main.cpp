@@ -185,10 +185,11 @@ void wUpdate()
 {
     while (1)
     {
-        bool finish = wInput.updateWiimotes(ended);
+        bool finish = wInput.updateWiimotes(false);
         //cerr << "LOLOLTHREAD" << ended << endl;
-        if (ended || finish) return;
+        if (ended || finish) break;
     }
+    wInput.updateWiimotes(true);
 }
 
 int main(int argc, char** argv)
