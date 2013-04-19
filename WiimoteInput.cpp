@@ -147,62 +147,73 @@ void WiimoteInput::test(struct wiimote_t* wm, byte* data, unsigned short len) {
     printf("test: %i [%x %x %x %x]\n", len, data[0], data[1], data[2], data[3]);
 }
 
-void WiimoteInput::updateWiimotes()
+bool WiimoteInput::updateWiimotes(bool ended)
 {
-    while (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
-        /*
-         *	This happens if something happened on any wiimote.
-         *	So go through each one and check if anything happened.
-         */
+    if (ended)
+    {
         for (int i = 0; i < MAX_WIIMOTES; i++)
         {
-            switch (wiimotes[i]->event) {
-                case WIIUSE_EVENT:
-                    /* a generic event occured */
-                    handle_event(wiimotes[i], i);
-                    break;
-
-                case WIIUSE_STATUS:
-                    /* a status event occured */
-                    handle_ctrl_status(wiimotes[i]);
-                    break;
-
-                case WIIUSE_DISCONNECT:
-                case WIIUSE_UNEXPECTED_DISCONNECT:
-                    /* the wiimote disconnected */
-                    handle_disconnect(wiimotes[i]);
-                    cerr << "disconnected WiiMote" << endl;
-                    break;
-
-                case WIIUSE_READ_DATA:
-                    /*
-                     *	Data we requested to read was returned.
-                     *	Take a look at wiimotes[i]->read_req
-                     *	for the data.
-                     */
-                    break;
-
-                case WIIUSE_NUNCHUK_INSERTED:
-                    /*
-                     *	a nunchuk was inserted
-                     *	This is a good place to set any nunchuk specific
-                     *	threshold values.  By default they are the same
-                     *	as the wiimote.
-                     */
-                     //wiiuse_set_nunchuk_orient_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 90.0f);
-                     //wiiuse_set_nunchuk_accel_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 100);
-                    printf("Nunchuk inserted.\n");
-                    break;
-
-                case WIIUSE_NUNCHUK_REMOVED:
-                    /* some expansion was removed */
-                    handle_ctrl_status(wiimotes[i]);
-                    printf("An expansion was removed.\n");
-                    break;
-
-                default:
-                    break;
-            }
+            wiiuse_disconnect(wiimotes[i]);
         }
+        return true;
     }
+
+     if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
+         /*
+          *	This happens if something happened on any wiimote.
+          *	So go through each one and check if anything happened.
+          */
+         for (int i = 0; i < MAX_WIIMOTES; i++)
+         {
+             switch (wiimotes[i]->event) {
+                 case WIIUSE_EVENT:
+                     /* a generic event occured */
+                     handle_event(wiimotes[i], i);
+                     break;
+
+                 case WIIUSE_STATUS:
+                     /* a status event occured */
+                     handle_ctrl_status(wiimotes[i]);
+                     break;
+
+                 case WIIUSE_DISCONNECT:
+                 case WIIUSE_UNEXPECTED_DISCONNECT:
+                     /* the wiimote disconnected */
+                     handle_disconnect(wiimotes[i]);
+                     cerr << "disconnected WiiMote" << endl;
+                     return true;
+                     break;
+
+                 case WIIUSE_READ_DATA:
+                     /*
+                      *	Data we requested to read was returned.
+                      *	Take a look at wiimotes[i]->read_req
+                      *	for the data.
+                      */
+                     break;
+
+                 case WIIUSE_NUNCHUK_INSERTED:
+                     /*
+                      *	a nunchuk was inserted
+                      *	This is a good place to set any nunchuk specific
+                      *	threshold values.  By default they are the same
+                      *	as the wiimote.
+                      */
+                      //wiiuse_set_nunchuk_orient_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 90.0f);
+                      //wiiuse_set_nunchuk_accel_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 100);
+                     printf("Nunchuk inserted.\n");
+                     break;
+
+                 case WIIUSE_NUNCHUK_REMOVED:
+                     /* some expansion was removed */
+                     handle_ctrl_status(wiimotes[i]);
+                     printf("An expansion was removed.\n");
+                     break;
+
+                 default:
+                     break;
+             }
+         }
+    }
+     return false;
 }

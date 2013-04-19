@@ -55,7 +55,7 @@ public:
     void handle_ctrl_status(struct wiimote_t* wm);
     void handle_disconnect(wiimote* wm);
     void test(struct wiimote_t* wm, byte* data, unsigned short len);
-    void updateWiimotes();
+    bool updateWiimotes(bool ended);
 };
 
 extern WiimoteInput wInput;

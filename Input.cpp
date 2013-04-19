@@ -10,6 +10,7 @@ Input::Input(int wiiMoteNum)
     keyValues = vector<float> (valueMapSize, 128);
     wiiMote = true;
     this->wiiMoteNum = wiiMoteNum;
+    pt = new Pointer(true, wiiMoteNum);
 }
 
 Input::Input(vector<Keyboard::Key> v)
@@ -20,6 +21,8 @@ Input::Input(vector<Keyboard::Key> v)
     keysPressed = vector<bool> (mapSize);
     keyValues = vector<float> (valueMapSize, 128);
     wiiMote = false;
+
+    pt = new Pointer(false, 0);
 
     for (int i = 0; i < v.size(); i++)
         keys[i] = v[i];
@@ -35,6 +38,16 @@ float Input::getValue(int n)
     return keyValues[n];
 }
 
+float Input::getPointerX()
+{
+    return pt->getX();
+}
+
+float Input::getPointerY()
+{
+    return pt->getY();
+}
+
 void Input::setKey(int n, Keyboard::Key val)
 {
     keys[n] = val;
@@ -47,6 +60,8 @@ Keyboard::Key Input::getKey(int n)
 
 void Input::update()
 {
+    pt->update();
+
     if (!wiiMote)
     {
         for (int i = 0; i < mapSize; i++)

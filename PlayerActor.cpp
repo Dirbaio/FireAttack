@@ -144,12 +144,11 @@ void PlayerActor::update()
 
     particlePosMult = 1+mouseDownTime;
 */
-    if(!wasMouseDown && (Mouse::isButtonPressed(Mouse::Left) || input->getKeyPressed(SHOOT)))
+    if(!wasMouseDown && input->getKeyPressed(SHOOT))
     {
-        Vector2i ppos = Mouse::getPosition(*theApp);
 
-        vec2 pos (float(ppos.x) - theApp->getSize().x / 2,
-                  theApp->getSize().y / 2 - float(ppos.y));
+        vec2 pos (input->getPointerX() - theApp->getSize().x / 2,
+                  theApp->getSize().y / 2 - input->getPointerY());
         pos /= float(theApp->getSize().y/2);
         //Awful math below :S
 

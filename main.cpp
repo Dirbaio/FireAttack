@@ -22,6 +22,8 @@ using namespace sf;
 float rotx = 0;
 float roty = 0;
 
+bool ended;
+
 //Defined as extern in util.h
 float dt;
 float tim = 0;
@@ -179,15 +181,30 @@ void makeHexagon()
     }
 }
 
+void wUpdate()
+{
+    while (1)
+    {
+        bool finish = wInput.updateWiimotes(ended);
+        //cerr << "LOLOLTHREAD" << ended << endl;
+        if (ended || finish) return;
+    }
+}
+
 int main(int argc, char** argv)
 {
     // Create the main window
     Window app (sf::VideoMode(window_width, window_height, 32), "SFML OpenGL");
     theApp = &app;
 
+    ended = false;
+
     //	app.setVerticalSyncEnabled(true);
 
     wInput.init();
+
+    sf::Thread wiimoteThread(&wUpdate);
+    wiimoteThread.launch();
 
     // Create a clock for measuring time elapsed
 
@@ -227,6 +244,7 @@ int main(int argc, char** argv)
     while (app.isOpen())
     {
         // Process events
+        bool closed = false;
         sf::Event event;
         while (app.pollEvent(event))
         {
@@ -234,14 +252,16 @@ int main(int argc, char** argv)
             if (event.type == sf::Event::Closed)
             {
                 app.close();
-                return 0;
+                closed = true;
+                break;
             }
 
             // Escape key : exit
             if ((event.type == sf::Event::KeyPressed) && (event.key.code == Keyboard::Escape))
             {
                 app.close();
-                return 0;
+                closed = true;
+                break;
             }
 
             // Resize event : adjust viewport
@@ -259,6 +279,8 @@ int main(int argc, char** argv)
                 glViewport(0, 0, window_width, window_height);
             }
         }
+
+        if (closed) break;
 
         app.setActive();
 
@@ -280,7 +302,6 @@ int main(int argc, char** argv)
         //UPDATE SCENE
         //============
         profiler.restart();
-        wInput.updateWiimotes();
         sc->update();
         countTime(updateTime, profiler.getElapsedTime().asMilliseconds());
 
@@ -397,6 +418,9 @@ int main(int argc, char** argv)
         app.display();
         countTime(renderPartTime, profiler.getElapsedTime().asMilliseconds());
     }
+
+    ended = true;
+    wiimoteThread.wait();
 
     return EXIT_SUCCESS;
 }

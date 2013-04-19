@@ -45,7 +45,7 @@ void configPlayers(PlayerConfig& player1, PlayerConfig& player2)
     player2.keyMap[SHOOT] = sf::Keyboard::Return;
     player2.keyMap[SPAWN] = sf::Keyboard::O;
 
-    player1.useWiimote = false;
+    player1.useWiimote = true;
     player2.useWiimote = true;
 
     player1.numWiimote = 1;

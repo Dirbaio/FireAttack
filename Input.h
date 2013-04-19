@@ -2,6 +2,7 @@
 #define INPUT_H
 
 #include "util.h"
+#include "Pointer.h"
 #include <vector>
 #include <SFML/System.hpp>
 
@@ -27,6 +28,7 @@ private:
     int valueMapSize;
     bool wiiMote;
     int wiiMoteNum;
+    Pointer* pt;
 
 public:
 
@@ -37,6 +39,8 @@ public:
 
     bool getKeyPressed(int n);
     float getValue(int n);
+    float getPointerX();
+    float getPointerY();
 
     void setKey(int n, sf::Keyboard::Key val);
 
