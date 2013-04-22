@@ -156,7 +156,7 @@ void PlayerActor::update()
         vec3 dir = res - p;
         normalize(dir);
 
-        if (gsc->GetRayCastDistance(b2Vec2(p.x,p.y), b2Vec2(p.x+dir.x*size/2, p.y+dir.y*size/2)) > 0.8)
+        if (gsc->GetRayCastDistance(b2Vec2(p.x,p.y), b2Vec2(p.x+dir.x*size, p.y+dir.y*size)) > 0.8)
         {
 
             BulletConfig config;
@@ -253,7 +253,7 @@ bool PlayerActor::renderParticle(Particle &p)
 {
     p.p = this->p;
     p.startAlpha = 1;
-    p.startSize = 2as ;
+    p.startSize = 2;
     p.startCol = vec3(0.4, 1.0, 0.0);
     p.isLight = true;
 
@@ -278,6 +278,14 @@ void PlayerActor::collided(Actor *b)
     if (dynamic_cast<MagmaHexagon*>(b))
     {
         explode();
+        return;
+    }
+    if (dynamic_cast<FireActor*>(b))
+    {
+        explode();
+        return;
+    }
+}
 
 bool PlayerActor::collidedWithGround()
 {
