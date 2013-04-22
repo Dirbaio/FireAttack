@@ -19,6 +19,7 @@ void Actor::update()
         explodeWater();
 }
 void Actor::render() {}
+bool Actor::renderParticle(Particle &p) { return false; }
 
 void Actor::updateEmitters()
 {

@@ -175,6 +175,12 @@ void Scene::renderParticles(bool reflex)
     texArray.reserve(particles.size()*4*4);
     colArray.reserve(particles.size()*4);
 
+    Particle p;
+    p.life = 1;
+    p.startingLife = 1;
+    for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+        if((*it)->renderParticle(p))
+            p.render(vtxArray, texArray, colArray, reflex);
     for(list<Particle>::iterator it = particles.begin(); it != particles.end(); it++)
         it->render(vtxArray, texArray, colArray, reflex);
 
@@ -197,6 +203,13 @@ void Scene::renderLights()
     vtxArray.resize(0);
     texArray.resize(0);
     colArray.resize(0);
+
+    Particle p;
+    p.life = 1;
+    p.startingLife = 1;
+    for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+        if((*it)->renderParticle(p))
+            p.renderLight(vtxArray, texArray, colArray);
 
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
     {

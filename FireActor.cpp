@@ -65,7 +65,7 @@ void FireActor::update()
     Actor::update();
     p += v*dt;
     if(p.y > 60 || p.x < -100 || p.x > 100)
-        explode();
+        alive = false;
 
     body->SetTransform(b2Vec2(p.x, p.y), 0);
 }
@@ -76,45 +76,30 @@ void FireActor::render()
 
 void FireActor::collided(Actor *b)
 {
-
     if(dynamic_cast<Hexagon*>(b))
-    {
         if (dynamic_cast<MagmaHexagon*>(b))
-        {
             explode();
-            return;
-        }
-        bounceCount--;
-        if(bounceCount == 0)
+        else
         {
-            explode();
+            bounceCount--;
+            if(bounceCount == 0)
+                explode();
         }
-        return;
-    }
 
     if(dynamic_cast<Enemy*>(b))
-    {
         explode();
-    }
 
     if (dynamic_cast<PlayerActor*>(b))
-    {
         explode();
-    }
 
     if (dynamic_cast<FireActor*>(b))
-    {
         explode();
-    }
 }
 
 bool FireActor::collidedWithGround()
 {
     bounceCount--;
     if(bounceCount == 0)
-    {
         explode();
-        return true;
-    }
-    return false;
+
 }

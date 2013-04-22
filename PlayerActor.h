@@ -39,6 +39,7 @@ public:
 
     virtual void update();
     virtual void render();
+    virtual bool renderParticle(Particle &p);
 
     void explode();
     void explodeWater();

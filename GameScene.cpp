@@ -14,10 +14,6 @@ GameScene::GameScene(GameMode mode)
     numPlayers = 1;
     gameMode = mode;
 
-    list<Asset> assetList;
-
-   /* for(int i = 0; i < 2; i++)
-        assetList.push_back(Asset(ENEMSTICKY, vec3(i*2, 15.0, 0.0)));*/
 
     if (numPlayers >= 1)
     {
@@ -89,6 +85,7 @@ GameScene::GameScene(GameMode mode)
     song.setLoop(true);
 //    song.play();
 }
+
 vector<PlayerActor*> GameScene::getPlayerList()
 {
     vector<PlayerActor*> ret;
