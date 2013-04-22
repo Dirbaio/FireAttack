@@ -15,9 +15,11 @@
 #define DASHX 0
 #define DASHY 1
 #define DASHZ 2
+#define POINTERX 3
+#define POINTERY 4
 
 #define MAPPINGSIZE 5
-#define VALUESIZE 3
+#define VALUESIZE 5
 
 class Input
 {
@@ -28,23 +30,24 @@ private:
     int valueMapSize;
     bool wiiMote;
     int wiiMoteNum;
-    Pointer* pt;
 
 public:
 
     vector<bool> keysPressed;
+    vector<bool> keysOldPressed;
     vector<float> keyValues;
     Input(int wiiMoteNum);
     Input(vector<sf::Keyboard::Key> v);
 
     bool getKeyPressed(int n);
+    bool getKeyDown(int n);
     float getValue(int n);
     float getPointerX();
     float getPointerY();
 
-    void setKey(int n, sf::Keyboard::Key val);
+//    void setKey(int n, sf::Keyboard::Key val);
 
-    sf::Keyboard::Key getKey(int n);
+//    sf::Keyboard::Key getKey(int n);
 
     void update();
 

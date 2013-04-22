@@ -28,7 +28,7 @@ public:
     float size;
 
     GameScene* gsc;
-    PlayerActor(GameScene* sc, PlayerConfig *config, int numPlayer);
+    PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer);
     Texture* playerTex;
 
     PlayerConfig cfg;
@@ -36,8 +36,6 @@ public:
 
     ParticleEmitter* sizeEmitter;
     FireActor* test;
-    bool wasMouseDown;
-    float mouseDownTime;
 
     virtual void update();
     virtual void render();

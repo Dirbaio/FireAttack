@@ -6,6 +6,10 @@
 #include "Level.h"
 #include <vector>
 
+#include "StaticHexagon.h"
+#include "SolidHexagon.h"
+#include "TrapHexagon.h"
+
 GameScene::GameScene(GameMode mode)
 {
     numPlayers = 1;
@@ -17,19 +21,65 @@ GameScene::GameScene(GameMode mode)
         assetList.push_back(Asset(ENEMSTICKY, vec3(i*2, 15.0, 0.0)));*/
 
     if (numPlayers >= 1)
-        assetList.push_back(Asset(PLAYER2, vec3(0.0, 0.0, 0.0)));
-    if (numPlayers >= 2)
-        assetList.push_back(Asset(PLAYER1, vec3(0.0, 0.0, 0.0)));
+    {
+        PlayerConfig player1;
 
+        player1.col1 = vec3(1.0, 1.0, 0.5);
+        player1.col2 = vec3(1.0, 1.0, 1.0);
+        player1.col3 = vec3(1.0, 0.0, 0.0);
+        player1.col4 = vec3(1.0, 1.0, 0.0);
+        player1.col5 = vec3(1.0, 0.0, 0.0);
+        player1.col6 = vec3(0.0, 1.0, 0.4);
+
+        player1.initPos = vec3(0, 10, 0);
+        player1.keyMap.resize(MAPPINGSIZE);
+
+        player1.keyMap[JUMP] = sf::Keyboard::Space;
+        player1.keyMap[MOVERIGHT] = sf::Keyboard::D;
+        player1.keyMap[MOVELEFT] = sf::Keyboard::A;
+        player1.keyMap[SHOOT] = sf::Keyboard::Tab;
+        player1.keyMap[SPAWN] = sf::Keyboard::E;
+
+        player1.useWiimote = false;
+        player1.numWiimote = 1;
+
+        actors.push_back(new PlayerActor(this, player1, 1));
+    }
+
+    if (numPlayers >= 2)
+    {
+        PlayerConfig player2;
+
+        player2.col1 = vec3(0.5, 1.0, 1.0);
+        player2.col2 = vec3(0.1, 1.0, 1.0);
+        player2.col3 = vec3(0.0, 0.0, 1.0);
+        player2.col4 = vec3(0.0, 1.0, 1.0);
+        player2.col5 = vec3(0.0, 0.0, 1.0);
+        player2.col6 = vec3(0.4, 1.0, 0.0);
+
+        player2.initPos = vec3(4, 10, 0);
+        player2.keyMap.resize(MAPPINGSIZE);
+
+        player2.keyMap[JUMP] = sf::Keyboard::RShift;
+        player2.keyMap[MOVERIGHT] = sf::Keyboard::L;
+        player2.keyMap[MOVELEFT] = sf::Keyboard::J;
+        player2.keyMap[SHOOT] = sf::Keyboard::Return;
+        player2.keyMap[SPAWN] = sf::Keyboard::O;
+
+        player2.useWiimote = false;
+        player2.numWiimote = 0;
+
+        actors.push_back(new PlayerActor(this, player2, 2));
+    }
+
+    for (int k = -20; k < 20; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));
+/*
     for (int k = -3; k < 0; k++) assetList.push_back(Asset(HEXTRAP, vec3(k*3, 8, 0)));
     for (int k = 0; k < 3; k++) assetList.push_back(Asset(HEXBOUNCY, vec3(k*2, k*2+5, 0)));
     for (int k = 3; k < 6; k++) assetList.push_back(Asset(HEXEXPLOSIVE, vec3(k*2, 10, 0)));
     for (int k = 6; k < 9; k++) assetList.push_back(Asset(HEXSOLID, vec3(k*2, 10, 0)));
-    for (int k = -8; k < 20; k++) assetList.push_back(Asset(HEXSTATIC, vec3(k*2, 0.4f, 0)));
     for (int k = 2; k < 6; k++) assetList.push_back(Asset(HEXFLOATING, vec3(-16+0.5*k, k, 0)));
-
-    Level* lvl = new Level(this, "Test", "Test.lvl", assetList);
-    lvl->Build();
+*/
 
     deadTimer = 6;
     spawnTimer = 1;
@@ -40,7 +90,6 @@ GameScene::GameScene(GameMode mode)
     song.setLoop(true);
 //    song.play();
 }
-
 vector<PlayerActor*> GameScene::getPlayerList()
 {
     vector<PlayerActor*> ret;

@@ -7,10 +7,10 @@ Input::Input(int wiiMoteNum)
     valueMapSize = VALUESIZE;
     keys = vector<sf::Keyboard::Key> (mapSize);
     keysPressed = vector<bool> (mapSize);
+    keysOldPressed = vector<bool> (mapSize);
     keyValues = vector<float> (valueMapSize, 128);
     wiiMote = true;
     this->wiiMoteNum = wiiMoteNum;
-    pt = new Pointer(true, wiiMoteNum);
 }
 
 Input::Input(vector<Keyboard::Key> v)
@@ -19,10 +19,9 @@ Input::Input(vector<Keyboard::Key> v)
     valueMapSize = VALUESIZE;
     keys = vector<sf::Keyboard::Key> (mapSize);
     keysPressed = vector<bool> (mapSize);
+    keysOldPressed = vector<bool> (mapSize);
     keyValues = vector<float> (valueMapSize, 128);
     wiiMote = false;
-
-    pt = new Pointer(false, 0);
 
     for (int i = 0; i < v.size(); i++)
         keys[i] = v[i];
@@ -32,22 +31,18 @@ bool Input::getKeyPressed(int n)
 {
     return keysPressed[n];
 }
+bool Input::getKeyDown(int n)
+{
+    return keysPressed[n] && !keysOldPressed[n];
+}
 
 float Input::getValue(int n)
 {
     return keyValues[n];
 }
 
-float Input::getPointerX()
-{
-    return pt->getX();
-}
 
-float Input::getPointerY()
-{
-    return pt->getY();
-}
-
+/*
 void Input::setKey(int n, Keyboard::Key val)
 {
     keys[n] = val;
@@ -56,16 +51,25 @@ void Input::setKey(int n, Keyboard::Key val)
 Keyboard::Key Input::getKey(int n)
 {
     return keys[n];
-}
+}*/
 
 void Input::update()
 {
-    pt->update();
+    keysOldPressed  = keysPressed;
 
     if (!wiiMote)
     {
         for (int i = 0; i < mapSize; i++)
-            keysPressed[i] = Keyboard::isKeyPressed(keys[i]);
+        {
+            if(keys[i] == Keyboard::Tab)
+                keysPressed[i] = Mouse::isButtonPressed(Mouse::Left);
+            else
+                keysPressed[i] = Keyboard::isKeyPressed(keys[i]);
+        }
+
+        Vector2i mpos = Mouse::getPosition(*theApp);
+        keyValues[POINTERX] = mpos.x;
+        keyValues[POINTERY] = mpos.y;
     }
     else
     {

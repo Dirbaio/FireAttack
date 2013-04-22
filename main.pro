@@ -32,8 +32,6 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     StickyEnemy.cpp \
     TrapHexagon.cpp \
     MagmaHexagon.cpp \
-    Level.cpp \
-    LevelIO.cpp \
     StaticHexagon.cpp \
     MenuScene.cpp \
     WiimoteInput.cpp \
@@ -59,8 +57,6 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     StickyEnemy.h \
     TrapHexagon.h \
     MagmaHexagon.h \
-    Level.h \
-    LevelIO.h \
     StaticHexagon.h \
     MenuScene.h \
     WiimoteInput.h \

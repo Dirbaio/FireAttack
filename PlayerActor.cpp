@@ -7,12 +7,12 @@
 #include "Enemy.h"
 #include "Input.h"
 
-PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : Actor(sc)
+PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Actor(sc)
 {
     this->gsc = sc;
 
-    p.x = config->initPos.x;
-    p.y = config->initPos.y;
+    p.x = config.initPos.x;
+    p.y = config.initPos.y;
     size = 0.5;
 
     bounce_cooldown = 0;
@@ -46,8 +46,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     pe.startSize = size/3;
     pe.endSize = size/16;
     pe.life = 0.01;
-    pe.startCol = config->col1;
-    pe.endCol = config->col2;
+    pe.startCol = config.col1;
+    pe.endCol = config.col2;
     pe.actorVelMult = 1;
     emitters.push_back(pe);
 
@@ -57,8 +57,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     pe.endSize = size/16;
     pe.life = 1;
     pe.startAlpha = 0.2;
-    pe.startCol = config->col3;
-    pe.endCol = config->col4;
+    pe.startCol = config.col3;
+    pe.endCol = config.col4;
     pe.actorVelMult = 0.9;
     emitters.push_back(pe);
 
@@ -69,19 +69,17 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig* config, int numPlayer) : A
     pe.startSize = size/2;
     pe.endSize = size/10;
     pe.life = 1;
-    pe.startCol = config->col5;
-    pe.endCol = config->col6;
+    pe.startCol = config.col5;
+    pe.endCol = config.col6;
     pe.actorVelMult = 0.9;
     sizeEmitter = addEmitter(pe);
 
     body->SetUserData(this);
-    wasMouseDown = false;
-    mouseDownTime = 0;
     canDash = false;
 
-    cfg = *config;
-    if (config->useWiimote) input = new Input(config->numWiimote);
-    else input = new Input(config->keyMap);
+    cfg = config;
+    if (config.useWiimote) input = new Input(config.numWiimote);
+    else input = new Input(config.keyMap);
 }
 
 void PlayerActor::update()
@@ -102,7 +100,9 @@ void PlayerActor::update()
 
     float f = 5.0;
     if(input->getKeyPressed(JUMP) && grounded)// && p.y < 0.3)
-        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 12.0f));
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 10.0f));
+    if(input->getKeyPressed(JUMP) && body->GetLinearVelocity().y > 0.0f)
+        body->ApplyForceToCenter(b2Vec2(0, 5.0f));
     if(input->getKeyPressed(MOVELEFT))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
     if(input->getKeyPressed(MOVERIGHT))
@@ -132,23 +132,11 @@ void PlayerActor::update()
     }
 
 
- /*   if(Keyboard::isKeyPressed(Keyboard::S))
-        body->ApplyForceToCenter(b2Vec2(0, -f));*/
-
-
-/*
-    if(Mouse::isButtonPressed(Mouse::Left))
-        mouseDownTime += dt;
-    else
-        mouseDownTime = 0;
-
-    particlePosMult = 1+mouseDownTime;
-*/
-    if(!wasMouseDown && input->getKeyPressed(SHOOT))
+    if(input->getKeyDown(SHOOT))
     {
 
-        vec2 pos (input->getPointerX() - theApp->getSize().x / 2,
-                  theApp->getSize().y / 2 - input->getPointerY());
+        vec2 pos (input->getValue(POINTERX) - theApp->getSize().x / 2,
+                  theApp->getSize().y / 2 - input->getValue(POINTERY));
         pos /= float(theApp->getSize().y/2);
         //Awful math below :S
 
@@ -180,7 +168,6 @@ void PlayerActor::update()
 
     if (p.y <= -0.2)
         explodeWater();
-    wasMouseDown = (Mouse::isButtonPressed(Mouse::Left) || input->getKeyPressed(SHOOT));
 }
 
 void PlayerActor::explode()

@@ -20,12 +20,11 @@ class FireActor : public Actor
     bool green;
 
 	Texture* playerTex;
-	
-	float rotx, roty;
+
     int bounceCount;
 	
 	virtual void render();
-	virtual void update();
+    virtual void update();
     virtual void collided(Actor *b);
     virtual bool collidedWithGround();
 };
