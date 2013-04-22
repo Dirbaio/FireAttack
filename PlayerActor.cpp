@@ -156,14 +156,18 @@ void PlayerActor::update()
         vec3 dir = res - p;
         normalize(dir);
 
-        BulletConfig config;
-        config.col1 = cfg.col1;
-        config.col2 = cfg.col2;
-        config.col3 = cfg.col3;
-        config.col4 = cfg.col4;
-        FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, &config);
-        sc->actors.push_back(bullet);
-        //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
+        if (gsc->GetRayCastDistance(b2Vec2(p.x,p.y), b2Vec2(p.x+dir.x*size/2, p.y+dir.y*size/2)) > 0.8)
+        {
+
+            BulletConfig config;
+            config.col1 = cfg.col1;
+            config.col2 = cfg.col2;
+            config.col3 = cfg.col3;
+            config.col4 = cfg.col4;
+            FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, &config);
+            sc->actors.push_back(bullet);
+            //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
+        }
     }
 
     if (p.y <= -0.2)

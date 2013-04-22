@@ -88,7 +88,7 @@ ParticleEmitter::ParticleEmitter(Actor* act)
     a = vec3(0, 0, 0);
     v = vec3(0, 0, 0);
 
-    lightPermil = 40;
+    lightPermil = 30;
 
 	//Private stuff
     count = 0;

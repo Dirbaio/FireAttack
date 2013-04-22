@@ -28,12 +28,14 @@ void main()
     if(y2 > 0.0) glow += exp(-5.0*y2)*1.5;
 */
     //glow += max(0.0, 1.0-abs(vertex.y));
+
+    vec3 color2 = color;
     if(vertex.y < 0.0 && isReflection)
         discard;
     if(isReflection || vertex.y < 0.0)
-        color *= vec3(0.3, 0.4, 0.6);
+        color2 *= vec3(0.3, 0.4, 0.6);
 
-    gl_FragData[0] = vec4(color.xyz, glow);
+    gl_FragData[0] = vec4(color2.xyz, glow);
     vec3 N = normalize(normal);
     gl_FragData[1] = vec4((N*0.5)+0.5, 1.0);
 }
