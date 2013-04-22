@@ -26,8 +26,9 @@ class Actor
 
     float particlePosMult;
 
-	virtual void render();
-	virtual void update();
+    virtual void render();
+    virtual bool renderParticle(Particle& p);
+    virtual void update();
     virtual void collided(Actor* b);
     virtual bool collidedWithGround();
 

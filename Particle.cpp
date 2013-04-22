@@ -38,41 +38,6 @@ void sets(float* a, vec3 b)
 	a[2] = b.z;
 }
 
-//WARNING UNUSED
-/*
-void Particle::render()
-{
-	float size = (startSize * (life) + endSize*(startingLife - life)) / startingLife;
-	float alpha = (startAlpha * (life) + endAlpha*(startingLife - life)) / startingLife;
-	vec3 col = (startCol * (life) + endCol*(startingLife - life)) / startingLife;
-
-	vec3 dx = cross(cameraVec, vec3(0, 1, 0));
-	vec3 dy = cross(dx, cameraVec);
-	normalize(dx);
-	normalize(dy);
-	dx *= size;
-	dy *= size;
-    sets(vtxcoords[0], p+dx+dy);
-    sets(vtxcoords[1], p+dx-dy);
-    sets(vtxcoords[2], p-dx-dy);
-    sets(vtxcoords[3], p-dx+dy);
-	
-    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-
-	glColor4f(col.x, col.y, col.z, alpha);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, vtxcoords);
-	glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
-
-	glDrawArrays(GL_QUADS, 0, 4);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}*/
-
 void Particle::render(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray, bool reflex)
 {
     if(p.y < 0.0f) return;

@@ -245,6 +245,17 @@ void PlayerActor::render()
 //    renderCube(p.x, p.y, p.z, size/2, size/2, size/2, body->GetAngle());
 }
 
+bool PlayerActor::renderParticle(Particle &p)
+{
+    p.p = this->p;
+    p.startAlpha = 1;
+    p.startSize = 2as ;
+    p.startCol = vec3(0.4, 1.0, 0.0);
+    p.isLight = true;
+
+    return true;
+}
+
 void PlayerActor::collided(Actor *b)
 {
 
@@ -263,13 +274,6 @@ void PlayerActor::collided(Actor *b)
     if (dynamic_cast<MagmaHexagon*>(b))
     {
         explode();
-    }
-
-    if (dynamic_cast<FireActor*>(b))
-    {
-        explode();
-    }
-}
 
 bool PlayerActor::collidedWithGround()
 {
