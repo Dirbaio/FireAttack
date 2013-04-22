@@ -78,6 +78,23 @@ void Hexagon::update()
             dead = true;
         die();
     }
+
+    if (abs(p.y) < 0.4)
+    {
+        ParticleEmitter pe (this);
+        pe.lightPermil = 0;
+        pe.startAlpha = 0.1;
+        pe.endAlpha = 0.3;
+        pe.randPos = (0);
+        pe.randVel = RandomVec(1.2, CIRCLE_XZ);
+        pe.startSize = 0.1;
+        pe.endSize = 0.08;
+        pe.life = 0.18;
+        pe.startCol = vec3(215,215,225);
+        pe.endCol = vec3(235,235,255);
+        pe.actorVelMult = 0;
+        pe.boom(250);
+    }
 }
 
 void Hexagon::render()
