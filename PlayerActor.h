@@ -4,7 +4,9 @@
 #include "Actor.h"
 #include "FireActor.h"
 #include "Input.h"
+#include "Pointer.h"
 
+class Input;
 class GameScene;
 
 struct PlayerConfig
@@ -22,13 +24,13 @@ private:
     float bounce_cooldown, bounce_cooldown_min, bounce_factor_x, bounce_factor_y;
     bool canDash;
     float dashCooldownTime, dashCooldownTimeMax;
+    Pointer* ptr;
 
 public:
 
     float size;
 
     GameScene* gsc;
-    PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer);
     Texture* playerTex;
 
     PlayerConfig cfg;
@@ -36,6 +38,9 @@ public:
 
     ParticleEmitter* sizeEmitter;
     FireActor* test;
+
+    PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer);
+    virtual ~PlayerActor();
 
     virtual void update();
     virtual void render();

@@ -10,6 +10,7 @@ Actor::Actor(Scene* sc)
     particlePosMult = 1;
     body = NULL;
     shader = NULL;
+    inmortal = false;
 }
 Actor::~Actor() {}
 

@@ -58,6 +58,8 @@ FireActor::FireActor(vec3 pos, vec3 vel, GameScene* sc, BulletConfig* config) : 
 
     body->SetUserData(this);
     bounceCount = 5;
+
+    inmortal = true;
 }
 
 void FireActor::update()

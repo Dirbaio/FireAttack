@@ -18,6 +18,7 @@ class Actor
     b2Body* body;
 	vec3 p, v;
     vec3 oldp;
+    bool inmortal;
 
     Shader* shader;
 

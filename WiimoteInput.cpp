@@ -24,6 +24,14 @@ void WiimoteInput::init(){
     wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
     wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
 
+    for(int i = 0; i < MAX_WIIMOTES; i++)
+    {
+        wiiuse_set_ir(wiimotes[i], 1);
+        wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
+        wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
+        wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
+        wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
+    }
 }
 
 void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
@@ -72,27 +80,13 @@ void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
         printf("wiimote yaw   = %f\n", wm->orient.yaw);
     }*/
 
-    /*
-     *	If IR tracking is enabled then print the coordinates
-     *	on the virtual screen that the wiimote is pointing to.
-     *
-     *	Also make sure that we see at least 1 dot.
-     */
-    /*
-    if (WIIUSE_USING_IR(wm)) {
-        int i = 0;
-*/ /*
-        /* go through each of the 4 possible IR sources */
-  //      for (; i < 4; ++i) {
-            /* check if the source is visible */
- /*           if (wm->ir.dot[i].visible)
-                printf("IR source %i: (%u, %u)\n", i, wm->ir.dot[i].x, wm->ir.dot[i].y);
-        }
-
-        printf("IR cursor: (%u, %u)\n", wm->ir.x, wm->ir.y);
-        printf("IR z distance: %f\n", wm->ir.z);
+    if (WIIUSE_USING_IR(wm))
+    {
+        wiiControl[i][W_IR] = wm->ir.num_dots != 0;
+        wiiValues[i][IR_X] = wm->ir.x;
+        wiiValues[i][IR_Y] = wm->ir.y;
     }
-*/
+
     /* show events specific to supported expansions */
     if (wm->exp.type == EXP_NUNCHUK) {
         /* nunchuk */

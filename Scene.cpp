@@ -78,24 +78,35 @@ void Scene::update()
 		else
 			it++;
 	}
+
+    bool deleting = true;
+    while(deleting)
+    {
+        deleting = false;
+        for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); )
+        {
+            if(!(*it)->alive)
+            {
+                list<Actor*>::iterator it2 = it;
+                it2++;
+                if((*it)->body)
+                    world.DestroyBody((*it)->body);
+                delete *it;
+                actors.erase(it);
+                it = it2;
+                deleting = true;
+            }
+            else
+                it++;
+        }
+    }
 	
-	for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); )
+    for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
 	{
         (*it)->updateEmitters();
         (*it)->update();
-		if(!(*it)->alive)
-		{
-			list<Actor*>::iterator it2 = it;
-			it2++;
-            if((*it)->body)
-                world.DestroyBody((*it)->body);
-			delete *it;
-			actors.erase(it);
-			it = it2;
-		}
-		else
-			it++;
-	}
+    }
+
 }
 
 void Scene::renderSingle(bool isReflection)

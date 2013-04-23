@@ -13,7 +13,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
 
     p.x = config.initPos.x;
     p.y = config.initPos.y;
-    size = 0.5;
+    size = 0.9;
 
     bounce_cooldown = 0;
     bounce_cooldown_min = 0.1;
@@ -80,6 +80,15 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
     cfg = config;
     if (config.useWiimote) input = new Input(config.numWiimote);
     else input = new Input(config.keyMap);
+
+    ptr = new Pointer(gsc, this);
+    gsc->actors.push_back(ptr);
+}
+
+PlayerActor::~PlayerActor()
+{
+    delete input;
+    ptr->alive = false;
 }
 
 void PlayerActor::update()
@@ -98,11 +107,11 @@ void PlayerActor::update()
     dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.04));
     grounded = grounded || (dist < 1.0 && dist > 0.0);
 
-    float f = 5.0;
+    float f = 20.0;
     if(input->getKeyPressed(JUMP) && grounded)// && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 10.0f));
     if(input->getKeyPressed(JUMP) && body->GetLinearVelocity().y > 0.0f)
-        body->ApplyForceToCenter(b2Vec2(0, 5.0f));
+        body->ApplyForceToCenter(b2Vec2(0, f));
     if(input->getKeyPressed(MOVELEFT))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
     if(input->getKeyPressed(MOVERIGHT))
@@ -126,7 +135,7 @@ void PlayerActor::update()
         pe.endCol = cfg.col2;
         pe.actorVelMult = 0;
         pe.boom(300);
-        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, f*3));
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 15.0));
         canDash = false;
         dashCooldownTime = 0.0;
     }
@@ -134,10 +143,7 @@ void PlayerActor::update()
 
     if(input->getKeyDown(SHOOT))
     {
-
-        vec2 pos (input->getValue(POINTERX) - theApp->getSize().x / 2,
-                  theApp->getSize().y / 2 - input->getValue(POINTERY));
-        pos /= float(theApp->getSize().y/2);
+        vec2 pos(input->getValue(POINTERX), input->getValue(POINTERY));
         //Awful math below :S
 
         vec3 camVec = sc->cameraLookAt - sc->cameraPos;
@@ -164,7 +170,7 @@ void PlayerActor::update()
             config.col2 = cfg.col2;
             config.col3 = cfg.col3;
             config.col4 = cfg.col4;
-            FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, &config);
+            FireActor* bullet = new FireActor(p+dir*0.8f, dir*17.0f, gsc, &config);
             sc->actors.push_back(bullet);
             //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
         }
@@ -257,7 +263,7 @@ bool PlayerActor::renderParticle(Particle &p)
     p.startCol = vec3(0.4, 1.0, 0.0);
     p.isLight = true;
 
-    return true;
+    return false;
 }
 
 void PlayerActor::collided(Actor *b)
@@ -271,20 +277,11 @@ void PlayerActor::collided(Actor *b)
     canDash |= (dist < 1.0 && dist > 0.0);
 
     if(dynamic_cast<Enemy*>(b))
-    {
         explode();
-        return;
-    }
-    if (dynamic_cast<MagmaHexagon*>(b))
-    {
+    else if (dynamic_cast<MagmaHexagon*>(b))
         explode();
-        return;
-    }
-    if (dynamic_cast<FireActor*>(b))
-    {
-        explode();
-        return;
-    }
+    else if (dynamic_cast<FireActor*>(b))
+        this->body->SetLinearVelocity(this->body->GetLinearVelocity() + b->body->GetLinearVelocity());
 }
 
 bool PlayerActor::collidedWithGround()

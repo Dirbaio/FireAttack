@@ -31,6 +31,7 @@ bool Input::getKeyPressed(int n)
 {
     return keysPressed[n];
 }
+
 bool Input::getKeyDown(int n)
 {
     return keysPressed[n] && !keysOldPressed[n];
@@ -68,8 +69,13 @@ void Input::update()
         }
 
         Vector2i mpos = Mouse::getPosition(*theApp);
-        keyValues[POINTERX] = mpos.x;
-        keyValues[POINTERY] = mpos.y;
+
+        vec2 pos ( float(mpos.x) - float(theApp->getSize().x) / 2,
+                  float(theApp->getSize().y) / 2 -  float(mpos.y));
+        pos /= float(theApp->getSize().y/2);
+
+        keyValues[POINTERX] = pos.x;
+        keyValues[POINTERY] = pos.y;
     }
     else
     {
@@ -83,6 +89,13 @@ void Input::update()
         keyValues[DASHX] = wInput.wiiValues[i][NUN_ACC_X];
         keyValues[DASHY] = wInput.wiiValues[i][NUN_ACC_Y];
         keyValues[DASHZ] = wInput.wiiValues[i][NUN_ACC_Z];
+
+        if(wInput.wiiControl[i][W_IR])
+        {
+            keyValues[POINTERX] = (wInput.wiiValues[i][IR_X]-512.0)/512.0  * float(theApp->getSize().x) / float(theApp->getSize().y);
+            keyValues[POINTERY] = -(wInput.wiiValues[i][IR_Y]-512.0)/512.0;
+        }
+        cout<<keyValues[POINTERX] << " " << keyValues[POINTERY] << endl;
     }
 
 }

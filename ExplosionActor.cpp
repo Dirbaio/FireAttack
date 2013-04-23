@@ -51,7 +51,7 @@ ExplosionActor::ExplosionActor(Scene* sc, vec3 pos, float force, bool explodes, 
     this->force = force;
 
     radio = 0.0;
-
+    inmortal = true;
 }
 
 void ExplosionActor::update()
@@ -67,8 +67,9 @@ void ExplosionActor::update()
 
     for(list<Actor*>::iterator it = sc->actors.begin(); it != sc->actors.end(); ++it)
     {
-        if (dynamic_cast<ExplosionActor*>(*it) or dynamic_cast<FireActor*>(*it))
+        if ((*it) -> inmortal)
             continue;
+
         vec3 dir = (*it)->p - p;
         if (isZero(dir)) continue;
         float ratio = force/norm(dir);

@@ -21,7 +21,8 @@ enum WiiButtons
     W_TWO,
     W_HOME,
     W_C,
-    W_Z
+    W_Z,
+    W_IR
 };
 
 enum WiiValues
@@ -39,7 +40,9 @@ enum WiiValues
     WV_OR_Y,
     NUN_OR_R,
     NUN_OR_P,
-    NUN_OR_Y
+    NUN_OR_Y,
+    IR_X,
+    IR_Y
 };
 
 class WiimoteInput

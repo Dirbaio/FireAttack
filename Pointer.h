@@ -1,22 +1,20 @@
 #ifndef POINTER_H
 #define POINTER_H
 
-#include "util.h"
+class Pointer;
 
-class Pointer
+#include "GameScene.h"
+#include "Actor.h"
+#include "PlayerActor.h"
+
+class Pointer : public Actor
 {
-private:
-    bool useWiimote;
-    int numWiimote;
-    float x, y;
-
+    GameScene* gsc;
+    PlayerActor* pl;
 public:
-    Pointer(bool useWiimote, int numWiimote);
-
-    float getX();
-    float getY();
-
-    void update();
+    Pointer(GameScene* sc, PlayerActor* pl);
+    virtual void update();
+    virtual bool renderParticle(Particle &p);
 };
 
 #endif // POINTER_H
