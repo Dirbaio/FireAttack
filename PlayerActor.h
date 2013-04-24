@@ -19,6 +19,7 @@ class PlayerActor : public Actor
     FireActor* test;
     bool wasMouseDown;
     float mouseDownTime;
+    float shootCooldown;
 
     virtual void update();
     virtual void render();

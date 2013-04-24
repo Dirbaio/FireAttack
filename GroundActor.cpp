@@ -25,7 +25,7 @@ GroundActor::GroundActor(Scene* sc, float x, float y, float z, float sx, float s
 
 void GroundActor::render()
 {
-    groundTex->bind();
+    Texture::bind(groundTex);
     glColor3f(1, 1, 1);
     renderCube(p.x, p.y, p.z, sx, sy, sz, 0);
 }

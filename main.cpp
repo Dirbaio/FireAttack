@@ -35,7 +35,9 @@ void countTime(float& t, float t2)
 int main(int argc, char** argv)
 {
     // Create the main window
-    Window app (sf::VideoMode(1024, 768, 32), "SFML OpenGL");
+    int width = sf::VideoMode::getFullscreenModes()[0].width;
+    int height = sf::VideoMode::getFullscreenModes()[0].height;
+    Window app (sf::VideoMode(width, height, 32), "Fire Attack", sf::Style::None);
     theApp = &app;
 
     //	app.setVerticalSyncEnabled(true);
@@ -77,10 +79,10 @@ int main(int argc, char** argv)
     glDisable(GL_LIGHTING);
     glEnable(GL_CULL_FACE);
 
-    Shader sh;
+/*    Shader sh;
     sh.loadFromFile("vertex.glsl", "fragment.glsl");
     sh.bind();
-
+*/
 	srand(time(NULL));
 	
 	float frameTime = 0;
@@ -91,6 +93,12 @@ int main(int argc, char** argv)
     float updateTime = 0;
     float renderTime = 0;
     float renderPartTime = 0;
+
+    glViewport(0, 0, app.getSize().x, app.getSize().y);
+    // Setup a perspective projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(90.f, float(app.getSize().x)/float(app.getSize().y), 0.01f, 500.f);
 
     // Start game loop
     while (app.isOpen())
@@ -112,6 +120,9 @@ int main(int argc, char** argv)
                 app.close();
                 return 0;
             }
+            if(event.type == sf::Event::JoystickButtonPressed)
+                if(event.joystickButton.button == 9 || event.joystickButton.button == 21)
+                    app.close();
 
             // Resize event : adjust viewport
             if (event.type == sf::Event::Resized)

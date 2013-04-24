@@ -129,7 +129,7 @@ void Scene::renderParticlePass()
 //	particles.sort();
 	
     //Render them!
-	particleTex.bind();
+    Texture::bind(&particleTex);
 
 	vtxArray.resize(0);
 	texArray.resize(0);

@@ -24,14 +24,3 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     PlayerActor.h \
     WallActor.h
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/ -lBox2D
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/ -lBox2D
-else:symbian: LIBS += -lBox2D
-else:unix: LIBS += -L$$PWD/../Downloads/Box2D_v2.2.1/Box2D/ -lBox2D
-
-INCLUDEPATH += $$PWD/../Downloads/Box2D_v2.2.1/
-DEPENDPATH += $$PWD/../Downloads/Box2D_v2.2.1/s
-
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/release/Box2D.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/debug/Box2D.lib
-else:unix:!symbian: PRE_TARGETDEPS += $$PWD/../Downloads/Box2D_v2.2.1/Box2D/libBox2D.a

@@ -158,7 +158,7 @@ void GameScene::update()
 void GameScene::render()
 {
     Scene::render();
-    groundTex->bind();
+    Texture::bind(groundTex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // [!] Juanking SFML
 
     glEnableClientState(GL_VERTEX_ARRAY);

@@ -67,6 +67,7 @@ PlayerActor::PlayerActor(GameScene* sc) : Actor(sc)
     body->SetUserData(this);
     wasMouseDown = false;
     mouseDownTime = 0;
+    shootCooldown = 0;
 }
 
 void PlayerActor::update()
@@ -74,7 +75,7 @@ void PlayerActor::update()
     sizeEmitter->randVel.rad = min(3.0f, norm(v)*0.3f);
 
     float f = 5;
-    if(Keyboard::isKeyPressed(Keyboard::Space) && p.y < 0.3)
+    if((Keyboard::isKeyPressed(Keyboard::Space) || Joystick::getAxisPosition(0, Joystick::Y) < -50) && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 7.0f));
     if(Keyboard::isKeyPressed(Keyboard::A))
         body->ApplyForceToCenter(b2Vec2(-f, 0));
@@ -82,6 +83,8 @@ void PlayerActor::update()
         body->ApplyForceToCenter(b2Vec2(f, 0));
     if(Keyboard::isKeyPressed(Keyboard::S))
         body->ApplyForceToCenter(b2Vec2(0, -f));
+    float val = Joystick::getAxisPosition(0, Joystick::X);
+    body->ApplyForceToCenter(b2Vec2(f*val/100, 0));
 
     if(p.x < -10)
         body->SetLinearVelocity(b2Vec2(10.0f, body->GetLinearVelocity().y));
@@ -99,7 +102,11 @@ void PlayerActor::update()
 
     particlePosMult = 1+mouseDownTime;
 */
-    if(!wasMouseDown && Mouse::isButtonPressed(Mouse::Left))
+
+    bool shoot = false;
+    vec3 dir;
+
+    if(Mouse::isButtonPressed(Mouse::Left))
     {
         Vector2i ppos = Mouse::getPosition(*theApp);
 
@@ -121,12 +128,32 @@ void PlayerActor::update()
         camVec2 *= res.z/camVec2.z;
         res -= camVec2;
 
-        vec3 dir = res - p;
+        dir = res - p;
+        shoot = true;
+    }
+
+    vec3 joy (0, 0, 0);
+    joy.x = sf::Joystick::getAxisPosition(0, Joystick::Z) / 100.0f;
+    joy.y = -sf::Joystick::getAxisPosition(0, Joystick::R) / 100.0f;
+    if(joy.x*joy.x + joy.y*joy.y > 0.5)
+    {
+        dir = joy;
+        shoot = true;
+    }
+
+    if(shootCooldown > 0)
+        shootCooldown -= dt;
+
+    if(shoot && shootCooldown <= 0)
+    {
         normalize(dir);
 
         FireActor* bullet = new FireActor(p+dir*0.4f, dir*10.0f, gsc, false);
         sc->actors.push_back(bullet);
-        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
+        float knockback = 0.5;
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x*knockback, body->GetLinearVelocity().y-dir.y*knockback));
+
+        shootCooldown = 0.05;
     }
 
     wasMouseDown = Mouse::isButtonPressed(Mouse::Left);
