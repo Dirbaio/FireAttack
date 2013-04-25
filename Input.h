@@ -11,6 +11,7 @@
 #define MOVELEFT 2
 #define SHOOT 3
 #define SPAWN 4
+#define CONNECTED 5
 
 #define DASHX 0
 #define DASHY 1
@@ -18,7 +19,7 @@
 #define POINTERX 3
 #define POINTERY 4
 
-#define MAPPINGSIZE 5
+#define MAPPINGSIZE 6
 #define VALUESIZE 5
 
 class Input

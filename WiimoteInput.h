@@ -49,18 +49,24 @@ class WiimoteInput
 {
 public:
     wiimote** wiimotes;
+    int connectedCount;
     bool wiiControl[MAX_WIIMOTES][NUM_WII_BUTTONS];
     float wiiValues[MAX_WIIMOTES][NUM_WII_BUTTONS];
-
+    bool searchMode;
     void init();
+    void stopSearch();
     void handle_event(struct wiimote_t* wm, int i);
     void handle_read(struct wiimote_t* wm, byte* data, unsigned short len);
     void handle_ctrl_status(struct wiimote_t* wm);
     void handle_disconnect(wiimote* wm);
     void test(struct wiimote_t* wm, byte* data, unsigned short len);
-    bool updateWiimotes(bool ended);
+    bool update();
+    void search();
+    void disconnect();
 };
 
 extern WiimoteInput wInput;
+void startWiimoteInput();
+void stopWiimoteInput();
 
 #endif // WIIMOTEINPUT_H

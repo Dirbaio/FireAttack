@@ -15,20 +15,13 @@
 #include "GameScene.h"
 #include "util.h"
 #include "WiimoteInput.h"
+#include "GameScene.h"
+#include "MenuScene.h"
 
 using namespace std;
 using namespace sf;
 
-float rotx = 0;
-float roty = 0;
-
-bool ended;
-
-//Defined as extern in util.h
-float dt;
-float tim = 0;
 Scene* sc;
-Window* theApp;
 
 void countTime(float& t, float t2)
 {
@@ -107,7 +100,7 @@ void initFrameBuffer(void)
 
 void setupShader(Shader* sh)
 {
-    sh->bind();
+    Shader::bind(sh);
 
     int program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
@@ -127,85 +120,17 @@ void setupShader(Shader* sh)
     glBindTexture(GL_TEXTURE_2D, fbo_depth);
 }
 
-void makeHexagon()
-{
-    float DIS = 1.154700538;
-    float COS = 0.577350269;
-    float SIN = 0.866025404;
-    float x[] = {-1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0};
-    float y[] = {1.0, -1.0};
-    float z[] = {COS, DIS, COS, -COS, -DIS, -COS, COS};
-    float nx[] = {-0.5, 0.5, 1.0, 0.5, -0.5, -1.0};
-    float nz[] = {SIN, SIN, 0.0, -SIN, -SIN, 0.0};
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 6; j++)
-        {
-            if (i == 0)
-            {
-                hexVert.push_back(vec3(x[j], y[i], z[j]));
-                hexVert.push_back(vec3(x[j+1], y[i], z[j+1]));
-                hexVert.push_back(vec3(0.0, y[i], 0.0));
-                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(0.0, 1.0, 0.0));
-                hexTexCoord.push_back(vec2((6.0-j)/6.0, 1.0/3.0));
-                hexTexCoord.push_back(vec2((5.0-j)/6.0, 1.0/3.0));
-                hexTexCoord.push_back(vec2((5.5-j)/6.0, 0.0));
 
-                hexVert.push_back(vec3(x[j], y[0], z[j]));
-                hexVert.push_back(vec3(x[j+1], y[1], z[j+1]));
-                hexVert.push_back(vec3(x[j+1], y[0], z[j+1]));
-                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(nx[j], 0.0, nz[j]));
-                hexTexCoord.push_back(vec2((6.0-j)/6.0, 1.0/3.0));
-                hexTexCoord.push_back(vec2((5.0-j)/6.0, 2.0/3.0));
-                hexTexCoord.push_back(vec2((5.0-j)/6.0, 1.0/3.0));
-            }
-            else
-            {
-                hexVert.push_back(vec3(x[j+1], y[i], z[j+1]));
-                hexVert.push_back(vec3(x[j], y[i], z[j]));
-                hexVert.push_back(vec3(0.0, y[i], 0.0));
-                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(0.0, -1.0, 0.0));
-                hexTexCoord.push_back(vec2((5.0-j)/6.0, 2.0/3.0));
-                hexTexCoord.push_back(vec2((6.0-j)/6.0, 2.0/3.0));
-                hexTexCoord.push_back(vec2((5.5-j)/6.0, 1.0));
-
-                hexVert.push_back(vec3(x[j+1], y[1], z[j+1]));
-                hexVert.push_back(vec3(x[j], y[0], z[j]));
-                hexVert.push_back(vec3(x[j], y[1], z[j]));
-                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(nx[j], 0.0, nz[j]));
-                hexTexCoord.push_back(vec2((5.0-j)/6.0, 2.0/3.0));
-                hexTexCoord.push_back(vec2((6.0-j)/6.0, 1.0/3.0));
-                hexTexCoord.push_back(vec2((6.0-j)/6.0, 2.0/3.0));
-            }
-        }
-    }
-}
-
-void wUpdate()
-{
-    while (1)
-    {
-        bool finish = wInput.updateWiimotes(false);
-        //cerr << "LOLOLTHREAD" << ended << endl;
-        if (ended || finish) break;
-    }
-    wInput.updateWiimotes(true);
-}
 
 int main(int argc, char** argv)
 {
     // Create the main window
-    Window app (sf::VideoMode(window_width, window_height, 32), "SFML OpenGL");
-    theApp = &app;
-
-    ended = false;
-
-    //	app.setVerticalSyncEnabled(true);
-
-    wInput.init();
-
-    sf::Thread wiimoteThread(&wUpdate);
-    wiimoteThread.launch();
+    window_width = sf::VideoMode::getFullscreenModes()[0].width;
+    window_height = sf::VideoMode::getFullscreenModes()[0].height;
+    app = new RenderWindow(sf::VideoMode(window_width, window_height, 32), "Fire Attack", sf::Style::None);
+    font.loadFromFile("BitDarling.ttf");
+    //	app->setVerticalSyncEnabled(true);
+    startWiimoteInput();
 
     // Create a clock for measuring time elapsed
 
@@ -218,11 +143,10 @@ int main(int argc, char** argv)
     glClearDepth(1.0f);
     glClearColor(0.f, 0.f, 0.f, 0.f);
 
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_TEXTURE_2D);
-
     initFrameBuffer();
 
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_TEXTURE_2D);
     glDisable(GL_CULL_FACE);
 
     Shader* lightShader = loadShader("vertex-light.glsl", "fragment-light.glsl");
@@ -236,23 +160,24 @@ int main(int argc, char** argv)
     int frameCount = 0;
 
     sc = new GameScene(FREEMODE);
+    //sc = new MenuScene();
 
     float updateTime = 0;
     float renderTime = 0;
     float renderPartTime = 0;
 
     // Start game loop
-    while (app.isOpen())
+    while (app->isOpen())
     {
         // Process events
         bool closed = false;
         sf::Event event;
-        while (app.pollEvent(event))
+        while (app->pollEvent(event))
         {
             // Close window : exit
             if (event.type == sf::Event::Closed)
             {
-                app.close();
+                app->close();
                 closed = true;
                 break;
             }
@@ -260,7 +185,7 @@ int main(int argc, char** argv)
             // Escape key : exit
             if ((event.type == sf::Event::KeyPressed) && (event.key.code == Keyboard::Escape))
             {
-                app.close();
+                app->close();
                 closed = true;
                 break;
             }
@@ -283,7 +208,7 @@ int main(int argc, char** argv)
 
         if (closed) break;
 
-        app.setActive();
+        app->setActive();
 
         dt = clock.getElapsedTime().asSeconds();
         clock.restart();
@@ -312,15 +237,16 @@ int main(int argc, char** argv)
         //==========
 
         profiler.restart();
-        glEnable(GL_LIGHTING);
         glDisable(GL_BLEND);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
         glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
         glViewport(0, 0, window_width, window_height);
 
-        glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluPerspective(90.f, float(window_width)/float(window_height), 0.01f, 50.f);
@@ -339,21 +265,21 @@ int main(int argc, char** argv)
         //===========
 
         profiler.restart();
-/*
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-*/
         glDisable(GL_CULL_FACE);
         glDisable(GL_LIGHTING);
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
         glDisable(GL_DEPTH_TEST);
         glClearColor (0.0f, 0.0f, 0.0f, 1.0f); // Set the clear colour
 
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth and colour buffers
+
 
         setupShader(glowShader);
         glBegin(GL_QUADS);
@@ -364,11 +290,11 @@ int main(int argc, char** argv)
         glEnd();
 
         setupShader(lightShader);
-        lightShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        lightShader->setParameter("aspectRatio", float(app->getSize().x)/float(app->getSize().y));
         sc->renderLights();
 
         setupShader(particleShader);
-        particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        particleShader->setParameter("aspectRatio", float(app->getSize().x)/float(app->getSize().y));
         particleShader->setParameter("isReflection", 1);
         sc->renderParticles(true);
 
@@ -384,7 +310,7 @@ int main(int argc, char** argv)
         if(loc != -1)
             glUniformMatrix4fv(loc, 1, false, inverseLookAt);
 
-        waterShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        waterShader->setParameter("aspectRatio", float(app->getSize().x)/float(app->getSize().y));
         waterShader->setParameter("time", tim);
         waterShader->setParameter("cameraPos", sc->cameraPos);
         vec3 camVec = sc->cameraLookAt - sc->cameraPos;
@@ -406,22 +332,37 @@ int main(int argc, char** argv)
         glEnd();
 
         setupShader(particleShader);
-        particleShader->setParameter("aspectRatio", float(theApp->getSize().x)/float(theApp->getSize().y));
+        particleShader->setParameter("aspectRatio", float(app->getSize().x)/float(app->getSize().y));
         particleShader->setParameter("isReflection", 0);
         sc->renderParticles(false);
 
+/*        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        Shader::bind(NULL);
+        app->pushGLStates();
+        app->resetGLStates();
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        sc->renderHud();
+
+        app->popGLStates();
+*/
         if(sc->nextScene)
         {
             Scene* next = sc->nextScene;
             delete sc;
             sc = next;
         }
-        app.display();
+        app->display();
         countTime(renderPartTime, profiler.getElapsedTime().asMilliseconds());
     }
 
-    ended = true;
-    wiimoteThread.wait();
+    stopWiimoteInput();
 
     return EXIT_SUCCESS;
 }

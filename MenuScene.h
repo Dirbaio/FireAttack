@@ -7,6 +7,8 @@ class MenuScene : public Scene
 {
 public:
     MenuScene();
+
+    virtual void renderHud();
 };
 
 #endif // MENUSCENE_H

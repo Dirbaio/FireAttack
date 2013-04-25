@@ -13,7 +13,6 @@ QMAKE_LDFLAGS += -O3
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lGL -lGLU -lBox2D -lwiiuse
 SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireActor.cpp util.cpp \
     GameScene.cpp \
-    GroundActor.cpp \
     PlayerActor.cpp \
     WallActor.cpp \
     Model.cpp \
@@ -35,10 +34,10 @@ SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireAct
     StaticHexagon.cpp \
     MenuScene.cpp \
     WiimoteInput.cpp \
-    Pointer.cpp
+    Pointer.cpp \
+    TitleScene.cpp
 HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     GameScene.h \
-    GroundActor.h \
     PlayerActor.h \
     WallActor.h \
     Model.h \
@@ -60,7 +59,8 @@ HEADERS += Particle.h util.h Actor.h Scene.h ParticleEmitter.h FireActor.h \
     StaticHexagon.h \
     MenuScene.h \
     WiimoteInput.h \
-    Pointer.h
+    Pointer.h \
+    TitleScene.h
 
 OTHER_FILES += \
     vertex.glsl \

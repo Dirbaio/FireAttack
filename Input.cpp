@@ -68,14 +68,16 @@ void Input::update()
                 keysPressed[i] = Keyboard::isKeyPressed(keys[i]);
         }
 
-        Vector2i mpos = Mouse::getPosition(*theApp);
+        Vector2i mpos = Mouse::getPosition(*app);
 
-        vec2 pos ( float(mpos.x) - float(theApp->getSize().x) / 2,
-                  float(theApp->getSize().y) / 2 -  float(mpos.y));
-        pos /= float(theApp->getSize().y/2);
+        vec2 pos ( float(mpos.x) - float(app->getSize().x) / 2,
+                  float(app->getSize().y) / 2 -  float(mpos.y));
+        pos /= float(app->getSize().y/2);
 
         keyValues[POINTERX] = pos.x;
         keyValues[POINTERY] = pos.y;
+
+        keyValues[CONNECTED] = true;
     }
     else
     {
@@ -92,10 +94,10 @@ void Input::update()
 
         if(wInput.wiiControl[i][W_IR])
         {
-            keyValues[POINTERX] = (wInput.wiiValues[i][IR_X]-512.0)/512.0  * float(theApp->getSize().x) / float(theApp->getSize().y);
+            keyValues[POINTERX] = (wInput.wiiValues[i][IR_X]-512.0)/512.0  * float(app->getSize().x) / float(app->getSize().y);
             keyValues[POINTERY] = -(wInput.wiiValues[i][IR_Y]-512.0)/512.0;
         }
-        cout<<keyValues[POINTERX] << " " << keyValues[POINTERY] << endl;
+
     }
 
 }

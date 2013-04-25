@@ -116,7 +116,7 @@ void Scene::renderSingle(bool isReflection)
     {
         Actor* act = *it;
         Shader* sh = act->shader == NULL ? defaultShader : act->shader;
-        sh->bind();
+        Shader::bind(sh);
 
         int program;
         glGetIntegerv(GL_CURRENT_PROGRAM, &program); //Trololo
@@ -130,11 +130,12 @@ void Scene::renderSingle(bool isReflection)
         if(loc != -1)
             glUniform1i(loc, isReflection);
         act->render();
-        sh->unbind();
+        Shader::bind(NULL);
     }
 
 }
 
+void Scene::renderHud() {}
 void Scene::render()
 {
     glMatrixMode(GL_MODELVIEW);

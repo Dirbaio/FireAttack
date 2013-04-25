@@ -2,41 +2,170 @@
 
 WiimoteInput wInput;
 
-void WiimoteInput::init(){
-    int found, connected;
+bool wiimoteInputRunning;
 
+void wiimoteSearch()
+{
+    while(wInput.searchMode && wiimoteInputRunning)
+        wInput.search();
+}
+
+void wiimoteUpdate()
+{
+    while (wiimoteInputRunning)
+    {
+        bool finish = wInput.update();
+        if(finish) break;
+    }
+    wInput.disconnect();
+}
+
+sf::Thread wiimoteSearchThread(&wiimoteSearch);
+sf::Thread wiimoteUpdateThread(&wiimoteUpdate);
+
+void startWiimoteInput()
+{
+    wInput.init();
+
+    wiimoteInputRunning = true;
+    wiimoteSearchThread.launch();
+}
+
+void stopWiimoteInput()
+{
+    wiimoteInputRunning = false;
+    wiimoteSearchThread.wait();
+    wiimoteUpdateThread.wait();
+}
+
+void WiimoteInput::stopSearch()
+{
+    if(!searchMode) return;
+
+
+    searchMode = false;
+}
+
+void WiimoteInput::init()
+{
     wiimotes =  wiiuse_init(MAX_WIIMOTES);
 
-    found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
-    if (!found) {
-        cerr << "No wiimotes found." << endl;
-    }
+    searchMode = true;
+    connectedCount = 0;
+}
 
-    connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
-    if (connected)
-        cerr << "Connected to " << connected << " wiimotes (of " << found << " found).\n";
-    else {
-        cerr << "Failed to connect to any wiimote.\n";
-    }
 
-    wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
-    wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
-    wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
-    wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
+void WiimoteInput::disconnect()
+{
+    for (int i = 0; i < MAX_WIIMOTES; i++)
+        wiiuse_disconnect(wiimotes[i]);
+}
 
+void WiimoteInput::search()
+{
     for(int i = 0; i < MAX_WIIMOTES; i++)
+        cout << wiimotes[i]->state << " ";
+    cout<<endl;
+
+    int found = wiiuse_find(wiimotes+connectedCount, MAX_WIIMOTES-connectedCount, 1);
+    if (found)
+        cout << found << " wiimotes found."<<endl;
+
+    int connected = wiiuse_connect(wiimotes+connectedCount, MAX_WIIMOTES-connectedCount);
+    if (connected)
     {
-        wiiuse_set_ir(wiimotes[i], 1);
-        wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
-        wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
-        wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
-        wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
+        wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
+        wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
+        wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
+        wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
+
+        for(int i = 0; i < MAX_WIIMOTES; i++)
+        {
+            wiiuse_set_ir(wiimotes[i], 1);
+            wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
+            wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
+            wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
+            wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
+        }
+
+        cerr << "Connected to " << connected << " wiimotes (of " << found << " found).\n";
     }
+
+    connectedCount += connected;
+
+    if(connectedCount == connected && connectedCount != 0)
+        wiimoteUpdateThread.launch();
+
+//    if(connected)
+//        stopSearch();
+}
+
+bool WiimoteInput::update()
+{
+
+    if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
+        /*
+          *	This happens if something happened on any wiimote.
+          *	So go through each one and check if anything happened.
+          */
+        for (int i = 0; i < MAX_WIIMOTES; i++)
+        {
+            switch (wiimotes[i]->event) {
+            case WIIUSE_EVENT:
+                /* a generic event occured */
+                handle_event(wiimotes[i], i);
+                break;
+
+            case WIIUSE_STATUS:
+                /* a status event occured */
+                handle_ctrl_status(wiimotes[i]);
+                break;
+
+            case WIIUSE_DISCONNECT:
+            case WIIUSE_UNEXPECTED_DISCONNECT:
+                /* the wiimote disconnected */
+                handle_disconnect(wiimotes[i]);
+                cerr << "disconnected WiiMote" << endl;
+                return true;
+                break;
+
+            case WIIUSE_READ_DATA:
+                /*
+                      *	Data we requested to read was returned.
+                      *	Take a look at wiimotes[i]->read_req
+                      *	for the data.
+                      */
+                break;
+
+            case WIIUSE_NUNCHUK_INSERTED:
+                /*
+                      *	a nunchuk was inserted
+                      *	This is a good place to set any nunchuk specific
+                      *	threshold values.  By default they are the same
+                      *	as the wiimote.
+                      */
+                //wiiuse_set_nunchuk_orient_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 90.0f);
+                //wiiuse_set_nunchuk_accel_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 100);
+                printf("Nunchuk inserted.\n");
+                break;
+
+            case WIIUSE_NUNCHUK_REMOVED:
+                /* some expansion was removed */
+                handle_ctrl_status(wiimotes[i]);
+                printf("An expansion was removed.\n");
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+    return false;
 }
 
 void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
     //printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
-
+    cout<<"GUIMOUT "<<i<<endl;
     /* if a button is pressed, report it */
     wiiControl[i][W_B] = IS_PRESSED(wm, WIIMOTE_BUTTON_B);
     wiiControl[i][W_A] = IS_PRESSED(wm, WIIMOTE_BUTTON_A);
@@ -67,14 +196,14 @@ void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
         wiiuse_motion_sensing(wm, 1);
 */
 
- /*
+    /*
     if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_UP))
         wiiuse_set_ir(wm, 1);
     if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_DOWN))
         wiiuse_set_ir(wm, 0);
 */
     /* if the accelerometer is turned on then print angles */
-/*    if (WIIUSE_USING_ACC(wm)) {
+    /*    if (WIIUSE_USING_ACC(wm)) {
         printf("wiimote roll  = %f [%f]\n", wm->orient.roll, wm->orient.a_roll);
         printf("wiimote pitch = %f [%f]\n", wm->orient.pitch, wm->orient.a_pitch);
         printf("wiimote yaw   = %f\n", wm->orient.yaw);
@@ -94,7 +223,7 @@ void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
 
         wiiControl[i][W_C] = IS_PRESSED(nc, NUNCHUK_BUTTON_C);
         wiiControl[i][W_Z] = IS_PRESSED(nc, NUNCHUK_BUTTON_Z);
-/*
+        /*
         printf("nunchuk roll  = %f\n", nc->orient.roll);
         printf("nunchuk pitch = %f\n", nc->orient.pitch);
         printf("nunchuk yaw   = %f\n", nc->orient.yaw);
@@ -139,75 +268,4 @@ void WiimoteInput::handle_disconnect(wiimote* wm) {
 
 void WiimoteInput::test(struct wiimote_t* wm, byte* data, unsigned short len) {
     printf("test: %i [%x %x %x %x]\n", len, data[0], data[1], data[2], data[3]);
-}
-
-bool WiimoteInput::updateWiimotes(bool ended)
-{
-    if (ended)
-    {
-        for (int i = 0; i < MAX_WIIMOTES; i++)
-        {
-            wiiuse_disconnect(wiimotes[i]);
-        }
-        return true;
-    }
-
-     if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
-         /*
-          *	This happens if something happened on any wiimote.
-          *	So go through each one and check if anything happened.
-          */
-         for (int i = 0; i < MAX_WIIMOTES; i++)
-         {
-             switch (wiimotes[i]->event) {
-                 case WIIUSE_EVENT:
-                     /* a generic event occured */
-                     handle_event(wiimotes[i], i);
-                     break;
-
-                 case WIIUSE_STATUS:
-                     /* a status event occured */
-                     handle_ctrl_status(wiimotes[i]);
-                     break;
-
-                 case WIIUSE_DISCONNECT:
-                 case WIIUSE_UNEXPECTED_DISCONNECT:
-                     /* the wiimote disconnected */
-                     handle_disconnect(wiimotes[i]);
-                     cerr << "disconnected WiiMote" << endl;
-                     return true;
-                     break;
-
-                 case WIIUSE_READ_DATA:
-                     /*
-                      *	Data we requested to read was returned.
-                      *	Take a look at wiimotes[i]->read_req
-                      *	for the data.
-                      */
-                     break;
-
-                 case WIIUSE_NUNCHUK_INSERTED:
-                     /*
-                      *	a nunchuk was inserted
-                      *	This is a good place to set any nunchuk specific
-                      *	threshold values.  By default they are the same
-                      *	as the wiimote.
-                      */
-                      //wiiuse_set_nunchuk_orient_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 90.0f);
-                      //wiiuse_set_nunchuk_accel_threshold((struct nunchuk_t*)&wiimotes[i]->exp.nunchuk, 100);
-                     printf("Nunchuk inserted.\n");
-                     break;
-
-                 case WIIUSE_NUNCHUK_REMOVED:
-                     /* some expansion was removed */
-                     handle_ctrl_status(wiimotes[i]);
-                     printf("An expansion was removed.\n");
-                     break;
-
-                 default:
-                     break;
-             }
-         }
-    }
-     return false;
 }

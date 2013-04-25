@@ -263,7 +263,7 @@ bool PlayerActor::renderParticle(Particle &p)
     p.startCol = vec3(0.4, 1.0, 0.0);
     p.isLight = true;
 
-    return false;
+    return true;
 }
 
 void PlayerActor::collided(Actor *b)

@@ -1,9 +1,15 @@
 #include "util.h"
 
-static map<string, Texture*> imgMap;
+RenderWindow* app;
 
 vector<vec3> hexVert, hexNorm;
 vector<vec2> hexTexCoord;
+
+Font font;
+float dt;
+float tim = 0;
+
+static map<string, Texture*> imgMap;
 
 Texture* loadTexture(string path)
 {
@@ -110,4 +116,60 @@ void renderCube(float x, float y, float z, float sx, float sy, float sz, float r
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glPopMatrix();
+}
+
+
+
+void makeHexagon()
+{
+    float DIS = 1.154700538;
+    float COS = 0.577350269;
+    float SIN = 0.866025404;
+    float x[] = {-1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0};
+    float y[] = {1.0, -1.0};
+    float z[] = {COS, DIS, COS, -COS, -DIS, -COS, COS};
+    float nx[] = {-0.5, 0.5, 1.0, 0.5, -0.5, -1.0};
+    float nz[] = {SIN, SIN, 0.0, -SIN, -SIN, 0.0};
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 6; j++)
+        {
+            if (i == 0)
+            {
+                hexVert.push_back(vec3(x[j], y[i], z[j]));
+                hexVert.push_back(vec3(x[j+1], y[i], z[j+1]));
+                hexVert.push_back(vec3(0.0, y[i], 0.0));
+                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(0.0, 1.0, 0.0));
+                hexTexCoord.push_back(vec2((6.0-j)/6.0, 1.0/3.0));
+                hexTexCoord.push_back(vec2((5.0-j)/6.0, 1.0/3.0));
+                hexTexCoord.push_back(vec2((5.5-j)/6.0, 0.0));
+
+                hexVert.push_back(vec3(x[j], y[0], z[j]));
+                hexVert.push_back(vec3(x[j+1], y[1], z[j+1]));
+                hexVert.push_back(vec3(x[j+1], y[0], z[j+1]));
+                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(nx[j], 0.0, nz[j]));
+                hexTexCoord.push_back(vec2((6.0-j)/6.0, 1.0/3.0));
+                hexTexCoord.push_back(vec2((5.0-j)/6.0, 2.0/3.0));
+                hexTexCoord.push_back(vec2((5.0-j)/6.0, 1.0/3.0));
+            }
+            else
+            {
+                hexVert.push_back(vec3(x[j+1], y[i], z[j+1]));
+                hexVert.push_back(vec3(x[j], y[i], z[j]));
+                hexVert.push_back(vec3(0.0, y[i], 0.0));
+                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(0.0, -1.0, 0.0));
+                hexTexCoord.push_back(vec2((5.0-j)/6.0, 2.0/3.0));
+                hexTexCoord.push_back(vec2((6.0-j)/6.0, 2.0/3.0));
+                hexTexCoord.push_back(vec2((5.5-j)/6.0, 1.0));
+
+                hexVert.push_back(vec3(x[j+1], y[1], z[j+1]));
+                hexVert.push_back(vec3(x[j], y[0], z[j]));
+                hexVert.push_back(vec3(x[j], y[1], z[j]));
+                for (int k = 0; k < 3; k++) hexNorm.push_back(vec3(nx[j], 0.0, nz[j]));
+                hexTexCoord.push_back(vec2((5.0-j)/6.0, 2.0/3.0));
+                hexTexCoord.push_back(vec2((6.0-j)/6.0, 1.0/3.0));
+                hexTexCoord.push_back(vec2((6.0-j)/6.0, 2.0/3.0));
+            }
+        }
+    }
 }

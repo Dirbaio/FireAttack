@@ -31,7 +31,8 @@ public:
 	Scene();
 	~Scene();
 	virtual void update();
-	virtual void render();
+    virtual void render();
+    virtual void renderHud();
     void renderSingle(bool isReflection);
     void renderParticles(bool reflex);
     void renderLights();

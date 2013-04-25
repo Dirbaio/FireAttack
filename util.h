@@ -88,14 +88,16 @@ inline float toDeg(float rad)
 //DELTA TIME!
 extern float dt;
 extern float tim;
-extern Window* theApp;
+extern RenderWindow* app;
 
+extern Font font;
 Texture* loadTexture(string path);
 SoundBuffer* loadSound(string path);
 Shader* loadShader(string vertex, string fragment);
 
 extern vector<vec3> hexVert, hexNorm;
 extern vector<vec2> hexTexCoord;
+void makeHexagon();
 
 void renderCube(float x, float y, float z, float sx, float sy, float sz, float rot);
 
