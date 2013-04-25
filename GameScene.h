@@ -16,7 +16,7 @@ class GameScene : public Scene
 {
     public:
 
-    GameScene(GameMode mode);
+    GameScene(GameMode mode, int numPlayers);
 
     SoundBuffer* song1;
     SoundBuffer* song2;

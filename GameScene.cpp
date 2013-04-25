@@ -9,9 +9,9 @@
 #include "SolidHexagon.h"
 #include "TrapHexagon.h"
 
-GameScene::GameScene(GameMode mode)
+GameScene::GameScene(GameMode mode, int numPlayers)
 {
-    numPlayers = 2;
+    this->numPlayers = numPlayers;
     gameMode = mode;
 
 
@@ -126,7 +126,7 @@ void GameScene::update()
         deadTimer -= dt;
     }
     if(deadTimer <= 0 && !nextScene)
-        nextScene = new GameScene(FREEMODE);
+        nextScene = new GameScene(FREEMODE, numPlayers);
 
     if (!playerList.empty())
     {

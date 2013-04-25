@@ -47,6 +47,7 @@ void MenuScene::renderHud()
 
     if(start)
     {
-        nextScene = new GameScene(FREEMODE);
+        wInput.stopSearch();
+        nextScene = new GameScene(FREEMODE, wInput.connectedCount);
     }
 }

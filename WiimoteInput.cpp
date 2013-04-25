@@ -41,8 +41,6 @@ void stopWiimoteInput()
 void WiimoteInput::stopSearch()
 {
     if(!searchMode) return;
-
-
     searchMode = false;
 }
 
@@ -165,7 +163,6 @@ bool WiimoteInput::update()
 
 void WiimoteInput::handle_event(struct wiimote_t* wm, int i) {
     //printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
-    cout<<"GUIMOUT "<<i<<endl;
     /* if a button is pressed, report it */
     wiiControl[i][W_B] = IS_PRESSED(wm, WIIMOTE_BUTTON_B);
     wiiControl[i][W_A] = IS_PRESSED(wm, WIIMOTE_BUTTON_A);
