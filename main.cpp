@@ -143,11 +143,11 @@ int main(int argc, char** argv)
     glClearDepth(1.0f);
     glClearColor(0.f, 0.f, 0.f, 0.f);
 
-    initFrameBuffer();
 
     glEnable(GL_NORMALIZE);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_CULL_FACE);
+    initFrameBuffer();
 
     Shader* lightShader = loadShader("vertex-light.glsl", "fragment-light.glsl");
     Shader* particleShader = loadShader("vertex-particle.glsl", "fragment-particle.glsl");
@@ -286,7 +286,7 @@ int main(int argc, char** argv)
         glTexCoord2f(-1, -1); glVertex2f(-1, -1);
         glTexCoord2f(1, -1); glVertex2f(1, -1);
         glTexCoord2f(1, 1); glVertex2f(1, 1);
-        glTexCoord2f(-1, 1); glVertex2f(-1, 1);
+         glTexCoord2f(-1, 1); glVertex2f(-1, 1);
         glEnd();
 
         setupShader(lightShader);
