@@ -9,6 +9,8 @@
 #include "SolidHexagon.h"
 #include "TrapHexagon.h"
 #include "BouncyHexagon.h"
+#include "ShooterEnemy.h"
+#include "ExplosiveHexagon.h"
 
 GameScene::GameScene(GameMode mode, int numPlayers)
 {
@@ -20,7 +22,8 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         actors.push_front(new PlayerActor(this, playerConfigs[i], i));
 
     int lvls = irand(3, 5);
-
+    int pisoheight = 7;
+    float hexheight = 0.8f;
     for(int y = 0; y < lvls; y++)
     {
         vector<int> v;
@@ -41,20 +44,28 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         for(int i = 0; i < v.size()/2; i++)
             for(int x = v[i*2]; x <= v[i*2+1]; x++)
             {
+                int h = 1;
+                if(irand(0, 10) == 0)
+                    h = irand(3,  pisoheight);
+
                 int type = irand(1, 10);
-                switch(type)
+                for(int y2 = 0; y2 < h; y2++)
                 {
-                case 0:
-                case 1:
-                    actors.push_back(new TrapHexagon(this, vec3(x*2, 0.4f+y*5, 1)));
-                    break;
-                case 2:
-                case 3:
-                    actors.push_back(new BouncyHexagon(this, vec3(x*2, 0.4f+y*5, 0)));
-                    break;
-                default:
-                    actors.push_back(new StaticHexagon(this, vec3(x*2, 0.4f+y*5, 0)));
-                    break;
+                    float yy = 0.4f + (y*pisoheight+y2)*hexheight;
+                    switch(type)
+                    {
+                    case 0:
+                    case 1:
+                        actors.push_back(new TrapHexagon(this, vec3(x*2, yy, 1)));
+                        break;
+                    case 2:
+                    case 3:
+                        actors.push_back(new BouncyHexagon(this, vec3(x*2, yy, 0)));
+                        break;
+                    default:
+                        actors.push_back(new StaticHexagon(this, vec3(x*2, yy, 0)));
+                        break;
+                    }
                 }
             }
     }
@@ -69,6 +80,7 @@ GameScene::GameScene(GameMode mode, int numPlayers)
 
     deadTimer = 6;
     spawnTimer = 1;
+    tntTimer = 10;
 
     song1 = loadSound("game1.wav");
     song2 = loadSound("game2.wav");
@@ -119,6 +131,23 @@ void GameScene::update()
     if(deadTimer <= 0 && !nextScene)
         nextScene = new GameScene(FREEMODE, numPlayers);
 
+    if(spawnTimer < 0)
+    {
+        spawnTimer = 16;
+        actors.push_back(new ShooterEnemy(this, vec3(frand(10), 40, 0)));
+    }
+    else
+        spawnTimer -= dt;
+
+    if(tntTimer < 0)
+    {
+        tntTimer = 25;
+        actors.push_back(new ExplosiveHexagon(this, vec3(frand(10), 40, 0)));
+    }
+    else
+        tntTimer -= dt;
+
+    spawnTimer <= dt;
     if (!playerList.empty())
     {
         vec3 minPos, maxPos;

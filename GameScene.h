@@ -24,6 +24,7 @@ class GameScene : public Scene
 
     float deadTimer;
     float spawnTimer;
+    float tntTimer;
 
     int numPlayers;
     GameMode gameMode;

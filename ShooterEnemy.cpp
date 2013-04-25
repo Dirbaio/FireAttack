@@ -18,15 +18,15 @@ void ShooterEnemy::update()
     shootTimer -= dt;
     if(shootTimer < 0)
     {
-        shootTimer = 2 + frand(1);
+        shootTimer = 6 + frand(1);
         vec3 dir = player->p - p;
         normalize(dir);
 
         BulletConfig config;
-        config.col1 = vec3(0, 1, 0);
-        config.col2 = vec3(1, 1, 0);
-        config.col3 = vec3(1, 1, 0);
-        config.col4 = vec3(0, 1, 1);
+        config.col1 = vec3(0.5, 0.5, 0.5);
+        config.col2 = vec3(1, 0, 0);
+        config.col3 = vec3(0, 1, 0);
+        config.col4 = vec3(0, 0, 1);
         FireActor* bullet = new FireActor(p+dir*0.9f, dir*10.0f, gsc, &config);
         gsc->actors.push_back(bullet);
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
