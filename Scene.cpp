@@ -270,13 +270,14 @@ void Scene::BeginContact(b2Contact *contact)
         b->collidedWithGround();
 }
 
-float Scene::GetRayCastDistance(b2Vec2 p1, b2Vec2 p2)
+float Scene::GetRayCastDistance(b2Vec2 p1, b2Vec2 p2, b2Fixture*& fixt)
 {
     MyRayCastCallback callback;
     b2Vec2 point1(p1.x, p1.y);
     b2Vec2 point2(p2.x, p2.y);
     world.RayCast(&callback, point1, point2);
     if (callback.m_fixture == NULL) return 123456;
+    fixt = callback.m_fixture;
     return callback.m_fraction;
 }
 
