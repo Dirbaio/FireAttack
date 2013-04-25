@@ -68,7 +68,7 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         actors.push_front(new PlayerActor(this, player2, 2));
     }
 
-    for (int k = -20; k < 20; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));
+    for (int k = -10; k < 10; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));
 /*
     for (int k = -3; k < 0; k++) assetList.push_back(Asset(HEXTRAP, vec3(k*3, 8, 0)));
     for (int k = 0; k < 3; k++) assetList.push_back(Asset(HEXBOUNCY, vec3(k*2, k*2+5, 0)));
