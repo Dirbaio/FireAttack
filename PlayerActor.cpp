@@ -95,7 +95,7 @@ void PlayerActor::update()
 {
     input->update();
 
-    sizeEmitter->randVel.rad = min(3.0f, norm(v)*0.3f);
+    sizeEmitter->randVel.rad = min(3.0f, 3.0f-norm(v)*0.3f);
 
     bounce_cooldown += dt;
     dashCooldownTime += dt;
@@ -280,7 +280,7 @@ bool PlayerActor::renderParticle(Particle &p)
     p.startCol = vec3(0.4, 1.0, 0.0);
     p.isLight = true;
 
-    return true;
+    return false;
 }
 
 void PlayerActor::collided(Actor *b)
