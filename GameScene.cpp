@@ -34,8 +34,9 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         player1.keyMap[MOVELEFT] = sf::Keyboard::A;
         player1.keyMap[SHOOT] = sf::Keyboard::Tab;
         player1.keyMap[SPAWN] = sf::Keyboard::E;
+        player1.keyMap[DASH] = sf::Keyboard::LShift;
 
-        player1.useWiimote = true;
+        player1.useWiimote = useWiimotes;
         player1.numWiimote = 0;
 
         actors.push_back(new PlayerActor(this, player1, 1));
@@ -61,7 +62,7 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         player2.keyMap[SHOOT] = sf::Keyboard::Return;
         player2.keyMap[SPAWN] = sf::Keyboard::O;
 
-        player2.useWiimote = true;
+        player2.useWiimote = useWiimotes;
         player2.numWiimote = 1;
 
         actors.push_back(new PlayerActor(this, player2, 2));

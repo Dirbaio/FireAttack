@@ -35,6 +35,8 @@ unsigned int fbo_texture1, fbo_texture2;
 int window_width = 1200;
 int window_height = 800;
 
+bool useWiimotes = false;
+
 void initFrameBuffer(void)
 {
     //Color texture
@@ -130,7 +132,8 @@ int main(int argc, char** argv)
     app = new RenderWindow(sf::VideoMode(window_width, window_height, 32), "Fire Attack", sf::Style::None);
     font.loadFromFile("BitDarling.ttf");
     //	app->setVerticalSyncEnabled(true);
-    startWiimoteInput();
+    if (useWiimotes)
+        startWiimoteInput();
 
     // Create a clock for measuring time elapsed
 
@@ -160,7 +163,10 @@ int main(int argc, char** argv)
     int frameCount = 0;
 
     //sc = new GameScene(FREEMODE);
-    sc = new MenuScene();
+    if (useWiimotes)
+        sc = new MenuScene();
+    else
+        sc = new GameScene(FREEMODE, 1);
 
     float updateTime = 0;
     float renderTime = 0;

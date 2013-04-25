@@ -21,6 +21,8 @@ using namespace sf;
 typedef Vector3<float> vec3;
 typedef Vector2<float> vec2;
 
+extern bool useWiimotes;
+
 struct color {
 	float r, g, b, a;
 };

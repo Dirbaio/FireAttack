@@ -77,6 +77,8 @@ void Input::update()
         keyValues[POINTERX] = pos.x;
         keyValues[POINTERY] = pos.y;
 
+        keyValues[DASHX] = 128.0 + (keysPressed[DASH])*1560;
+
         keyValues[CONNECTED] = true;
     }
     else
