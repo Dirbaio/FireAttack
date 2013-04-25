@@ -39,6 +39,8 @@ int window_height = 800;
 
 bool useWiimotes = true;
 
+vector<int> scores(4,0);
+
 void initFrameBuffer(void)
 {
     //Color texture
@@ -181,7 +183,7 @@ int main(int argc, char** argv)
     // Create the main window
     window_width = sf::VideoMode::getFullscreenModes()[0].width;
     window_height = sf::VideoMode::getFullscreenModes()[0].height;
-    app = new RenderWindow(sf::VideoMode(window_width, window_height, 32), "Fire Attack", sf::Style::None);
+    app = new RenderWindow(sf::VideoMode(window_width, window_height, 32), "Fire Smash", sf::Style::None);
     font.loadFromFile("BitDarling.ttf");
     //	app->setVerticalSyncEnabled(true);
     if (useWiimotes)

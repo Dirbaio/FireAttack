@@ -26,11 +26,15 @@ class GameScene : public Scene
     float spawnTimer;
     float tntTimer;
 
+    int winner;
+    int endState;
+
     int numPlayers;
     GameMode gameMode;
 
     virtual void update();
     virtual void render();
+    virtual void renderHud();
     vector<float> vertexs, texcoords, colors;
     vector<PlayerActor*> getPlayerList();
     PlayerActor* getPlayer();

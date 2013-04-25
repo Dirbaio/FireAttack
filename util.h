@@ -102,6 +102,8 @@ extern float dt;
 extern float tim;
 extern RenderWindow* app;
 
+extern vector<int> scores;
+
 extern Font font;
 Texture* loadTexture(string path);
 SoundBuffer* loadSound(string path);

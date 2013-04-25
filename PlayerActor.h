@@ -32,6 +32,8 @@ public:
     ParticleEmitter* sizeEmitter;
     FireActor* test;
 
+    int numPlayer;
+
     PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer);
     virtual ~PlayerActor();
 

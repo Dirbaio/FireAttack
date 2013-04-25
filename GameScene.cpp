@@ -3,6 +3,7 @@
 #include "FireActor.h"
 #include "ModelActor.h"
 #include "Input.h"
+#include <sstream>
 #include <vector>
 
 #include "StaticHexagon.h"
@@ -10,13 +11,23 @@
 #include "TrapHexagon.h"
 #include "BouncyHexagon.h"
 #include "ShooterEnemy.h"
+#include "StickyEnemy.h"
 #include "ExplosiveHexagon.h"
+
+string numToString(int n)
+{
+    stringstream ss;
+    ss<<n;
+    return ss.str();
+}
 
 GameScene::GameScene(GameMode mode, int numPlayers)
 {
     this->numPlayers = numPlayers;
     gameMode = mode;
 
+    winner = -1;
+    endState = 0;
 
     for(int i = 0; i < numPlayers; i++)
         actors.push_front(new PlayerActor(this, playerConfigs[i], i));
@@ -117,17 +128,43 @@ void GameScene::update()
     Scene::update();
 
     vector<PlayerActor*> playerList = getPlayerList();
-    if(playerList.empty())
+    if(playerList.size() == 1 && winner == -1)
     {
-        if(deadTimer == 6)
-        {
-            song.stop();
-            song.setBuffer(*song2);
-            song.setPlayingOffset(seconds(60+30.9df));
+        winner = playerList[0]->numPlayer;
+        scores[winner] += 3;
+        song.stop();
+        song.setBuffer(*song2);
+        song.setPlayingOffset(seconds(60+30.9df));
 //            song.play();
-        }
-        deadTimer -= dt;
+        endState = 1;
     }
+    else if (playerList.empty() && winner == -1)
+    {
+        winner = -2;
+        song.stop();
+        song.setBuffer(*song2);
+        song.setPlayingOffset(seconds(60+30.9df));
+//            song.play();
+        endState = 2;
+    }
+
+    if (winner != -1)
+    {
+        bool start = false;
+
+        for(int i = 0; i < MAX_WIIMOTES; i++)
+            if(wInput.wiiControl[i][W_Z])
+                start = true;
+
+        start |= sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
+
+        if (start)
+        {
+            nextScene = new GameScene(FREEMODE, numPlayers);
+        }
+    }
+
+
     if(deadTimer <= 0 && !nextScene)
         nextScene = new GameScene(FREEMODE, numPlayers);
 
@@ -135,6 +172,7 @@ void GameScene::update()
     {
         spawnTimer = 16;
         actors.push_back(new ShooterEnemy(this, vec3(frand(10), 40, 0)));
+        actors.push_back(new StickyEnemy(this, vec3(frand(10), 40, 0)));
     }
     else
         spawnTimer -= dt;
@@ -200,6 +238,56 @@ void GameScene::render()
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 */
+}
+
+void GameScene::renderHud()
+{
+
+    if (endState == 1)
+    {
+        Text t;
+        t.setFont(font);
+        t.setCharacterSize(40);
+
+        string winstr = "Guanyador: Jugador "+numToString(winner+1)+"!";
+
+        t.setString(String(winstr));
+        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-20);
+        app->draw(t);
+    }
+    else if (endState == 2)
+    {
+        Text t;
+        t.setFont(font);
+        t.setCharacterSize(40);
+
+        string winstr = "No hi ha guanyador";
+
+        t.setString(String(winstr));
+        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-20);
+        app->draw(t);
+    }
+
+    if (endState != 0)
+    {
+        Text t;
+        t.setFont(font);
+        t.setCharacterSize(40);
+
+        string winstr = "Pressiona Z per reiniciar la partida";
+
+        t.setString(String(winstr));
+        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+70);
+        app->draw(t);
+
+        for (int i = 0; i < numPlayers; i++)
+        {
+            string str = "Jugador "+numToString(i+1)+": "+numToString(scores[i])+" punts";
+            t.setString(String(str));
+            t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+140+60*i);
+            app->draw(t);
+        }
+    }
 }
 
 PlayerActor* GameScene::GetNearestPlayerInView(vec3 pos)

@@ -20,6 +20,8 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
     bounce_factor_x = 1.8;
     bounce_factor_y = 3.0;
 
+    this->numPlayer = numPlayer;
+
     dashCooldownTime = 0.0;
     dashCooldownTimeMax = 0.2;
 
@@ -91,6 +93,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
 
 PlayerActor::~PlayerActor()
 {
+    if (gsc->getPlayerList().size() > 1) scores[numPlayer] += (gsc->numPlayers - gsc->getPlayerList().size());
     delete input;
     ptr->alive = false;
 }
