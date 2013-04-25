@@ -59,7 +59,17 @@ inline bool prand(float f)
 
 inline float norm(vec3 v)
 {
-	return sqrt(dot(v, v));
+    return sqrt(dot(v, v));
+}
+
+inline int irand(int min, int max)
+{
+    if(max < min)
+        cerr<<"Eres tonto. ~Balaghi"<<endl;
+
+    if(min == max) return min;
+    max++;
+    return min + rand() % (max-min);
 }
 
 inline float norm(vec2 v)

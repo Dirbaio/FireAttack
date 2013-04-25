@@ -84,7 +84,7 @@ void Input::update()
     else
     {
         int i = wiiMoteNum;
-        keysPressed[JUMP] = wInput.wiiControl[i][W_A];
+        keysPressed[JUMP] = wInput.wiiControl[i][W_A] || wInput.wiiControl[i][W_C];
         keysPressed[SHOOT] = wInput.wiiControl[i][W_B];
         keysPressed[SPAWN] = wInput.wiiControl[i][W_Z];
         keysPressed[MOVERIGHT] = wInput.wiiValues[i][WV_ANG] >= 44.0 && wInput.wiiValues[i][WV_ANG] <= 136.0 && wInput.wiiValues[i][WV_MAG] >= 0.5;
@@ -103,3 +103,7 @@ void Input::update()
     }
 
 }
+
+
+PlayerConfig playerConfigs[4];
+

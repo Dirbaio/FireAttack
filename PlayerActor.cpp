@@ -23,6 +23,9 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
     dashCooldownTime = 0.0;
     dashCooldownTimeMax = 0.2;
 
+    shootCooldownTime = 0.0;
+    shootCooldownTimeMax = 0.7;
+
     b2BodyDef bodyDef;
     bodyDef.position.Set(p.x, p.y);
     bodyDef.type = b2_dynamicBody;
@@ -40,6 +43,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
     body->CreateFixture(&fixture);
 
     ParticleEmitter pe (this);
+    pe.randLife = 0.1;
     pe.period = 1/500.0;
     pe.startAlpha = 0.1;
     pe.randPos = RandomVec(size/4);
@@ -55,7 +59,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
     pe.randPos = RandomVec(size/2);
     pe.startSize = size/3;
     pe.endSize = size/16;
-    pe.life = 1;
+    pe.life = 0.4;
     pe.startAlpha = 0.2;
     pe.startCol = config.col3;
     pe.endCol = config.col4;
@@ -68,7 +72,7 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
     pe.randVel = RandomVec(size/3);
     pe.startSize = size/2;
     pe.endSize = size/10;
-    pe.life = 1;
+    pe.life = 0.6;
     pe.startCol = config.col5;
     pe.endCol = config.col6;
     pe.actorVelMult = 0.9;
@@ -99,6 +103,7 @@ void PlayerActor::update()
 
     bounce_cooldown += dt;
     dashCooldownTime += dt;
+    shootCooldownTime += dt;
 
     b2Fixture* fixt = NULL;
     bool grounded = false;
@@ -158,7 +163,7 @@ void PlayerActor::update()
     }
 
 
-    if(input->getKeyDown(SHOOT))
+    if(input->getKeyDown(SHOOT) && shootCooldownTime >= shootCooldownTimeMax)
     {
         vec2 pos(input->getValue(POINTERX), input->getValue(POINTERY));
         //Awful math below :S
@@ -181,13 +186,13 @@ void PlayerActor::update()
 
         if (gsc->GetRayCastDistance(b2Vec2(p.x,p.y), b2Vec2(p.x+dir.x*size, p.y+dir.y*size), fixt) > 0.8)
         {
-
+            shootCooldownTime = 0.0;
             BulletConfig config;
             config.col1 = cfg.col1;
             config.col2 = cfg.col2;
             config.col3 = cfg.col3;
             config.col4 = cfg.col4;
-            FireActor* bullet = new FireActor(p+dir*0.8f, dir*17.0f, gsc, &config);
+            FireActor* bullet = new FireActor(p+dir*0.8f, dir*32.0f, gsc, &config);
             sc->actors.push_back(bullet);
             //body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x-dir.x, body->GetLinearVelocity().y-dir.y));
         }

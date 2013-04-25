@@ -2,6 +2,16 @@
 #define INPUT_H
 
 #include "util.h"
+
+struct PlayerConfig
+{
+    vec3 initPos;
+    vec3 col1, col2, col3, col4, col5, col6;
+    vector<sf::Keyboard::Key> keyMap;
+    int numWiimote;
+    bool useWiimote;
+};
+
 #include "Pointer.h"
 #include <vector>
 #include <SFML/System.hpp>
@@ -23,6 +33,8 @@
 
 #define MAPPINGSIZE 8
 #define VALUESIZE 5
+
+extern PlayerConfig playerConfigs[4];
 
 class Input
 {

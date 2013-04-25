@@ -17,6 +17,8 @@
 #include "WiimoteInput.h"
 #include "GameScene.h"
 #include "MenuScene.h"
+#include "Input.h"
+
 
 using namespace std;
 using namespace sf;
@@ -35,7 +37,7 @@ unsigned int fbo_texture1, fbo_texture2;
 int window_width = 1200;
 int window_height = 800;
 
-bool useWiimotes = false;
+bool useWiimotes = true;
 
 void initFrameBuffer(void)
 {
@@ -126,6 +128,56 @@ void setupShader(Shader* sh)
 
 int main(int argc, char** argv)
 {
+    playerConfigs[0].col1 = vec3(1.0, 1.0, 0.5);
+    playerConfigs[0].col2 = vec3(1.0, 1.0, 1.0);
+    playerConfigs[0].col3 = vec3(1.0, 0.0, 0.0);
+    playerConfigs[0].col4 = vec3(1.0, 1.0, 0.0);
+    playerConfigs[0].col5 = vec3(1.0, 0.0, 0.0);
+    playerConfigs[0].col6 = vec3(0.0, 1.0, 0.4);
+
+    playerConfigs[0].initPos = vec3(-5, 10, 0);
+
+
+    playerConfigs[1].col1 = vec3(0.5, 1.0, 1.0);
+    playerConfigs[1].col2 = vec3(0.1, 1.0, 1.0);
+    playerConfigs[1].col3 = vec3(0.0, 0.0, 1.0);
+    playerConfigs[1].col4 = vec3(0.0, 1.0, 1.0);
+    playerConfigs[1].col5 = vec3(0.0, 0.0, 1.0);
+    playerConfigs[1].col6 = vec3(0.4, 1.0, 0.0);
+
+    playerConfigs[1].initPos = vec3(5, 10, 0);
+
+    playerConfigs[2].col1 = vec3(0.1, 1.0, 0.5);
+    playerConfigs[2].col2 = vec3(0.05, 1.0, 0.3);
+    playerConfigs[2].col3 = vec3(0.0, 1.0, 0.0);
+    playerConfigs[2].col4 = vec3(0.0, 1.0, 0.2);
+    playerConfigs[2].col5 = vec3(0.0, 0.5, 0.0);
+    playerConfigs[2].col6 = vec3(0.4, 1.0, 0.0);
+    playerConfigs[2].initPos = vec3(-3, 20, 0);
+
+    playerConfigs[3].col1 = vec3(1.0, 0.1, 1.0);
+    playerConfigs[3].col2 = vec3(1.0, 0.3, 0.3);
+    playerConfigs[3].col3 = vec3(0.0, 0.0, 1.0);
+    playerConfigs[3].col4 = vec3(0.7, 0.3, 0.2);
+    playerConfigs[3].col5 = vec3(0.9, 0.5, 0.5);
+    playerConfigs[3].col6 = vec3(0.4, 0.0, 0.2);
+    playerConfigs[3].initPos = vec3(3, 20, 0);
+
+
+    for(int i = 0; i < 4; i++)
+    {
+        playerConfigs[i].keyMap.resize(MAPPINGSIZE);
+        playerConfigs[i].keyMap[JUMP] = sf::Keyboard::Space;
+        playerConfigs[i].keyMap[MOVERIGHT] = sf::Keyboard::D;
+        playerConfigs[i].keyMap[MOVELEFT] = sf::Keyboard::A;
+        playerConfigs[i].keyMap[SHOOT] = sf::Keyboard::Tab;
+        playerConfigs[i].keyMap[SPAWN] = sf::Keyboard::E;
+        playerConfigs[i].keyMap[DASH] = sf::Keyboard::LShift;
+    }
+
+    if(!useWiimotes)
+        playerConfigs[0].useWiimote = false;
+
     // Create the main window
     window_width = sf::VideoMode::getFullscreenModes()[0].width;
     window_height = sf::VideoMode::getFullscreenModes()[0].height;

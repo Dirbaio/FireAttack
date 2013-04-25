@@ -2,7 +2,7 @@
 #include "PlayerActor.h"
 #include "util.h"
 
-TrapHexagon::TrapHexagon(GameScene* sc, vec3 pos) : Hexagon(sc, pos, true, true, true, 2.0, 15)
+TrapHexagon::TrapHexagon(GameScene* sc, vec3 pos) : Hexagon(sc, pos, true, true, true, 2.0, 4)
 {
     body->SetGravityScale(0);
     body->SetFixedRotation(true);

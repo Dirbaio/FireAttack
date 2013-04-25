@@ -159,6 +159,7 @@ void ParticleEmitter::spawnParticle(float t)
 void ParticleEmitter::renderLight(vector<vec3>& vtxArray, vector<float>& texArray, vector<color>& colArray)
 {
     float size = (startSize + endSize) * (startAlpha + endAlpha) * period * (life+randLife)* 10000.0;
+    size = 0.3;
     vec3 col = (startCol+endCol)*0.5f;
     color colr;
     colr.r = col.x;

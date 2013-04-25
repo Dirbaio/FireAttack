@@ -39,10 +39,10 @@ Hexagon::Hexagon(GameScene* sc, vec3 pos, bool movable, bool rotable, bool destr
     body = sc->world.CreateBody(&bodyDef);
     body->SetLinearDamping(1.0f);
     b2PolygonShape box;
-    box.SetAsBox(1.0, 0.4);
+    box.SetAsBox(0.9, 0.4);
     b2FixtureDef fixture;
     fixture.density = 1.0f;
-    fixture.friction = 0.0f;
+    fixture.friction = 0.4f;
     fixture.shape = &box;
     fixture.restitution = 0.3f;
     fixture.userData = this;

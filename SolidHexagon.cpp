@@ -1,7 +1,7 @@
 #include "SolidHexagon.h"
 #include "GameScene.h"
 
-SolidHexagon::SolidHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, false, true, 2.0, 15)
+SolidHexagon::SolidHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, false, true, 2.0, 5)
 {
 
 }

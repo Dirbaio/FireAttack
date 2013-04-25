@@ -1,7 +1,7 @@
 #include "FloatingHexagon.h"
 #include "GameScene.h"
 
-FloatingHexagon::FloatingHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, true, true, 3.0, 5)
+FloatingHexagon::FloatingHexagon(GameScene *sc, vec3 pos) : Hexagon(sc, pos, true, true, true, 3.0, 1)
 {
 
 }

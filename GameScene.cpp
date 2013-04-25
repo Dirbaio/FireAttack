@@ -8,6 +8,7 @@
 #include "StaticHexagon.h"
 #include "SolidHexagon.h"
 #include "TrapHexagon.h"
+#include "BouncyHexagon.h"
 
 GameScene::GameScene(GameMode mode, int numPlayers)
 {
@@ -15,60 +16,49 @@ GameScene::GameScene(GameMode mode, int numPlayers)
     gameMode = mode;
 
 
-    if (numPlayers >= 1)
+    for(int i = 0; i < numPlayers; i++)
+        actors.push_front(new PlayerActor(this, playerConfigs[i], i));
+
+    int lvls = irand(3, 5);
+
+    for(int y = 0; y < lvls; y++)
     {
-        PlayerConfig player1;
+        vector<int> v;
+        if(y == 0)
+        {
+            v.push_back(-10);
+            v.push_back(10);
+        }
+        else
+        {
+            int ct = irand(1, 3);
+            for(int i = 0; i < ct*2; i++)
+                v.push_back(irand(-8+y, 8-y));
+        }
 
-        player1.col1 = vec3(1.0, 1.0, 0.5);
-        player1.col2 = vec3(1.0, 1.0, 1.0);
-        player1.col3 = vec3(1.0, 0.0, 0.0);
-        player1.col4 = vec3(1.0, 1.0, 0.0);
-        player1.col5 = vec3(1.0, 0.0, 0.0);
-        player1.col6 = vec3(0.0, 1.0, 0.4);
+        sort(v.begin(), v.end());
 
-        player1.initPos = vec3(0, 10, 0);
-        player1.keyMap.resize(MAPPINGSIZE);
-
-        player1.keyMap[JUMP] = sf::Keyboard::Space;
-        player1.keyMap[MOVERIGHT] = sf::Keyboard::D;
-        player1.keyMap[MOVELEFT] = sf::Keyboard::A;
-        player1.keyMap[SHOOT] = sf::Keyboard::Tab;
-        player1.keyMap[SPAWN] = sf::Keyboard::E;
-        player1.keyMap[DASH] = sf::Keyboard::LShift;
-
-        player1.useWiimote = useWiimotes;
-        player1.numWiimote = 0;
-
-        actors.push_front(new PlayerActor(this, player1, 1));
+        for(int i = 0; i < v.size()/2; i++)
+            for(int x = v[i*2]; x <= v[i*2+1]; x++)
+            {
+                int type = irand(1, 10);
+                switch(type)
+                {
+                case 0:
+                case 1:
+                    actors.push_back(new TrapHexagon(this, vec3(x*2, 0.4f+y*5, 1)));
+                    break;
+                case 2:
+                case 3:
+                    actors.push_back(new BouncyHexagon(this, vec3(x*2, 0.4f+y*5, 0)));
+                    break;
+                default:
+                    actors.push_back(new StaticHexagon(this, vec3(x*2, 0.4f+y*5, 0)));
+                    break;
+                }
+            }
     }
 
-    if (numPlayers >= 2)
-    {
-        PlayerConfig player2;
-
-        player2.col1 = vec3(0.5, 1.0, 1.0);
-        player2.col2 = vec3(0.1, 1.0, 1.0);
-        player2.col3 = vec3(0.0, 0.0, 1.0);
-        player2.col4 = vec3(0.0, 1.0, 1.0);
-        player2.col5 = vec3(0.0, 0.0, 1.0);
-        player2.col6 = vec3(0.4, 1.0, 0.0);
-
-        player2.initPos = vec3(4, 10, 0);
-        player2.keyMap.resize(MAPPINGSIZE);
-
-        player2.keyMap[JUMP] = sf::Keyboard::RShift;
-        player2.keyMap[MOVERIGHT] = sf::Keyboard::L;
-        player2.keyMap[MOVELEFT] = sf::Keyboard::J;
-        player2.keyMap[SHOOT] = sf::Keyboard::Return;
-        player2.keyMap[SPAWN] = sf::Keyboard::O;
-
-        player2.useWiimote = useWiimotes;
-        player2.numWiimote = 1;
-
-        actors.push_front(new PlayerActor(this, player2, 2));
-    }
-
-    for (int k = -10; k < 10; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));
 /*
     for (int k = -3; k < 0; k++) assetList.push_back(Asset(HEXTRAP, vec3(k*3, 8, 0)));
     for (int k = 0; k < 3; k++) assetList.push_back(Asset(HEXBOUNCY, vec3(k*2, k*2+5, 0)));
@@ -136,8 +126,10 @@ void GameScene::update()
         for (int i = 1; i < playerList.size(); i++)
         {
             PlayerActor* pl = playerList[i];
-            if (pl->p.x < minPos.x) minPos = pl->p;
-            if (pl->p.x > maxPos.x) maxPos = pl->p;
+            if (pl->p.x < minPos.x) minPos.x = pl->p.x;
+            if (pl->p.x > maxPos.x) maxPos.x = pl->p.x;
+            if (pl->p.y < minPos.y) minPos.y = pl->p.y;
+            if (pl->p.y > maxPos.y) maxPos.y = pl->p.y;
         }
 
         cameraLookAt = vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0+1.0, 0);

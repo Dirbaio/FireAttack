@@ -9,14 +9,6 @@
 class Input;
 class GameScene;
 
-struct PlayerConfig
-{
-    vec3 initPos;
-    vec3 col1, col2, col3, col4, col5, col6;
-    vector<sf::Keyboard::Key> keyMap;
-    int numWiimote;
-    bool useWiimote;
-};
 
 class PlayerActor : public Actor
 {
@@ -24,6 +16,7 @@ private:
     float bounce_cooldown, bounce_cooldown_min, bounce_factor_x, bounce_factor_y;
     bool canDash;
     float dashCooldownTime, dashCooldownTimeMax;
+    float shootCooldownTime, shootCooldownTimeMax;
     Pointer* ptr;
 
 public:

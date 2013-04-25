@@ -8,6 +8,7 @@ Pointer::Pointer(GameScene* gsc, PlayerActor* pl) : Actor(gsc)
     float size = 0.1;
 
     ParticleEmitter pe (this);
+    pe.randLife = 0;
     pe.period = 1/500.0;
     pe.startAlpha = 0.1;
     pe.randPos = RandomVec(size/4);
@@ -23,7 +24,7 @@ Pointer::Pointer(GameScene* gsc, PlayerActor* pl) : Actor(gsc)
     pe.randPos = RandomVec(size/2);
     pe.startSize = size/3;
     pe.endSize = size/16;
-    pe.life = 0.2;
+    pe.life = 0.1;
     pe.startAlpha = 0.2;
     pe.startCol = pl->cfg.col3;
     pe.endCol = pl->cfg.col4;
@@ -36,7 +37,7 @@ Pointer::Pointer(GameScene* gsc, PlayerActor* pl) : Actor(gsc)
     pe.randVel = RandomVec(size/3);
     pe.startSize = size/2;
     pe.endSize = size/10;
-    pe.life = 0.2;
+    pe.life = 0.15;
     pe.startCol = pl->cfg.col5;
     pe.endCol = pl->cfg.col6;
     pe.actorVelMult = 0.9;
@@ -67,7 +68,7 @@ void Pointer::update()
     float weight2 = exp(-dt*10);
     v = v*weight2 + (res-p)*(1-weight2);
     float weight = exp(-dt*50);
-    p = res; //p*weight+res*(1-weight);
+    p = p*weight+res*(1-weight);
 }
 
 bool Pointer::renderParticle(Particle &p)
@@ -75,7 +76,7 @@ bool Pointer::renderParticle(Particle &p)
     p.p = this->p;
     p.startCol = pl->cfg.col1;
     p.startAlpha = 1;
-    p.startSize = 0.2;
+    p.startSize = 0.12;
 
     return true;
 }

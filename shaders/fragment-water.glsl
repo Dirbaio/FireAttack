@@ -115,7 +115,7 @@ void main()
         if(dir.y > 0.0) glow = 0.0;
     }
 
-    float black = ty/40.0+1.0;
+    float black = ty/20.0+1.0;
     black = clamp(black, 0.0, 1.0);
 
     vec3 col = vec3(glow*0.1, glow*glow*0.4, glow*0.8);
