@@ -107,21 +107,21 @@ void PlayerActor::update()
     if (fixt != NULL)
     {
         Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
-        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr) && !dynamic_cast<PlayerActor*>(ptr));
     }
 
     dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.04), fixt);
     if (fixt != NULL)
     {
         Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
-        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr) && !dynamic_cast<PlayerActor*>(ptr));
     }
 
     dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.04), fixt);
     if (fixt != NULL)
     {
         Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
-        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr) && !dynamic_cast<PlayerActor*>(ptr));
     }
 
     float f = 20.0;
@@ -291,21 +291,21 @@ void PlayerActor::collided(Actor *b)
     if (fixt != NULL)
     {
         Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
-        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr) && !dynamic_cast<PlayerActor*>(ptr));
     }
 
     dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.5), fixt);
     if (fixt != NULL)
     {
         Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
-        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr) && !dynamic_cast<PlayerActor*>(ptr));
     }
 
     dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.5), fixt);
     if (fixt != NULL)
     {
         Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
-        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr) && !dynamic_cast<PlayerActor*>(ptr));
     }
 
     if(dynamic_cast<Enemy*>(b))
