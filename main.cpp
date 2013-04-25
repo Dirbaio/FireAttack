@@ -159,8 +159,8 @@ int main(int argc, char** argv)
     float frameTime = 0;
     int frameCount = 0;
 
-    sc = new GameScene(FREEMODE);
-    //sc = new MenuScene();
+    //sc = new GameScene(FREEMODE);
+    sc = new MenuScene();
 
     float updateTime = 0;
     float renderTime = 0;
@@ -268,11 +268,6 @@ int main(int argc, char** argv)
         glDisable(GL_CULL_FACE);
         glDisable(GL_LIGHTING);
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
         glDisable(GL_DEPTH_TEST);
@@ -336,7 +331,7 @@ int main(int argc, char** argv)
         particleShader->setParameter("isReflection", 0);
         sc->renderParticles(false);
 
-/*        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
         Shader::bind(NULL);
         app->pushGLStates();
@@ -351,7 +346,7 @@ int main(int argc, char** argv)
         sc->renderHud();
 
         app->popGLStates();
-*/
+
         if(sc->nextScene)
         {
             Scene* next = sc->nextScene;
