@@ -39,7 +39,7 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         player1.useWiimote = useWiimotes;
         player1.numWiimote = 0;
 
-        actors.push_back(new PlayerActor(this, player1, 1));
+        actors.push_front(new PlayerActor(this, player1, 1));
     }
 
     if (numPlayers >= 2)
@@ -65,7 +65,7 @@ GameScene::GameScene(GameMode mode, int numPlayers)
         player2.useWiimote = useWiimotes;
         player2.numWiimote = 1;
 
-        actors.push_back(new PlayerActor(this, player2, 2));
+        actors.push_front(new PlayerActor(this, player2, 2));
     }
 
     for (int k = -20; k < 20; k++) actors.push_back(new StaticHexagon(this, vec3(k*2, 0.4f, 0)));

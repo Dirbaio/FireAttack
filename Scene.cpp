@@ -103,8 +103,8 @@ void Scene::update()
 	
     for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
 	{
-        (*it)->updateEmitters();
         (*it)->update();
+        (*it)->updateEmitters();
     }
 
 }

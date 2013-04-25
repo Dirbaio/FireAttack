@@ -5,7 +5,7 @@ Pointer::Pointer(GameScene* gsc, PlayerActor* pl) : Actor(gsc)
     this->gsc = gsc;
     this->pl = pl;
 
-    float size = 0.3;
+    float size = 0.1;
 
     ParticleEmitter pe (this);
     pe.period = 1/500.0;
@@ -19,24 +19,24 @@ Pointer::Pointer(GameScene* gsc, PlayerActor* pl) : Actor(gsc)
     pe.actorVelMult = 1;
     emitters.push_back(pe);
 
-    pe.period = 1/1000.0;
+    pe.period = 1/5000.0;
     pe.randPos = RandomVec(size/2);
     pe.startSize = size/3;
     pe.endSize = size/16;
-    pe.life = 1;
+    pe.life = 0.2;
     pe.startAlpha = 0.2;
     pe.startCol = pl->cfg.col3;
     pe.endCol = pl->cfg.col4;
     pe.actorVelMult = 0.9;
     emitters.push_back(pe);
 
-    pe.period = 1/1000.0;
+    pe.period = 1/5000.0;
     pe.startAlpha = 0.2;
     pe.randPos = RandomVec(size/3);
     pe.randVel = RandomVec(size/3);
     pe.startSize = size/2;
     pe.endSize = size/10;
-    pe.life = 1;
+    pe.life = 0.2;
     pe.startCol = pl->cfg.col5;
     pe.endCol = pl->cfg.col6;
     pe.actorVelMult = 0.9;
@@ -60,11 +60,14 @@ void Pointer::update()
     normalize(up);
 
     vec3 camVec2 = camVec + right*pos.x + up*pos.y;
-    vec3 res = sc->cameraPos;
-    camVec2 *= res.z/camVec2.z;
-    res -= camVec2;
-
-    p = res;
+//    vec3 res = sc->cameraPos;
+//    camVec2 *= res.z/camVec2.z;
+//    res -= camVec2;
+    vec3 res = sc->cameraPos + camVec2*2.0f;
+    float weight2 = exp(-dt*10);
+    v = v*weight2 + (res-p)*(1-weight2);
+    float weight = exp(-dt*50);
+    p = res; //p*weight+res*(1-weight);
 }
 
 bool Pointer::renderParticle(Particle &p)
@@ -72,7 +75,7 @@ bool Pointer::renderParticle(Particle &p)
     p.p = this->p;
     p.startCol = pl->cfg.col1;
     p.startAlpha = 1;
-    p.startSize = 1;
+    p.startSize = 0.2;
 
     return true;
 }
