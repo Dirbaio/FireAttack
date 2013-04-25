@@ -193,7 +193,8 @@ PlayerActor* GameScene::GetNearestPlayerInView(vec3 pos)
             if (bestDist != -1 && dist > bestDist)
                 continue;
 
-            float rayFract = GetRayCastDistance(b2Vec2(pos.x, pos.y), b2Vec2((*it)->p.x, (*it)->p.y));
+            b2Fixture* fixt;
+            float rayFract = GetRayCastDistance(b2Vec2(pos.x, pos.y), b2Vec2((*it)->p.x, (*it)->p.y), fixt);
             if (rayFract >= 1 - 0.5/dist - 0.1 && (dist < bestDist || bestDist == -1))
             {
                 best = dynamic_cast<PlayerActor*>(*it);

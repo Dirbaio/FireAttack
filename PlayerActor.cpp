@@ -100,12 +100,29 @@ void PlayerActor::update()
     bounce_cooldown += dt;
     dashCooldownTime += dt;
 
-    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.04));
-    bool grounded = (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.04));
-    grounded = grounded || (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.04));
-    grounded = grounded || (dist < 1.0 && dist > 0.0);
+    b2Fixture* fixt = NULL;
+    bool grounded = false;
+
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.04), fixt);
+    if (fixt != NULL)
+    {
+        Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
+        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+    }
+
+    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.04), fixt);
+    if (fixt != NULL)
+    {
+        Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
+        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+    }
+
+    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.04), fixt);
+    if (fixt != NULL)
+    {
+        Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
+        grounded = (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+    }
 
     float f = 20.0;
     if(input->getKeyPressed(JUMP) && grounded)// && p.y < 0.3)
@@ -162,7 +179,7 @@ void PlayerActor::update()
         vec3 dir = res - p;
         normalize(dir);
 
-        if (gsc->GetRayCastDistance(b2Vec2(p.x,p.y), b2Vec2(p.x+dir.x*size, p.y+dir.y*size)) > 0.8)
+        if (gsc->GetRayCastDistance(b2Vec2(p.x,p.y), b2Vec2(p.x+dir.x*size, p.y+dir.y*size), fixt) > 0.8)
         {
 
             BulletConfig config;
@@ -269,12 +286,27 @@ bool PlayerActor::renderParticle(Particle &p)
 void PlayerActor::collided(Actor *b)
 {
 
-    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.5));
-    canDash |= (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.5));
-    canDash |= (dist < 1.0 && dist > 0.0);
-    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.5));
-    canDash |= (dist < 1.0 && dist > 0.0);
+    b2Fixture* fixt = NULL;
+    float dist = sc->GetRayCastDistance(b2Vec2(p.x, p.y), b2Vec2(p.x, p.y-size/2.0-0.5), fixt);
+    if (fixt != NULL)
+    {
+        Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
+        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+    }
+
+    dist = sc->GetRayCastDistance(b2Vec2(p.x-size/2.0+0.02, p.y), b2Vec2(p.x-size/2.0+0.02, p.y-size/2.0-0.5), fixt);
+    if (fixt != NULL)
+    {
+        Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
+        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+    }
+
+    dist = sc->GetRayCastDistance(b2Vec2(p.x+size/2.0-0.02, p.y), b2Vec2(p.x+size/2.0-0.02, p.y-size/2.0-0.5), fixt);
+    if (fixt != NULL)
+    {
+        Actor* ptr = (Actor*) fixt->GetBody()->GetUserData();
+        canDash |= (dist < 1.0 && dist > 0.0 && !dynamic_cast<FireActor*>(ptr));
+    }
 
     if(dynamic_cast<Enemy*>(b))
         explode();
