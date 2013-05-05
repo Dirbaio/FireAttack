@@ -24,7 +24,10 @@ void main()
     float z = 2.0 * zNear * zFar / (zFar + zNear - z_n * (zFar - zNear));
     vec3 pos = vec3(coord.x*aspectRatio*z, coord.y*z, -z);
 
-    gl_FragColor = vec4(color * c1.a * 8.0, 1.0);
+    float light = max(0.0, 1.0-normal.z);
+    light *= light;
+    light += c1.a*9;
+    gl_FragColor = vec4(color * light, 1.0);
 
    /* vec3 res = vec3(0.0, 0.0, 0.0);
     vec2 pos = gl_TexCoord[0].xy*0.5 + 0.5;

@@ -172,4 +172,9 @@ void makeHexagon()
             }
         }
     }
+    for(int i = 0; i < hexVert.size(); i++)
+    {
+        hexNorm[i] = hexNorm[i]*0.8f+hexVert[i]*0.2f;
+        normalize(hexNorm[i]);
+    }
 }
