@@ -87,7 +87,7 @@ void WiimoteInput::search()
         wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
         wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
         wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
-
+/*
         for(int i = 0; i < MAX_WIIMOTES; i++)
         {
             wiiuse_set_ir(wiimotes[i], 1);
@@ -96,7 +96,7 @@ void WiimoteInput::search()
             wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
             wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
         }
-
+*/
         cerr << "Connected to " << connected << " wiimotes (of " << found << " found).\n";
     }
 
