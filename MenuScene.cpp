@@ -52,9 +52,9 @@ void MenuScene::update()
             else if (wInput.wiiControl[i][W_HOME] && closeTime >= 2.0)
                 closeNow = true;
             else if (wInput.wiiControl[i][W_PLUS] && changeScoreTime >= changeScoreTimeWindow)
-                objScore = min(10000, objScore+10), changeScoreTime = 0;
+                objScore = min(1000, objScore+1), changeScoreTime = 0;
             else if (wInput.wiiControl[i][W_MINUS] && changeScoreTime >= changeScoreTimeWindow)
-                objScore = max(10, objScore-10), changeScoreTime = 0;
+                objScore = max(1, objScore-1), changeScoreTime = 0;
 
         }
 

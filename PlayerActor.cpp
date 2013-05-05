@@ -93,8 +93,6 @@ PlayerActor::PlayerActor(GameScene* sc, PlayerConfig config, int numPlayer) : Ac
 
 PlayerActor::~PlayerActor()
 {
-    if (gsc->playerListSize > 1) scores[numPlayer] += gsc->deadPlayers;
-    gsc->deadPlayers++;
     delete input;
     ptr->alive = false;
 }

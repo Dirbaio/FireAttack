@@ -218,9 +218,9 @@ int main(int argc, char** argv)
 
     //sc = new GameScene(FREEMODE);
     if (useWiimotes)
-        sc = new MenuScene(50);
+        sc = new MenuScene(5);
     else
-        sc = new GameScene(FREEMODE, 1, 50);
+        sc = new GameScene(FREEMODE, 1, 5);
 
     float updateTime = 0;
     float renderTime = 0;
