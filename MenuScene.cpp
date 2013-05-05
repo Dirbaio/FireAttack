@@ -3,11 +3,11 @@
 #include "GameScene.h"
 #include "Input.h"
 
-#define MIN_PLAYERS 1
+#define MIN_PLAYERS 2
 
-MenuScene::MenuScene(int objecScore)
+MenuScene::MenuScene(int objecScore, bool first)
 {
-
+    this->first = first;
     hasKeyboard = false;
     menu = true;
     credits = false;
@@ -65,9 +65,12 @@ void MenuScene::update()
         if(start)
         {
             wInput.stopSearch();
+            wInput.startIR();
 
             ct = wInput.connectedCount;
             if(hasKeyboard) ct++;
+
+            scores = vector<int> (ct, 0);
 
             if(hasKeyboard)
                 playerConfigs[0].useWiimote = false;
@@ -118,17 +121,21 @@ void MenuScene::renderHud()
         logo.setPosition(app->getView().getCenter().x - logo.getLocalBounds().width/2, -80);
         app->draw(logo);
 
-        writeText("Conecta los Wiimotes (pulsa 1+2)", -110);
+        if(first)
+            writeText("Conecta los Wiimotes (pulsa 1+2)", -110);
 
         int ct = wInput.connectedCount;
         if(hasKeyboard) ct++;
 
         if(ct)
         {
-            if(ct == 1)
-                writeText("1 wiimote conectado (max 4)", -60);
-            else
-                writeText(toString(ct)+" wiimotes conectados (max 4)", -60);
+            if(first)
+            {
+                if(ct == 1)
+                    writeText("1 wiimote conectado (max 4)", -60);
+                else
+                    writeText(toString(ct)+" wiimotes conectados (max 4)", -60);
+            }
 
             writeText("Objetivo: "+toString(objScore)+" puntos (puedes cambiarlo con +/-)", 30);
 

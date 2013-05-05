@@ -36,6 +36,7 @@ void Actor::updateEmitters()
         v.z = 0;
     }
 
+    /*
     PlayerActor* pl = dynamic_cast< PlayerActor* const> (this);
     if(pl)
     {
@@ -43,7 +44,8 @@ void Actor::updateEmitters()
         v.y = -5;
         p.x = 0;
         p.y = 10;
-    }
+    }*/
+
     for(list<ParticleEmitter>::iterator it = emitters.begin(); it != emitters.end(); it++)
 		it->update();
 

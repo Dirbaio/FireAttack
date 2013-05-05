@@ -62,6 +62,7 @@ public:
     void test(struct wiimote_t* wm, byte* data, unsigned short len);
     bool update();
     void search();
+    void startIR();
     void disconnect();
 };
 

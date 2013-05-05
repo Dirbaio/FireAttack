@@ -170,7 +170,7 @@ void GameScene::update()
 
     if (goMenu)
     {
-        nextScene = new MenuScene(objScore);
+        nextScene = new MenuScene(objScore, false);
     }
     else
     {
@@ -289,8 +289,11 @@ void GameScene::renderHud()
         for (int i = 0; i < numPlayers; i++)
         {
             string str = "Jugador "+numToString(i+1)+": "+numToString(scores[i])+" puntos";
-            if (scores[i] >= objScore && scores[i] > scores[daWinnah])
-                won = true, daWinnah = i;
+            if (scores[i] >= objScore && (scores[i] > scores[daWinnah] || !won))
+            {
+                won = true;
+                daWinnah = i;
+            }
             t.setString(String(str));
             t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+140+60*i);
             app->draw(t);

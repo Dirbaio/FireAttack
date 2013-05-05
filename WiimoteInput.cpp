@@ -110,20 +110,25 @@ void WiimoteInput::search()
         wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
         wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
 
-        for(int i = 0; i < MAX_WIIMOTES; i++)
-        {
-            wiiuse_set_ir(wiimotes[i], 1);
-            wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
-            wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
-            wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
-            wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
-        }
 
         wiimoteUpdateThread.launch();
      }
 
 //    if(connected)
 //        stopSearch();
+}
+
+void WiimoteInput::startIR()
+{
+    for(int i = 0; i < MAX_WIIMOTES; i++)
+    {
+        wiiuse_set_ir(wiimotes[i], 0);
+        wiiuse_set_ir(wiimotes[i], 1);
+        wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
+        wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
+        wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
+        wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
+    }
 }
 
 bool WiimoteInput::update()

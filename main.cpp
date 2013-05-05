@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 
     //sc = new GameScene(FREEMODE);
     if (useWiimotes)
-        sc = new MenuScene(5);
+        sc = new MenuScene(5, true);
     else
         sc = new GameScene(FREEMODE, 1, 5);
 
@@ -408,7 +408,7 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        //sc->renderHud();
+        sc->renderHud();
 
         app->popGLStates();
 

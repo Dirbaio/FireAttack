@@ -7,12 +7,13 @@ class MenuScene : public Scene
 {
 private:
     bool menu, credits;
+    bool first;
     int objScore;
     bool plusClicked, minusClicked;
     float changeScoreTime, changeScoreTimeWindow, closeTime;
 
 public:
-    MenuScene(int objecScore);
+    MenuScene(int objecScore, bool first);
 
     virtual void update();
     virtual void renderHud();

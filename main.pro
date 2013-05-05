@@ -1,6 +1,7 @@
 CONFIG -= qt
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lGL -lGLU -lBox2D -lwiiuse
+
 SOURCES += main.cpp Particle.cpp Actor.cpp Scene.cpp ParticleEmitter.cpp FireActor.cpp util.cpp \
     GameScene.cpp \
     PlayerActor.cpp \
