@@ -18,10 +18,6 @@ class GameScene : public Scene
 
     GameScene(GameMode mode, int numPlayers);
 
-    SoundBuffer* song1;
-    SoundBuffer* song2;
-    Sound song;
-
     float deadTimer;
     float spawnTimer;
     float tntTimer;

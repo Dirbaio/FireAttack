@@ -165,7 +165,6 @@ int main(int argc, char** argv)
     playerConfigs[3].col6 = vec3(0.4, 0.0, 0.2);
     playerConfigs[3].initPos = vec3(3, 20, 0);
 
-
     for(int i = 0; i < 4; i++)
     {
         playerConfigs[i].keyMap.resize(MAPPINGSIZE);

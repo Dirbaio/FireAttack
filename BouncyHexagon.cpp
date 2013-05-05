@@ -13,6 +13,6 @@ void BouncyHexagon::update()
 
 void BouncyHexagon::render()
 {
-    shader->setParameter("color", vec3(1.0, 0.0, 0.8));
+    shader->setParameter("color", vec3(1.0, 0.2, 0.8));
     Hexagon::render();
 }

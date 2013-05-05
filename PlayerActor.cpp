@@ -134,7 +134,11 @@ void PlayerActor::update()
 
     float f = 20.0;
     if(input->getKeyPressed(JUMP) && grounded)// && p.y < 0.3)
+    {
+        playSound("jump");
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 10.0f));
+        grounded = false;
+    }
     if(input->getKeyPressed(JUMP) && body->GetLinearVelocity().y > 0.0f)
         body->ApplyForceToCenter(b2Vec2(0, f));
     if(input->getKeyPressed(MOVELEFT))
@@ -148,6 +152,7 @@ void PlayerActor::update()
 
     if (dashCooldownTime >= dashCooldownTimeMax && canDash && (abs(dashx) > 0.7 || abs(dashz) > 0.7))
     {
+        playSound("jump");
         ParticleEmitter pe (this);
         pe.startAlpha = 0.1;
         pe.endAlpha = 0.6;
@@ -168,6 +173,7 @@ void PlayerActor::update()
 
     if(input->getKeyDown(SHOOT) && shootCooldownTime >= shootCooldownTimeMax)
     {
+        playSound("shoot");
         vec2 pos(input->getValue(POINTERX), input->getValue(POINTERY));
         //Awful math below :S
 
@@ -207,6 +213,7 @@ void PlayerActor::update()
 
 void PlayerActor::explode()
 {
+    playSound("die");
     ParticleEmitter e(this);
     e.randVel = RandomVec(3);
     e.life = 1;
@@ -245,6 +252,7 @@ void PlayerActor::explode()
 
 void PlayerActor::explodeWater()
 {
+    playSound("die");
     ParticleEmitter e(this);
     e.a = vec3(0, -7, 0);
     e.lightPermil = 0;
@@ -321,7 +329,10 @@ void PlayerActor::collided(Actor *b)
     else if (dynamic_cast<MagmaHexagon*>(b))
         explode();
     else if (dynamic_cast<FireActor*>(b))
+    {
+        playSound("crash");
         this->body->SetLinearVelocity(this->body->GetLinearVelocity() + b->body->GetLinearVelocity());
+    }
 }
 
 bool PlayerActor::collidedWithGround()

@@ -1,4 +1,5 @@
 #include "util.h"
+#include<list>
 
 RenderWindow* app;
 
@@ -30,16 +31,20 @@ Texture* loadTexture(string path)
 
 static map<string, SoundBuffer*> sndMap;
 
-SoundBuffer* loadSound(string path)
+SoundBuffer* loadSound(string name)
 {
     map<string, SoundBuffer*>::iterator it;
-    it = sndMap.find(path);
+    it = sndMap.find(name);
     if (it == sndMap.end()) {
-        cerr << "* Loading sound: " << path << endl;
+        cerr << "* Loading sound: " << name << endl;
         SoundBuffer* t = new SoundBuffer();
-        t->loadFromFile(path);
+        if(!t->loadFromFile("sound/"+name+".wav"))
+        {
+            cerr<<"Cant load sound "<<name<<endl;
+            app->close();
+        }
 
-        sndMap[path] = t;
+        sndMap[name] = t;
         return t;
     }
 
@@ -177,4 +182,61 @@ void makeHexagon()
         hexNorm[i] = hexNorm[i]*0.8f+hexVert[i]*0.2f;
         normalize(hexNorm[i]);
     }
+}
+
+Music music;
+string playingMusic;
+
+void playMusic(string name)
+{
+        return;
+
+    if(name == playingMusic)
+        return;
+    if(playingMusic != "")
+        stopMusic();
+
+    if(!music.openFromFile("sound/music/"+name+".wav"))
+    {
+        cerr<<"Cant load music "<<name<<endl;
+        exit(1);
+    }
+    music.setLoop(true);
+    music.play();
+    playingMusic = true;
+}
+
+void stopMusic()
+{
+    if(playingMusic == "")
+        return;
+
+    playingMusic = "";
+    music.stop();
+}
+
+list<Sound> sounds;
+
+void playSound(string name)
+{
+    for(list<Sound>::iterator it = sounds.begin(); it != sounds.end(); )
+    {
+        if(!it->getStatus() != sf::Sound::Playing)
+        {
+            list<Sound>::iterator it2 = it;
+            it2++;
+            sounds.erase(it);
+            it = it2;
+        }
+        else
+            it++;
+    }
+
+    //Avoid sound spam.
+    if(sounds.size() > 10) return;
+
+    Sound s;
+    s.setBuffer(*(loadSound(name)));
+    sounds.push_back(s);
+    sounds.back().play();
 }

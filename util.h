@@ -109,6 +109,10 @@ Texture* loadTexture(string path);
 SoundBuffer* loadSound(string path);
 Shader* loadShader(string vertex, string fragment);
 
+void playMusic(string name);
+void stopMusic();
+void playSound(string name);
+
 extern vector<vec3> hexVert, hexNorm;
 extern vector<vec2> hexTexCoord;
 void makeHexagon();

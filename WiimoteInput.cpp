@@ -61,10 +61,6 @@ void WiimoteInput::disconnect()
 
 void WiimoteInput::search()
 {
-    for(int i = 0; i < MAX_WIIMOTES; i++)
-        cout << wiimotes[i]->state << " ";
-    cout<<endl;
-
     int found = wiiuse_find(wiimotes+connectedCount, MAX_WIIMOTES-connectedCount, 1);
     if (found)
         cout << found << " wiimotes found."<<endl;

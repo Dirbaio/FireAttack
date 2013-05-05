@@ -8,6 +8,7 @@ MenuScene::MenuScene()
 
     hasKeyboard = false;
 
+    playMusic("wiideo2");
 }
 
 string toString(int n)

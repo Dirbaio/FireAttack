@@ -65,6 +65,7 @@ void Actor::explode()
 
 void Actor::explodeWater()
 {
+    playSound("boom");
     ParticleEmitter e(this);
     e.a = vec3(0, -7, 0);
     e.lightPermil = 0;

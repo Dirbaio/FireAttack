@@ -23,15 +23,19 @@ void ExplosiveHexagon::update()
     if (exploded)
     {
         parpadeoTime += dt;
+        vec3 oldcol = hexColor;
         if (parpadeoTime <= parpadeoTimeMax)
             hexColor = vec3(1.0, 0.0, 0.0);
         else if (parpadeoTime > parpadeoTimeMax)
             hexColor = vec3(1.0, 0.5, 0.0);
+        if(hexColor != oldcol)
+            playSound("tnttick");
         if (parpadeoTime >= parpadeoTimeMax*2.0)
             parpadeoTime = 0.0;
         explodeTime += dt;
         if (explodeTime >= explodeTimeMax)
         {
+            playSound("tnt");
             sc->makeExplosion(p, 50.0, true, true, 12.0f);
             alive = false;
         }

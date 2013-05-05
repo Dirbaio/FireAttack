@@ -146,6 +146,7 @@ void Hexagon::collided(Actor* b)
 
 void Hexagon::die()
 {
+    playSound("boom");
     if (dead)
     {
         explode();

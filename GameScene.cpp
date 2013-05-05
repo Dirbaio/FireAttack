@@ -93,11 +93,7 @@ GameScene::GameScene(GameMode mode, int numPlayers)
     spawnTimer = 1;
     tntTimer = 10;
 
-    song1 = loadSound("game1.wav");
-    song2 = loadSound("game2.wav");
-    song.setBuffer(*song1);
-    song.setLoop(true);
-//    song.play();
+    playMusic("game1");
 }
 
 vector<PlayerActor*> GameScene::getPlayerList()
@@ -132,19 +128,11 @@ void GameScene::update()
     {
         winner = playerList[0]->numPlayer;
         scores[winner] += 3;
-        song.stop();
-        song.setBuffer(*song2);
-        song.setPlayingOffset(seconds(60+30.9df));
-//            song.play();
         endState = 1;
     }
     else if (playerList.empty() && winner == -1)
     {
         winner = -2;
-        song.stop();
-        song.setBuffer(*song2);
-        song.setPlayingOffset(seconds(60+30.9df));
-//            song.play();
         endState = 2;
     }
 
