@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "MenuScene.h"
 #include "PlayerActor.h"
 #include "FireActor.h"
 #include "ModelActor.h"
@@ -21,13 +22,17 @@ string numToString(int n)
     return ss.str();
 }
 
-GameScene::GameScene(GameMode mode, int numPlayers)
+GameScene::GameScene(GameMode mode, int numPlayers, int objectiveScore)
 {
     this->numPlayers = numPlayers;
     gameMode = mode;
 
+    deadPlayers = 0;
+
+    objScore = objectiveScore;
     winner = -1;
     endState = 0;
+    won = false;
 
     for(int i = 0; i < numPlayers; i++)
         actors.push_front(new PlayerActor(this, playerConfigs[i], i));
@@ -124,10 +129,11 @@ void GameScene::update()
     Scene::update();
 
     vector<PlayerActor*> playerList = getPlayerList();
+    playerListSize  = playerList.size();
     if(playerList.size() == 1 && winner == -1)
     {
         winner = playerList[0]->numPlayer;
-        scores[winner] += 3;
+        scores[winner] += deadPlayers;
         endState = 1;
     }
     else if (playerList.empty() && winner == -1)
@@ -136,60 +142,72 @@ void GameScene::update()
         endState = 2;
     }
 
-    if (winner != -1)
+    if (winner != -1 && !won)
     {
         bool start = false;
 
         for(int i = 0; i < MAX_WIIMOTES; i++)
-            if(wInput.wiiControl[i][W_Z])
+            if(wInput.wiiControl[i][W_C])
                 start = true;
 
-        start |= sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
+        start |= sf::Keyboard::isKeyPressed(sf::Keyboard::C);
 
         if (start)
         {
-            nextScene = new GameScene(FREEMODE, numPlayers);
+            nextScene = new GameScene(FREEMODE, numPlayers, objScore);
         }
     }
 
+    bool goMenu = false;
 
-    if(deadTimer <= 0 && !nextScene)
-        nextScene = new GameScene(FREEMODE, numPlayers);
+    for(int i = 0; i < MAX_WIIMOTES; i++)
+        if(wInput.wiiControl[i][W_HOME])
+            goMenu = true;
 
-    if(spawnTimer < 0)
+    if (goMenu)
     {
-        spawnTimer = 16;
-        actors.push_back(new ShooterEnemy(this, vec3(frand(10), 40, 0)));
-        actors.push_back(new StickyEnemy(this, vec3(frand(10), 40, 0)));
+        nextScene = new MenuScene(objScore);
     }
     else
-        spawnTimer -= dt;
-
-    if(tntTimer < 0)
     {
-        tntTimer = 25;
-        actors.push_back(new ExplosiveHexagon(this, vec3(frand(10), 40, 0)));
-    }
-    else
-        tntTimer -= dt;
+        if(deadTimer <= 0 && !nextScene)
+            nextScene = new GameScene(FREEMODE, numPlayers, objScore);
 
-    spawnTimer <= dt;
-    if (!playerList.empty())
-    {
-        vec3 minPos, maxPos;
-        minPos = maxPos = playerList[0]->p;
-        for (int i = 1; i < playerList.size(); i++)
+        if(spawnTimer < 0)
         {
-            PlayerActor* pl = playerList[i];
-            if (pl->p.x < minPos.x) minPos.x = pl->p.x;
-            if (pl->p.x > maxPos.x) maxPos.x = pl->p.x;
-            if (pl->p.y < minPos.y) minPos.y = pl->p.y;
-            if (pl->p.y > maxPos.y) maxPos.y = pl->p.y;
+            spawnTimer = 16;
+            actors.push_back(new ShooterEnemy(this, vec3(frand(10), 40, 0)));
+            actors.push_back(new StickyEnemy(this, vec3(frand(10), 40, 0)));
         }
+        else
+            spawnTimer -= dt;
 
-        cameraLookAt = vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0+1.0, 0);
-        float weight = exp(-dt*6);
-        cameraPos = cameraPos * weight + (vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0 , 0) + vec3(0, 2, 7+0.25*norm(maxPos-minPos))) * (1-weight);
+        if(tntTimer < 0)
+        {
+            tntTimer = 25;
+            actors.push_back(new ExplosiveHexagon(this, vec3(frand(10), 40, 0)));
+        }
+        else
+            tntTimer -= dt;
+
+        spawnTimer <= dt;
+        if (!playerList.empty())
+        {
+            vec3 minPos, maxPos;
+            minPos = maxPos = playerList[0]->p;
+            for (int i = 1; i < playerList.size(); i++)
+            {
+                PlayerActor* pl = playerList[i];
+                if (pl->p.x < minPos.x) minPos.x = pl->p.x;
+                if (pl->p.x > maxPos.x) maxPos.x = pl->p.x;
+                if (pl->p.y < minPos.y) minPos.y = pl->p.y;
+                if (pl->p.y > maxPos.y) maxPos.y = pl->p.y;
+            }
+
+            cameraLookAt = vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0+1.0, 0);
+            float weight = exp(-dt*6);
+            cameraPos = cameraPos * weight + (vec3((minPos.x+maxPos.x)/2.0, (minPos.y+maxPos.y)/2.0 , 0) + vec3(0, 2, 7+0.25*norm(maxPos-minPos))) * (1-weight);
+        }
     }
 /*
     spawnTimer -= dt;
@@ -237,10 +255,10 @@ void GameScene::renderHud()
         t.setFont(font);
         t.setCharacterSize(40);
 
-        string winstr = "Guanyador: Jugador "+numToString(winner+1)+"!";
+        string winstr = "Superviviente: Jugador "+numToString(winner+1)+"!";
 
         t.setString(String(winstr));
-        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-20);
+        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-80);
         app->draw(t);
     }
     else if (endState == 2)
@@ -249,10 +267,10 @@ void GameScene::renderHud()
         t.setFont(font);
         t.setCharacterSize(40);
 
-        string winstr = "No hi ha guanyador";
+        string winstr = "No hay supervivientes";
 
         t.setString(String(winstr));
-        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-20);
+        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-80);
         app->draw(t);
     }
 
@@ -262,18 +280,40 @@ void GameScene::renderHud()
         t.setFont(font);
         t.setCharacterSize(40);
 
-        string winstr = "Pressiona Z per reiniciar la partida";
-
-        t.setString(String(winstr));
-        t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+70);
-        app->draw(t);
-
+        won = false;
+        int daWinnah = 0;
         for (int i = 0; i < numPlayers; i++)
         {
-            string str = "Jugador "+numToString(i+1)+": "+numToString(scores[i])+" punts";
+            string str = "Jugador "+numToString(i+1)+": "+numToString(scores[i])+" puntos";
+            if (scores[i] >= objScore && scores[i] > scores[daWinnah])
+                won = true, daWinnah = i;
             t.setString(String(str));
             t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+140+60*i);
             app->draw(t);
+        }
+
+        if (won)
+        {
+            string winstr = "Presiona HOME para salir al menu";
+
+            t.setString(String(winstr));
+            t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+70);
+            app->draw(t);
+
+            t.setCharacterSize(50);
+
+            t.setString(String("Ha ganado el jugador "+numToString(daWinnah+1)+"!"));
+            t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y-20);
+            app->draw(t);
+        }
+        else
+        {
+            string winstr = "Presiona C para la siguiente ronda";
+
+            t.setString(String(winstr));
+            t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y+70);
+            app->draw(t);
+
         }
     }
 }

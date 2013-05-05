@@ -16,12 +16,17 @@ class GameScene : public Scene
 {
     public:
 
-    GameScene(GameMode mode, int numPlayers);
+    GameScene(GameMode mode, int numPlayers, int objectiveScore);
+
+    int deadPlayers;
+    int playerListSize;
 
     float deadTimer;
     float spawnTimer;
     float tntTimer;
 
+    bool won;
+    int objScore;
     int winner;
     int endState;
 
