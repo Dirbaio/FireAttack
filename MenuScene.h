@@ -7,13 +7,16 @@ class MenuScene : public Scene
 {
 private:
     bool menu, credits;
+    int objScore;
+    bool plusClicked, minusClicked;
+    float changeScoreTime, changeScoreTimeWindow, closeTime;
 
 public:
-    MenuScene();
+    MenuScene(int objecScore);
 
     virtual void update();
     virtual void renderHud();
-    static void writeText(const string text, const int offset);
+    static void writeText(const string text, const int offset, const int fontSize);
     bool hasKeyboard;
 };
 

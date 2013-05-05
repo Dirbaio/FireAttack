@@ -24,6 +24,7 @@ typedef Vector3<float> vec3;
 typedef Vector2<float> vec2;
 
 extern bool useWiimotes;
+extern bool closeNow;
 
 struct color {
 	float r, g, b, a;

@@ -38,6 +38,7 @@ int window_width = 1200;
 int window_height = 800;
 
 bool useWiimotes = true;
+bool closeNow = false;
 
 vector<int> scores(4,0);
 
@@ -218,9 +219,9 @@ int main(int argc, char** argv)
 
     //sc = new GameScene(FREEMODE);
     if (useWiimotes)
-        sc = new MenuScene();
+        sc = new MenuScene(50);
     else
-        sc = new GameScene(FREEMODE, 1);
+        sc = new GameScene(FREEMODE, 1, 50);
 
     float updateTime = 0;
     float renderTime = 0;
@@ -264,6 +265,11 @@ int main(int argc, char** argv)
 
                 glViewport(0, 0, window_width, window_height);
             }
+        }
+        if (closeNow && !closed)
+        {
+            app->close();
+            closed = true;
         }
 
         if (closed) break;

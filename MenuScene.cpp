@@ -3,13 +3,19 @@
 #include "GameScene.h"
 #include "Input.h"
 
-MenuScene::MenuScene()
+MenuScene::MenuScene(int objecScore)
 {
 
     hasKeyboard = false;
     menu = true;
     credits = false;
 
+    changeScoreTime = 0.0;
+    changeScoreTimeWindow = 0.2;
+
+    closeTime = 0.0;
+
+    objScore = objecScore;
 }
 
 string toString(int n)
@@ -23,6 +29,8 @@ void MenuScene::update()
 {
     if (menu)
     {
+        changeScoreTime += dt;
+        closeTime += dt;
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             hasKeyboard = true;
 
@@ -37,7 +45,15 @@ void MenuScene::update()
                 start = true;
             else if(wInput.wiiControl[i][W_ONE])
                 menu = false, credits = true;
+            else if (wInput.wiiControl[i][W_HOME] && closeTime >= 2.0)
+                closeNow = true;
+            else if (wInput.wiiControl[i][W_PLUS] && changeScoreTime >= changeScoreTimeWindow)
+                objScore = min(10000, objScore+10), changeScoreTime = 0;
+            else if (wInput.wiiControl[i][W_MINUS] && changeScoreTime >= changeScoreTimeWindow)
+                objScore = max(10, objScore-10), changeScoreTime = 0;
+
         }
+
 
         if (hasKeyboard)
             start |= (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && ct >= MIN_PLAYERS);
@@ -57,7 +73,7 @@ void MenuScene::update()
                 playerConfigs[i+(hasKeyboard?1:0)].useWiimote = true;
                 playerConfigs[i+(hasKeyboard?1:0)].numWiimote = i;
             }
-            nextScene = new GameScene(FREEMODE, ct);
+            nextScene = new GameScene(FREEMODE, ct, objScore);
         }
     }
     else if (credits)
@@ -72,11 +88,11 @@ void MenuScene::update()
     }
 }
 
-void MenuScene::writeText(const string text, const int offset = 0)
+void MenuScene::writeText(const string text, const int offset = 0, const int fontSize = 40)
 {
     Text t;
     t.setFont(font);
-    t.setCharacterSize(40);
+    t.setCharacterSize(fontSize);
 
     t.setString(String(text));
     t.setPosition(app->getView().getCenter().x - t.getLocalBounds().width/2, app->getView().getCenter().y + offset);
@@ -87,7 +103,18 @@ void MenuScene::renderHud()
 {
     if (menu)
     {
-        writeText("Conecta los Wiimotes (pulsa 1+2)", -200);
+        Image img;
+        img.loadFromFile("img/logo.png");
+        int logoWidth = img.getSize().x;
+        int logoHeight = img.getSize().y;
+        Texture texture;
+        texture.loadFromImage(img, Rect<int>(0,0, logoWidth,logoHeight));
+        RectangleShape logo(vec2(logoWidth,logoHeight));
+        logo.setTexture(&texture, true);
+        logo.setPosition(app->getView().getCenter().x - logo.getLocalBounds().width/2, -80);
+        app->draw(logo);
+
+        writeText("Conecta los Wiimotes (pulsa 1+2)", -110);
 
         int ct = wInput.connectedCount;
         if(hasKeyboard) ct++;
@@ -95,17 +122,19 @@ void MenuScene::renderHud()
         if(ct)
         {
             if(ct == 1)
-                writeText("1 wiimote conectado");
+                writeText("1 wiimote conectado (max 4)", -60);
             else
-                writeText(toString(ct)+" wiimotes conectados");
+                writeText(toString(ct)+" wiimotes conectados (max 4)", -60);
+
+            writeText("Objetivo: "+toString(objScore)+" puntos (puedes cambiarlo con +/-)", 30);
 
             if (ct < MIN_PLAYERS)
-                writeText("hacen falta minimo "+toString(MIN_PLAYERS)+" jugadores para jugar", 60);
+                writeText("Hacen falta minimo "+toString(MIN_PLAYERS)+" jugadores para jugar", 100);
             else
-                writeText("Pulsa A para iniciar la partida", 60);
+                writeText("Pulsa A para iniciar la partida", 100);
 
-            writeText("Pulsa 1 para ver los creditos", 160);
-            writeText("Pulsa HOME para salir del juego", 260);
+            writeText("Pulsa 1 para ver los creditos", 200);
+            writeText("Pulsa HOME para salir del juego", 300);
         }
     }
     else if (credits)
@@ -118,7 +147,7 @@ void MenuScene::renderHud()
         t.setPosition(20, 20);
         app->draw(t);
 
-        writeText("FIRE SMASH", -280);
+        writeText("FIRE SMASH", -280, 50);
         writeText("Desarrollado para Wiideojuegos 2012 por:", -200);
         writeText("David Balaghi Buil", -150);
         writeText("Dario Nieuwenhuis Nivela", -110);
