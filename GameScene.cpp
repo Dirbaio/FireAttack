@@ -14,6 +14,7 @@
 #include "ShooterEnemy.h"
 #include "StickyEnemy.h"
 #include "ExplosiveHexagon.h"
+#include "FloatingHexagon.h"
 
 string numToString(int n)
 {
@@ -79,7 +80,10 @@ GameScene::GameScene(GameMode mode, int numPlayers, int objectiveScore)
                         actors.push_back(new BouncyHexagon(this, vec3(x*2, yy, 0)));
                         break;
                     default:
-                        actors.push_back(new StaticHexagon(this, vec3(x*2, yy, 0)));
+                        if(irand(0, 7) == 0)
+                            actors.push_back(new FloatingHexagon(this, vec3(x*2, yy, 0)));
+                        else
+                            actors.push_back(new StaticHexagon(this, vec3(x*2, yy, 0)));
                         break;
                     }
                 }

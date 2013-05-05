@@ -210,6 +210,7 @@ void PlayerActor::update()
 
     if (p.y <= -0.2)
         explodeWater();
+
 }
 
 void PlayerActor::explode()

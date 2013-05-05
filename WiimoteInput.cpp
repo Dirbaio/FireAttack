@@ -120,7 +120,7 @@ void WiimoteInput::search()
         }
 
         wiimoteUpdateThread.launch();
-    }
+     }
 
 //    if(connected)
 //        stopSearch();
