@@ -3,7 +3,7 @@
 #include "GameScene.h"
 #include "Input.h"
 
-#define MIN_PLAYERS 1
+#define MIN_PLAYERS 2
 
 MenuScene::MenuScene(int objecScore)
 {
