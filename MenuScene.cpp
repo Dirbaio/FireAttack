@@ -3,7 +3,7 @@
 #include "GameScene.h"
 #include "Input.h"
 
-#define MIN_PLAYERS 2
+#define MIN_PLAYERS 1
 
 MenuScene::MenuScene(int objecScore)
 {
@@ -162,6 +162,6 @@ void MenuScene::renderHud()
         writeText("Software utilizado:", 160);
         writeText("Qt Creator", 210);
         writeText("GIMP", 250);
-        writeText("Ableton", 290);
+        writeText("Ableton Live 8", 290);
     }
 }

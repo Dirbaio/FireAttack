@@ -408,7 +408,7 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        sc->renderHud();
+        //sc->renderHud();
 
         app->popGLStates();
 

@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Scene.h"
 #include "FloatingHexagon.h"
+#include "PlayerActor.h"
 
 Actor::Actor(Scene* sc)
 {
@@ -24,6 +25,7 @@ bool Actor::renderParticle(Particle &p) { return false; }
 
 void Actor::updateEmitters()
 {
+
     if(body)
     {
         p.x = body->GetPosition().x;
@@ -33,7 +35,16 @@ void Actor::updateEmitters()
         v.y = body->GetLinearVelocity().y;
         v.z = 0;
     }
-	for(list<ParticleEmitter>::iterator it = emitters.begin(); it != emitters.end(); it++)
+
+    PlayerActor* pl = dynamic_cast< PlayerActor* const> (this);
+    if(pl)
+    {
+        v.x = 10;
+        v.y = -5;
+        p.x = 0;
+        p.y = 10;
+    }
+    for(list<ParticleEmitter>::iterator it = emitters.begin(); it != emitters.end(); it++)
 		it->update();
 
     oldp = p;
