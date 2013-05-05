@@ -3,6 +3,8 @@
 
 #define GL_GLEXT_PROTOTYPES 1
 
+#define MIN_PLAYERS 2
+
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>

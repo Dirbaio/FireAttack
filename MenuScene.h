@@ -5,11 +5,15 @@
 
 class MenuScene : public Scene
 {
+private:
+    bool menu, credits;
+
 public:
     MenuScene();
 
     virtual void update();
     virtual void renderHud();
+    static void writeText(const string text, const int offset);
     bool hasKeyboard;
 };
 
