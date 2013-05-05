@@ -133,7 +133,7 @@ void GameScene::update()
     if(playerList.size() == 1 && winner == -1)
     {
         winner = playerList[0]->numPlayer;
-        scores[winner] += deadPlayers;
+        scores[winner]++;
         endState = 1;
     }
     else if (playerList.empty() && winner == -1)
