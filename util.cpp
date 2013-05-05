@@ -189,8 +189,6 @@ string playingMusic;
 
 void playMusic(string name)
 {
-        return;
-
     if(name == playingMusic)
         return;
     if(playingMusic != "")

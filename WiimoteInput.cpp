@@ -1,5 +1,5 @@
 #include "WiimoteInput.h"
-
+#include <unistd.h>
 WiimoteInput wInput;
 
 bool wiimoteInputRunning;
@@ -12,6 +12,7 @@ void wiimoteSearch()
 
 void wiimoteUpdate()
 {
+
     while (wiimoteInputRunning)
     {
         bool finish = wInput.update();
@@ -47,6 +48,20 @@ void WiimoteInput::stopSearch()
 void WiimoteInput::init()
 {
     wiimotes =  wiiuse_init(MAX_WIIMOTES);
+
+    wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
+    wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
+    wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
+    wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
+
+    for(int i = 0; i < MAX_WIIMOTES; i++)
+    {
+        wiiuse_set_ir(wiimotes[i], 1);
+        wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
+        wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
+        wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
+        wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
+    }
 
     searchMode = true;
     connectedCount = 0;
@@ -88,7 +103,24 @@ void WiimoteInput::search()
     connectedCount += connected;
 
     if(connectedCount == connected && connectedCount != 0)
+    {
+        usleep(100000);
+        wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
+        wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
+        wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
+        wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
+
+        for(int i = 0; i < MAX_WIIMOTES; i++)
+        {
+            wiiuse_set_ir(wiimotes[i], 1);
+            wiiuse_set_ir_position(wiimotes[i], WIIUSE_IR_ABOVE);
+            wiiuse_set_ir_sensitivity(wiimotes[i], 5); //1..5
+            wiiuse_set_aspect_ratio(wiimotes[i], WIIUSE_ASPECT_16_9);
+            wiiuse_set_ir_vres(wiimotes[i], 1024, 1024);
+        }
+
         wiimoteUpdateThread.launch();
+    }
 
 //    if(connected)
 //        stopSearch();
