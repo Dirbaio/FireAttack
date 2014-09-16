@@ -35,8 +35,8 @@ void countTime(float& t, float t2)
 int main(int argc, char** argv)
 {
     // Create the main window
-    int width = sf::VideoMode::getFullscreenModes()[0].width;
-    int height = sf::VideoMode::getFullscreenModes()[0].height;
+    int width = 1920; //sf::VideoMode::getFullscreenModes()[0].width;
+    int height = 1080; //sf::VideoMode::getFullscreenModes()[0].height;
     Window app (sf::VideoMode(width, height, 32), "Fire Attack", sf::Style::None);
     theApp = &app;
 

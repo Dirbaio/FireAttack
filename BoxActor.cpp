@@ -59,7 +59,7 @@ void BoxActor::update()
     PlayerActor* pl = gsc->getPlayer();
     if(!pl) return;
 
-    body->ApplyForceToCenter(b2Vec2(pl->p.x - p.x, 0));
+    body->ApplyForceToCenter(b2Vec2(pl->p.x - p.x, 0), true);
     if(op)
     {
         shootTimer -= dt;

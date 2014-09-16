@@ -78,13 +78,13 @@ void PlayerActor::update()
     if((Keyboard::isKeyPressed(Keyboard::Space) || Joystick::getAxisPosition(0, Joystick::Y) < -50) && p.y < 0.3)
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 7.0f));
     if(Keyboard::isKeyPressed(Keyboard::A))
-        body->ApplyForceToCenter(b2Vec2(-f, 0));
+        body->ApplyForceToCenter(b2Vec2(-f, 0), true);
     if(Keyboard::isKeyPressed(Keyboard::D))
-        body->ApplyForceToCenter(b2Vec2(f, 0));
+        body->ApplyForceToCenter(b2Vec2(f, 0), true);
     if(Keyboard::isKeyPressed(Keyboard::S))
-        body->ApplyForceToCenter(b2Vec2(0, -f));
+        body->ApplyForceToCenter(b2Vec2(0, -f), true);
     float val = Joystick::getAxisPosition(0, Joystick::X);
-    body->ApplyForceToCenter(b2Vec2(f*val/100, 0));
+    body->ApplyForceToCenter(b2Vec2(f*val/100, 0), true);
 
     if(p.x < -10)
         body->SetLinearVelocity(b2Vec2(10.0f, body->GetLinearVelocity().y));
